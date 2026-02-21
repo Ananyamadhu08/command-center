@@ -283,8 +283,8 @@ export function TodayView({ onNavigate }: TodayViewProps) {
             Full plan {"\u2192"}
           </button>
         </div>
-        <MealPlanCard plan={mealPlan} />
         <NutritionTips />
+        <MealPlanCard plan={mealPlan} />
       </motion.div>
     </motion.div>
   )
