@@ -131,7 +131,7 @@ function StoryCard({ story, index, onSelect }: { story: TechStory; index: number
 
           {/* Takeaway */}
           <div className="pt-2.5 border-t border-white/[0.06] space-y-1.5">
-            <span className="inline-block text-[9px] font-mono px-2 py-0.5 rounded-md bg-white/[0.05] border border-white/[0.1] text-white/35 uppercase tracking-widest">
+            <span className="text-[9px] font-mono text-white/25 uppercase tracking-widest">
               Takeaway
             </span>
             <p className="text-xs text-cosmic-light leading-relaxed">{story.takeaway}</p>
@@ -403,7 +403,7 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
             )}
 
             <div className="pt-3 border-t border-white/[0.06] space-y-2">
-              <span className="inline-block text-[9px] font-mono px-2 py-0.5 rounded-md bg-white/[0.05] border border-white/[0.1] text-white/35 uppercase tracking-widest">
+              <span className="text-[9px] font-mono text-white/25 uppercase tracking-widest">
                 Key Takeaway
               </span>
               <p className="text-sm text-cosmic-light leading-relaxed">{selectedStory.takeaway}</p>
