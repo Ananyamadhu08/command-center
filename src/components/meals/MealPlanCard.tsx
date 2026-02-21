@@ -22,9 +22,9 @@ export function MealPlanCard({ plan }: MealPlanCardProps) {
   const meals = Object.entries(plan) as [keyof MealPlanData, string][]
 
   return (
-    <GlassCard glow="amber" className="space-y-3">
+    <GlassCard glow="cosmic" className="space-y-3">
       <div className="flex items-center gap-2 mb-1">
-        <span className="text-amber-light text-sm">◇</span>
+        <span className="text-cosmic-light text-sm">◇</span>
         <h3 className="text-sm font-semibold text-white/90">Today&apos;s Meal Plan</h3>
       </div>
       <div className="space-y-2.5">
@@ -34,7 +34,7 @@ export function MealPlanCard({ plan }: MealPlanCardProps) {
               {MEAL_ICONS[key]}
             </span>
             <div className="flex-1 min-w-0">
-              <span className="text-[10px] font-mono text-amber/60 uppercase tracking-wider">
+              <span className="text-[10px] font-mono text-cosmic/60 uppercase tracking-wider">
                 {MEAL_TYPE_LABELS[key]}
               </span>
               <p className="text-xs text-white/60 leading-relaxed mt-0.5">{value}</p>

@@ -278,7 +278,7 @@ export function TodayView({ onNavigate }: TodayViewProps) {
           <h3 className="text-xs font-mono text-white/30 uppercase tracking-wider">Nutrition</h3>
           <button
             onClick={() => onNavigate("meals")}
-            className="text-[10px] text-amber-light/50 hover:text-amber-light transition-colors"
+            className="text-[10px] text-cosmic-light/50 hover:text-cosmic-light transition-colors"
           >
             Full plan {"\u2192"}
           </button>
