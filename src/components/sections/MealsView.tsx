@@ -5,12 +5,14 @@ import { motion } from "framer-motion"
 import { MealPlanCard } from "@/components/meals/MealPlanCard"
 import { CookCard } from "@/components/meals/CookCard"
 import { MealLogger } from "@/components/meals/MealLogger"
+import { MealLogs } from "@/components/meals/MealLogs"
 import { NutritionTips } from "@/components/meals/NutritionTips"
 import { getTodaysMealPlan } from "@/lib/nutrition"
 
 export function MealsView() {
   const mealPlan = getTodaysMealPlan()
   const [logSuccess, setLogSuccess] = useState(false)
+  const [refreshKey, setRefreshKey] = useState(0)
 
   async function handleLogMeal(entry: { date: string; meal_type: string; description: string }) {
     try {
@@ -21,6 +23,7 @@ export function MealsView() {
       })
       if (res.ok) {
         setLogSuccess(true)
+        setRefreshKey((k) => k + 1)
         setTimeout(() => setLogSuccess(false), 2000)
       }
     } catch {
@@ -45,6 +48,9 @@ export function MealsView() {
 
       {/* Log a Meal — primary action */}
       <MealLogger onLog={handleLogMeal} />
+
+      {/* Today's Logs — shows meals logged today */}
+      <MealLogs refreshKey={refreshKey} />
 
       {/* Daily Essentials + Meal Plan — side by side */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
