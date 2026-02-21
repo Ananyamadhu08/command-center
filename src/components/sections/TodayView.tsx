@@ -2,14 +2,13 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { GlassCard } from "@/components/ui/GlassCard"
-import { BriefCard } from "@/components/briefs/BriefCard"
+import { BriefCard, PendingBriefCard } from "@/components/briefs/BriefCard"
 import { MealPlanCard } from "@/components/meals/MealPlanCard"
 import { NutritionTips } from "@/components/meals/NutritionTips"
 import { HabitTracker } from "@/components/habits/HabitTracker"
 import { getTodaysMealPlan } from "@/lib/nutrition"
 import { getToday } from "@/lib/utils"
-import type { Brief, Habit, HabitLog, NavSection } from "@/lib/types"
+import type { Brief, BriefType, Habit, HabitLog, NavSection } from "@/lib/types"
 
 interface TodayViewProps {
   onNavigate: (section: NavSection) => void
@@ -78,32 +77,36 @@ export function TodayView({ onNavigate }: TodayViewProps) {
     }
   }
 
+  const BRIEF_TYPES: BriefType[] = ["morning_briefing", "tech_news", "evening_review"]
+  const briefsByType = new Map(briefs.map((b) => [b.type, b]))
+
   return (
     <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-6">
+      {/* Briefs Overview */}
       <motion.div variants={item}>
-        <h2 className="text-lg font-semibold text-white/80 mb-4">Today&apos;s Overview</h2>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-lg font-semibold text-white/80">Today&apos;s Overview</h2>
+          <button
+            onClick={() => onNavigate("briefs")}
+            className="text-[10px] text-cosmic-light/50 hover:text-cosmic-light transition-colors"
+          >
+            View all →
+          </button>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {BRIEF_TYPES.map((type) => {
+            const brief = briefsByType.get(type)
+            return brief ? (
+              <BriefCard key={type} brief={brief} />
+            ) : (
+              <PendingBriefCard key={type} type={type} />
+            )
+          })}
+        </div>
       </motion.div>
 
-      {briefs.length > 0 && (
-        <motion.div variants={item}>
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-xs font-mono text-white/30 uppercase tracking-wider">Latest Briefs</h3>
-            <button
-              onClick={() => onNavigate("briefs")}
-              className="text-[10px] text-cosmic-light/50 hover:text-cosmic-light transition-colors"
-            >
-              View all →
-            </button>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {briefs.slice(0, 3).map((brief) => (
-              <BriefCard key={brief.id} brief={brief} />
-            ))}
-          </div>
-        </motion.div>
-      )}
-
-      <motion.div variants={item} className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      {/* Nutrition + Habits */}
+      <motion.div variants={item} className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-xs font-mono text-white/30 uppercase tracking-wider">Nutrition</h3>
@@ -115,6 +118,7 @@ export function TodayView({ onNavigate }: TodayViewProps) {
             </button>
           </div>
           <MealPlanCard plan={mealPlan} />
+          <NutritionTips />
         </div>
 
         <div className="space-y-4">
@@ -128,16 +132,7 @@ export function TodayView({ onNavigate }: TodayViewProps) {
             </button>
           </div>
           <HabitTracker habits={habits} todayLogs={habitLogs} onToggle={handleHabitToggle} />
-          <NutritionTips />
         </div>
-      </motion.div>
-
-      <motion.div variants={item}>
-        <GlassCard className="text-center py-8">
-          <p className="text-xs text-white/20 font-mono">
-            Press 1-6 to navigate · Connected to the cosmos
-          </p>
-        </GlassCard>
       </motion.div>
     </motion.div>
   )
