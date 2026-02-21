@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Command Center
 
-## Getting Started
+Personal life OS dashboard with a deep space theme. Combines daily briefs, Indian meal planning, habit tracking, exercise/reading logs, and quick notes.
 
-First, run the development server:
+## Features
+
+- **Briefs** - Morning briefing, tech news digest, evening review (OpenClaw-powered)
+- **Meals** - 7 rotating Indian non-veg meal templates, cook's card, meal logging, daily essentials checklist
+- **Habits** - Configurable daily habits, exercise logging, reading tracker, streak calendars
+- **Notes** - Quick capture for thoughts and ideas
+- **Space Theme** - Animated twinkling stars, glass-morphism cards, cosmic glow effects
+
+## Quick Start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Works immediately with sample data - no Supabase required for local development.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Setup with Supabase (optional)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Create a project at [supabase.com](https://supabase.com)
+2. Run `supabase/schema.sql` in the SQL Editor
+3. Optionally run `src/data/seed.sql` for demo data
+4. Copy `.env.example` to `.env.local` and fill in your keys:
 
-## Learn More
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Deploy to Vercel
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Import repo at [vercel.com/new](https://vercel.com/new)
+2. Add environment variables (Supabase URL + anon key)
+3. Deploy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Keyboard Shortcuts
 
-## Deploy on Vercel
+| Key | Section |
+|-----|---------|
+| 1   | Today   |
+| 2   | Briefs  |
+| 3   | Meals   |
+| 4   | Habits  |
+| 5   | Notes   |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## OpenClaw Webhook
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+POST to `/api/webhook` with:
+
+```json
+{
+  "type": "brief",
+  "brief_type": "morning_briefing",
+  "title": "Your Morning Brief",
+  "content": "..."
+}
+```
+
+## Tech Stack
+
+Next.js 15, TypeScript, Tailwind CSS, Framer Motion, Supabase
