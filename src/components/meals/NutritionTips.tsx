@@ -22,7 +22,7 @@ export function NutritionTips() {
   const progress = checked.size / DAILY_ESSENTIALS.length
 
   return (
-    <GlassCard glow="cosmic">
+    <GlassCard glow="cosmic" className="h-full">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-sm font-semibold text-white/90 flex items-center gap-2">
           <span className="text-cosmic-light">✓</span>

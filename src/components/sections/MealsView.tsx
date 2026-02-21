@@ -47,7 +47,7 @@ export function MealsView() {
       <MealLogger onLog={handleLogMeal} />
 
       {/* Daily Essentials + Meal Plan — side by side */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <NutritionTips />
         <MealPlanCard plan={mealPlan} />
       </div>

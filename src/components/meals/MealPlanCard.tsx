@@ -22,7 +22,7 @@ export function MealPlanCard({ plan }: MealPlanCardProps) {
   const meals = Object.entries(plan) as [keyof MealPlanData, string][]
 
   return (
-    <GlassCard glow="cosmic" className="space-y-3">
+    <GlassCard glow="cosmic" className="h-full space-y-3">
       <div className="flex items-center gap-2 mb-1">
         <span className="text-cosmic-light text-sm">◇</span>
         <h3 className="text-sm font-semibold text-white/90">Today&apos;s Meal Plan</h3>
