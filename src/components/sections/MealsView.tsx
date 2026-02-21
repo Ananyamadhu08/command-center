@@ -37,22 +37,23 @@ export function MealsView() {
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
-          className="glass text-xs text-amber-light/70 px-4 py-2 inline-block"
+          className="glass text-xs text-cosmic-light/70 px-4 py-2 inline-block"
         >
           Meal logged successfully
         </motion.div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="space-y-4">
-          <MealPlanCard plan={mealPlan} />
-          <CookCard plan={mealPlan} />
-        </div>
-        <div className="space-y-4">
-          <MealLogger onLog={handleLogMeal} />
-          <NutritionTips />
-        </div>
+      {/* Log a Meal — primary action */}
+      <MealLogger onLog={handleLogMeal} />
+
+      {/* Daily Essentials + Meal Plan — side by side */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+        <NutritionTips />
+        <MealPlanCard plan={mealPlan} />
       </div>
+
+      {/* Cook's Card — full width reference */}
+      <CookCard plan={mealPlan} />
     </motion.div>
   )
 }
