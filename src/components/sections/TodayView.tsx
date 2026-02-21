@@ -193,8 +193,7 @@ export function TodayView({ onNavigate }: TodayViewProps) {
           <GlassCard hover={false} className="h-full text-center py-4">
             <span className="text-2xl block mb-1">{"\uD83C\uDFCB\uFE0F"}</span>
             <p className="text-lg font-semibold text-white/90">
-              {exerciseMinutes > 0 ? `${exerciseMinutes}` : "0"}
-              <span className="text-xs font-normal text-white/40 ml-1">min</span>
+              {exerciseMinutes > 0 ? `${exerciseMinutes}` : "0"} min
             </p>
             <p className="text-[10px] font-mono text-white/30 mt-0.5 truncate">
               {exerciseType ?? "No workout yet"}
@@ -205,8 +204,7 @@ export function TodayView({ onNavigate }: TodayViewProps) {
           <GlassCard hover={false} className="h-full text-center py-4">
             <span className="text-2xl block mb-1">{"\uD83D\uDCDA"}</span>
             <p className="text-lg font-semibold text-white/90">
-              {pagesRead > 0 ? `${pagesRead}` : "0"}
-              <span className="text-xs font-normal text-white/40 ml-1">pages</span>
+              {pagesRead > 0 ? `${pagesRead}` : "0"} pages
             </p>
             <p className="text-[10px] font-mono text-white/30 mt-0.5 truncate">
               {currentBook ?? "No reading yet"}
@@ -217,8 +215,7 @@ export function TodayView({ onNavigate }: TodayViewProps) {
           <GlassCard hover={false} className="h-full text-center py-4">
             <span className="text-2xl block mb-1">{"\u2705"}</span>
             <p className="text-lg font-semibold text-white/90">
-              {completedHabits}
-              <span className="text-xs font-normal text-white/40">/{habits.length}</span>
+              {completedHabits}/{habits.length}
             </p>
             <p className="text-[10px] font-mono text-white/30 mt-0.5">
               Habits done
@@ -229,8 +226,7 @@ export function TodayView({ onNavigate }: TodayViewProps) {
           <GlassCard hover={false} className="h-full text-center py-4">
             <span className="text-2xl block mb-1">{"\uD83C\uDF7D\uFE0F"}</span>
             <p className="text-lg font-semibold text-white/90">
-              {mealLogs.length}
-              <span className="text-xs font-normal text-white/40">/7</span>
+              {mealLogs.length}/7
             </p>
             <p className="text-[10px] font-mono text-white/30 mt-0.5">
               Meals tracked
