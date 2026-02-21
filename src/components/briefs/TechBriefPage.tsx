@@ -64,8 +64,8 @@ function GlassBadge({ category }: { category: TechCategory }) {
       className={
         "inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap " +
         "text-[10px] font-medium px-2.5 py-1 rounded-lg " +
-        "backdrop-blur-md bg-cosmic/10 border border-cosmic/25 text-cosmic-light/80 " +
-        "shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_0_8px_rgba(139,92,246,0.1)]"
+        "backdrop-blur-md bg-white/[0.05] border border-white/[0.12] text-white/70 " +
+        "shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]"
       }
     >
       <span className="text-xs leading-none">{CATEGORY_ICONS[category]}</span>
@@ -76,12 +76,7 @@ function GlassBadge({ category }: { category: TechCategory }) {
 
 function GlassTag({ tag }: { tag: string }) {
   return (
-    <span
-      className={
-        "text-[9px] px-2 py-0.5 rounded-md font-mono " +
-        "backdrop-blur-sm bg-cosmic/[0.06] border border-cosmic/15 text-cosmic-light/40"
-      }
-    >
+    <span className="text-[9px] px-2 py-0.5 rounded-md font-mono bg-white/[0.04] border border-white/[0.08] text-white/30">
       #{tag}
     </span>
   )
@@ -90,7 +85,6 @@ function GlassTag({ tag }: { tag: string }) {
 function StoryCard({ story, index, onSelect }: { story: TechStory; index: number; onSelect: () => void }) {
   return (
     <motion.div
-      key={`news-${story.title}-${index}`}
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
@@ -98,10 +92,10 @@ function StoryCard({ story, index, onSelect }: { story: TechStory; index: number
     >
       <GlassCard hover onClick={onSelect}>
         <div className="space-y-3">
-          {/* Badge + Source row */}
+          {/* Badge + Source */}
           <div className="flex items-center gap-2.5">
             <GlassBadge category={story.category} />
-            <span className="text-[10px] font-mono text-white/25">{story.source}</span>
+            <span className="text-[10px] font-mono text-white/20">{story.source}</span>
           </div>
 
           {/* Title */}
@@ -110,7 +104,7 @@ function StoryCard({ story, index, onSelect }: { story: TechStory; index: number
           </h3>
 
           {/* Summary */}
-          <p className="text-xs text-white/50 leading-relaxed">{story.summary}</p>
+          <p className="text-xs text-white/45 leading-relaxed">{story.summary}</p>
 
           {/* Tags */}
           {story.tags && story.tags.length > 0 && (
@@ -121,18 +115,13 @@ function StoryCard({ story, index, onSelect }: { story: TechStory; index: number
             </div>
           )}
 
-          {/* Takeaway strip */}
-          <div
-            className={
-              "flex items-center gap-3 px-3 py-2.5 -mx-1 rounded-lg " +
-              "bg-cosmic/[0.04] border border-cosmic/10"
-            }
-          >
-            <span className="text-[9px] font-mono text-cosmic/50 uppercase tracking-widest shrink-0">
+          {/* Takeaway — purple text is the accent */}
+          <div className="flex items-center gap-3 pt-2.5 border-t border-white/[0.06]">
+            <span className="text-[9px] font-mono text-white/20 uppercase tracking-widest shrink-0">
               Takeaway
             </span>
-            <p className="text-xs text-cosmic-light/50 flex-1 min-w-0 truncate">{story.takeaway}</p>
-            <span className="text-cosmic-light/30 text-sm shrink-0">{"\u2192"}</span>
+            <p className="text-xs text-cosmic-light flex-1 min-w-0 truncate">{story.takeaway}</p>
+            <span className="text-white/20 text-sm shrink-0">{"\u2192"}</span>
           </div>
         </div>
       </GlassCard>
@@ -199,7 +188,7 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
         </div>
       </div>
 
-      {/* Tab Bar — glass pill toggle */}
+      {/* Tab Bar */}
       <div className="flex gap-2">
         <button
           onClick={() => {
@@ -208,10 +197,9 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
           }}
           className={
             "text-xs px-5 py-2 rounded-lg border transition-all font-medium " +
-            "backdrop-blur-md " +
             (activeTab === "news"
-              ? "border-cosmic/30 bg-cosmic/15 text-cosmic-light shadow-[0_0_12px_rgba(139,92,246,0.15)]"
-              : "border-white/10 bg-white/[0.02] text-white/40 hover:border-white/20 hover:text-white/60")
+              ? "border-white/20 bg-white/10 text-white/90"
+              : "border-white/[0.08] text-white/35 hover:border-white/15 hover:text-white/55")
           }
         >
           News ({newsCount})
@@ -223,10 +211,9 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
           }}
           className={
             "text-xs px-5 py-2 rounded-lg border transition-all font-medium " +
-            "backdrop-blur-md " +
             (activeTab === "discourse"
-              ? "border-cosmic/30 bg-cosmic/15 text-cosmic-light shadow-[0_0_12px_rgba(139,92,246,0.15)]"
-              : "border-white/10 bg-white/[0.02] text-white/40 hover:border-white/20 hover:text-white/60")
+              ? "border-white/20 bg-white/10 text-white/90"
+              : "border-white/[0.08] text-white/35 hover:border-white/15 hover:text-white/55")
           }
         >
           Discourse ({discourseCount})
@@ -244,15 +231,15 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
             transition={{ duration: 0.2 }}
             className="space-y-5"
           >
-            {/* Category Filter — glass chips */}
+            {/* Category Filters */}
             <div className="flex flex-wrap gap-1.5">
               <button
                 onClick={() => setActiveCategory("all")}
                 className={
-                  "text-[10px] px-3 py-1.5 rounded-lg border transition-all backdrop-blur-sm " +
+                  "text-[10px] px-3 py-1.5 rounded-lg border transition-all " +
                   (activeCategory === "all"
-                    ? "border-cosmic/30 bg-cosmic/12 text-cosmic-light shadow-[0_0_8px_rgba(139,92,246,0.12)]"
-                    : "border-white/10 bg-white/[0.02] text-white/40 hover:border-cosmic/20 hover:text-white/60")
+                    ? "border-white/20 bg-white/10 text-white/80"
+                    : "border-white/[0.08] text-white/30 hover:border-white/15 hover:text-white/50")
                 }
               >
                 All ({newsCount})
@@ -262,11 +249,10 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
                   className={
-                    "text-[10px] px-3 py-1.5 rounded-lg border transition-all backdrop-blur-sm " +
-                    "flex items-center gap-1.5 " +
+                    "text-[10px] px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 " +
                     (activeCategory === cat
-                      ? "border-cosmic/30 bg-cosmic/12 text-cosmic-light shadow-[0_0_8px_rgba(139,92,246,0.12)]"
-                      : "border-white/10 bg-white/[0.02] text-white/40 hover:border-cosmic/20 hover:text-white/60")
+                      ? "border-white/20 bg-white/10 text-white/80"
+                      : "border-white/[0.08] text-white/30 hover:border-white/15 hover:text-white/50")
                   }
                 >
                   <span className="text-[9px]">{CATEGORY_ICONS[cat]}</span>
@@ -301,7 +287,7 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
             {/* Hot Takes */}
             {hotTakes.length > 0 && (
               <div>
-                <h2 className="text-xs font-mono text-cosmic-light/50 uppercase tracking-wider mb-3 flex items-center gap-2">
+                <h2 className="text-xs font-mono text-white/35 uppercase tracking-wider mb-3 flex items-center gap-2">
                   <span>{"\u{1D54F}"}</span> Hot Takes
                 </h2>
                 <div className="space-y-2.5">
@@ -312,25 +298,18 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.05 }}
                     >
-                      <GlassCard hover={false} className="border-l-2 border-l-cosmic/40">
+                      <GlassCard hover={false} className="border-l-2 border-l-cosmic/30">
                         <div className="space-y-2.5">
                           <div className="flex items-center gap-2.5">
                             <span className="text-sm font-semibold text-white/85">{take.author}</span>
-                            <span className="text-[10px] font-mono text-cosmic-light/40">{take.handle}</span>
+                            <span className="text-[10px] font-mono text-white/30">{take.handle}</span>
                           </div>
-                          <p className="text-xs text-white/55 leading-relaxed italic">
+                          <p className="text-xs text-white/50 leading-relaxed italic">
                             {"\u201C"}{take.text}{"\u201D"}
                           </p>
-                          <div className="flex items-center gap-2">
-                            <span
-                              className={
-                                "text-[9px] px-2 py-0.5 rounded-md font-mono " +
-                                "backdrop-blur-sm bg-cosmic/[0.06] border border-cosmic/15 text-cosmic-light/35"
-                              }
-                            >
-                              {take.engagement}
-                            </span>
-                          </div>
+                          <span className="inline-block text-[9px] px-2 py-0.5 rounded-md font-mono bg-white/[0.04] border border-white/[0.08] text-white/25">
+                            {take.engagement}
+                          </span>
                         </div>
                       </GlassCard>
                     </motion.div>
@@ -342,7 +321,7 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
             {/* Featured Discussions */}
             {discussions.length > 0 && (
               <div>
-                <h2 className="text-xs font-mono text-cosmic-light/50 uppercase tracking-wider mb-3 flex items-center gap-2">
+                <h2 className="text-xs font-mono text-white/35 uppercase tracking-wider mb-3 flex items-center gap-2">
                   <span>{"\u{1F4AC}"}</span> Featured Discussions
                 </h2>
                 <div className="space-y-3">
@@ -365,7 +344,7 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
       {(parsed.quick_links ?? []).length > 0 && (
         <div className="pt-4 border-t border-white/5">
           <GlassCard hover={false}>
-            <h3 className="text-xs font-mono text-white/30 uppercase tracking-wider mb-3">Quick Links</h3>
+            <h3 className="text-xs font-mono text-white/25 uppercase tracking-wider mb-3">Quick Links</h3>
             <div className="flex flex-wrap gap-2">
               {parsed.quick_links.map((link) => (
                 <a
@@ -375,9 +354,8 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
                   rel="noopener noreferrer"
                   className={
                     "text-[11px] px-3 py-1.5 rounded-lg transition-all " +
-                    "backdrop-blur-sm bg-white/[0.02] border border-white/10 text-white/50 " +
-                    "hover:text-cosmic-light hover:border-cosmic/25 hover:bg-cosmic/[0.06] " +
-                    "hover:shadow-[0_0_8px_rgba(139,92,246,0.1)]"
+                    "border border-white/[0.08] text-white/40 " +
+                    "hover:text-white/70 hover:border-white/20 hover:bg-white/[0.04]"
                   }
                 >
                   {link.label} {"\u2197"}
@@ -394,33 +372,28 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
           <div className="space-y-4">
             <div className="flex items-center gap-2.5 flex-wrap">
               <GlassBadge category={selectedStory.category} />
-              <span className="text-[10px] font-mono text-white/30">{selectedStory.source}</span>
+              <span className="text-[10px] font-mono text-white/25">{selectedStory.source}</span>
             </div>
 
-            <div className="text-sm text-white/70 leading-relaxed space-y-3">
+            <div className="text-sm text-white/65 leading-relaxed space-y-3">
               {selectedStory.detail.split("\n\n").map((paragraph, i) => (
                 <p key={i}>{paragraph}</p>
               ))}
             </div>
 
             {selectedStory.tags && selectedStory.tags.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 pt-2 border-t border-white/5">
+              <div className="flex flex-wrap gap-1.5 pt-2 border-t border-white/[0.06]">
                 {selectedStory.tags.map((tag) => (
                   <GlassTag key={tag} tag={tag} />
                 ))}
               </div>
             )}
 
-            <div
-              className={
-                "px-4 py-3 rounded-lg " +
-                "bg-cosmic/[0.04] border border-cosmic/10"
-              }
-            >
-              <p className="text-[9px] font-mono text-cosmic/50 uppercase tracking-widest mb-1.5">
+            <div className="pt-3 border-t border-white/[0.06]">
+              <p className="text-[9px] font-mono text-white/20 uppercase tracking-widest mb-1.5">
                 Key Takeaway
               </p>
-              <p className="text-sm text-cosmic-light/70">{selectedStory.takeaway}</p>
+              <p className="text-sm text-cosmic-light">{selectedStory.takeaway}</p>
             </div>
           </div>
         )}
