@@ -141,7 +141,7 @@ export function ReadingTracker({ onLog, recentLogs }: ReadingTrackerProps) {
             <span className="text-cosmic-light">□</span>
             Reading
           </h3>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {finishedBooks.length > 0 && (
               <button
                 onClick={() => setShowFinished(true)}
@@ -150,46 +150,19 @@ export function ReadingTracker({ onLog, recentLogs }: ReadingTrackerProps) {
                 {finishedBooks.length} finished
               </button>
             )}
-            {!showAddForm && (
-              <button
-                onClick={() => setShowAddForm(true)}
-                className="text-[10px] px-2.5 py-1 rounded-lg border border-cosmic/25 text-cosmic-light/60 hover:bg-cosmic/10 hover:text-cosmic-light transition-all"
-              >
-                + Add Book
-              </button>
-            )}
+            <button
+              onClick={() => setShowAddForm(true)}
+              className="w-5 h-5 rounded-md border border-cosmic/25 text-cosmic-light/60 hover:bg-cosmic/10 hover:text-cosmic-light flex items-center justify-center transition-all text-xs leading-none"
+              title="Add book"
+            >
+              +
+            </button>
           </div>
         </div>
 
         <div className="space-y-4">
-          {/* Add New Book Form */}
-          {showAddForm && (
-            <div className="p-5 rounded-2xl border border-dashed border-cosmic/30 bg-cosmic/[0.03] space-y-3">
-              <p className="text-[11px] font-medium text-white/40 uppercase tracking-wider">New book</p>
-              <Input value={newTitle} onChange={setNewTitle} placeholder="Book title" />
-              <Input value={newPages} onChange={setNewPages} placeholder="Total pages" type="number" />
-              <div className="flex gap-2 pt-1">
-                <GlowButton
-                  variant="cosmic"
-                  size="sm"
-                  onClick={handleAddBook}
-                  disabled={!newTitle.trim() || !newPages || parseInt(newPages, 10) <= 0}
-                >
-                  Add Book
-                </GlowButton>
-                <GlowButton
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => { setShowAddForm(false); setNewTitle(""); setNewPages("") }}
-                >
-                  Cancel
-                </GlowButton>
-              </div>
-            </div>
-          )}
-
           {/* Empty State */}
-          {activeBooks.length === 0 && !showAddForm && (
+          {activeBooks.length === 0 && (
             <div className="py-8 text-center">
               <p className="text-xs text-white/25">No books yet. Add one to start tracking.</p>
             </div>
@@ -275,6 +248,31 @@ export function ReadingTracker({ onLog, recentLogs }: ReadingTrackerProps) {
           })}
         </div>
       </GlassCard>
+
+      {/* Add Book Modal */}
+      <Modal isOpen={showAddForm} onClose={() => { setShowAddForm(false); setNewTitle(""); setNewPages("") }} title="Add Book">
+        <div className="space-y-4">
+          <Input value={newTitle} onChange={setNewTitle} placeholder="Book title" />
+          <Input value={newPages} onChange={setNewPages} placeholder="Total pages" type="number" />
+          <div className="flex gap-2 pt-2">
+            <GlowButton
+              variant="cosmic"
+              size="sm"
+              onClick={handleAddBook}
+              disabled={!newTitle.trim() || !newPages || parseInt(newPages, 10) <= 0}
+            >
+              Add Book
+            </GlowButton>
+            <GlowButton
+              variant="ghost"
+              size="sm"
+              onClick={() => { setShowAddForm(false); setNewTitle(""); setNewPages("") }}
+            >
+              Cancel
+            </GlowButton>
+          </div>
+        </div>
+      </Modal>
 
       {/* Finished Books Modal */}
       <Modal isOpen={showFinished} onClose={() => setShowFinished(false)} title="Finished Books">
