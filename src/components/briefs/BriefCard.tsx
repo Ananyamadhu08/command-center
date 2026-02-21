@@ -28,12 +28,12 @@ const TYPE_TIMES: Record<BriefType, string> = {
 
 export function BriefCard({ brief }: BriefCardProps) {
   const config = TYPE_CONFIG[brief.type]
-  const rawPreview = brief.content.startsWith("{") ? TYPE_LABELS[brief.type] + " — tap to view" : brief.content
-  const preview = rawPreview.slice(0, 120) + (rawPreview.length > 120 ? "..." : "")
+  const rawPreview = brief.content.startsWith("{") ? TYPE_LABELS[brief.type] + " \u2014 tap to view" : brief.content
+  const preview = rawPreview.slice(0, 80) + (rawPreview.length > 80 ? "..." : "")
 
   return (
-    <Link href={`/briefs/${brief.type}`} className="block">
-      <GlassCard glow={config.glow}>
+    <Link href={`/briefs/${brief.type}`} className="block h-full">
+      <GlassCard glow={config.glow} className="h-full">
         <div className="flex items-start gap-3">
           <span className={`text-lg ${config.color}`}>{config.icon}</span>
           <div className="flex-1 min-w-0">
@@ -48,7 +48,7 @@ export function BriefCard({ brief }: BriefCardProps) {
             <h3 className="text-sm font-medium text-white/90 mb-1.5 truncate">
               {brief.title}
             </h3>
-            <p className="text-xs text-white/40 leading-relaxed">{preview}</p>
+            <p className="text-xs text-white/40 leading-relaxed line-clamp-2">{preview}</p>
           </div>
         </div>
       </GlassCard>
@@ -64,14 +64,22 @@ export function PendingBriefCard({ type }: PendingBriefCardProps) {
   const config = TYPE_CONFIG[type]
 
   return (
-    <GlassCard className="opacity-50">
-      <div className="flex items-center gap-3">
+    <GlassCard className="h-full opacity-50">
+      <div className="flex items-start gap-3">
         <span className={`text-lg ${config.color} opacity-40`}>{config.icon}</span>
-        <div>
-          <span className="text-[10px] font-mono text-white/30 uppercase tracking-wider">
-            {TYPE_LABELS[type]}
-          </span>
-          <p className="text-xs text-white/25 mt-0.5">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-[10px] font-mono text-white/30 uppercase tracking-wider">
+              {TYPE_LABELS[type]}
+            </span>
+            <span className="text-[10px] font-mono text-white/20">
+              {TYPE_TIMES[type]}
+            </span>
+          </div>
+          <h3 className="text-sm font-medium text-white/40 mb-1.5">
+            Pending
+          </h3>
+          <p className="text-xs text-white/25 leading-relaxed line-clamp-2">
             Arrives at {TYPE_TIMES[type]}
           </p>
         </div>

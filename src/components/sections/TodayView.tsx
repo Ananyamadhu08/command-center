@@ -177,32 +177,32 @@ export function TodayView({ onNavigate }: TodayViewProps) {
         <h2 className="text-lg font-semibold text-white/80 mb-3">Today&apos;s Overview</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
           {/* Weather */}
-          <GlassCard hover={false} className="text-center py-4">
+          <GlassCard hover={false} className="h-full text-center py-4">
             <span className="text-2xl block mb-1">
               {weather ? (WEATHER_ICONS[weather.icon] ?? "\u2601\uFE0F") : "\u2601\uFE0F"}
             </span>
             <p className="text-lg font-semibold text-white/90">
               {weather ? `${weather.temp}\u00B0` : "--\u00B0"}
             </p>
-            <p className="text-[10px] font-mono text-white/30 mt-0.5 capitalize">
+            <p className="text-[10px] font-mono text-white/30 mt-0.5 capitalize truncate">
               {weather?.condition ?? "Loading..."}
             </p>
           </GlassCard>
 
           {/* Exercise */}
-          <GlassCard hover={false} className="text-center py-4">
+          <GlassCard hover={false} className="h-full text-center py-4">
             <span className="text-2xl block mb-1">{"\uD83C\uDFCB\uFE0F"}</span>
             <p className="text-lg font-semibold text-white/90">
               {exerciseMinutes > 0 ? `${exerciseMinutes}` : "0"}
               <span className="text-xs font-normal text-white/40 ml-1">min</span>
             </p>
-            <p className="text-[10px] font-mono text-white/30 mt-0.5">
+            <p className="text-[10px] font-mono text-white/30 mt-0.5 truncate">
               {exerciseType ?? "No workout yet"}
             </p>
           </GlassCard>
 
           {/* Reading */}
-          <GlassCard hover={false} className="text-center py-4">
+          <GlassCard hover={false} className="h-full text-center py-4">
             <span className="text-2xl block mb-1">{"\uD83D\uDCDA"}</span>
             <p className="text-lg font-semibold text-white/90">
               {pagesRead > 0 ? `${pagesRead}` : "0"}
@@ -214,7 +214,7 @@ export function TodayView({ onNavigate }: TodayViewProps) {
           </GlassCard>
 
           {/* Habits */}
-          <GlassCard hover={false} className="text-center py-4">
+          <GlassCard hover={false} className="h-full text-center py-4">
             <span className="text-2xl block mb-1">{"\u2705"}</span>
             <p className="text-lg font-semibold text-white/90">
               {completedHabits}
@@ -226,7 +226,7 @@ export function TodayView({ onNavigate }: TodayViewProps) {
           </GlassCard>
 
           {/* Meals */}
-          <GlassCard hover={false} className="text-center py-4 col-span-2 sm:col-span-1">
+          <GlassCard hover={false} className="h-full text-center py-4">
             <span className="text-2xl block mb-1">{"\uD83C\uDF7D\uFE0F"}</span>
             <p className="text-lg font-semibold text-white/90">
               {mealLogs.length}
