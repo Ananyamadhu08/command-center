@@ -1,11 +1,11 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo, useRef } from "react"
 import { motion } from "framer-motion"
 import { HabitTracker } from "@/components/habits/HabitTracker"
 import { ExerciseLog } from "@/components/habits/ExerciseLog"
-import { ReadingLog } from "@/components/habits/ReadingLog"
-import { StreakCalendar } from "@/components/habits/StreakCalendar"
+import { ReadingTracker } from "@/components/habits/ReadingTracker"
+import { WeeklyActivity } from "@/components/habits/WeeklyActivity"
 import { getToday } from "@/lib/utils"
 import type {
   Habit,
@@ -20,7 +20,8 @@ export function HabitsView() {
   const [exerciseLogs, setExerciseLogs] = useState<ExerciseLogType[]>([])
   const [readingLogs, setReadingLogs] = useState<ReadingLogType[]>([])
 
-  const today = getToday()
+  const todayRef = useRef(getToday())
+  const today = todayRef.current
 
   useEffect(() => {
     fetch("/api/habits")
@@ -28,7 +29,7 @@ export function HabitsView() {
       .then((r) => { if (r.success) setHabits(r.data) })
       .catch(() => {})
 
-    fetch(`/api/habits?logs=true&date=${today}`)
+    fetch("/api/habits?logs=true")
       .then((r) => r.json())
       .then((r) => { if (r.success) setHabitLogs(r.data) })
       .catch(() => {})
@@ -115,25 +116,45 @@ export function HabitsView() {
     }
   }
 
-  const todayExercise = exerciseLogs.filter((l) => l.date === today)
-  const exerciseDates = [...new Set(exerciseLogs.map((l) => l.date))]
-  const readingDates = [...new Set(readingLogs.map((l) => l.date))]
+  const todayExercise = useMemo(
+    () => exerciseLogs.filter((l) => l.date === today),
+    [exerciseLogs, today],
+  )
+
+  const todayHabitLogs = useMemo(
+    () => habitLogs.filter((l) => l.date === today),
+    [habitLogs, today],
+  )
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
       <h2 className="text-lg font-semibold text-white/80">Habits & Tracking</h2>
 
+      {/* Row 1: Reading Tracker (full width) */}
+      <ReadingTracker onLog={handleReadingLog} recentLogs={readingLogs} />
+
+      {/* Row 2: Daily Habits + Exercise Log */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="space-y-4">
-          <HabitTracker habits={habits} todayLogs={habitLogs} onToggle={handleHabitToggle} />
-          <ExerciseLog onLog={handleExerciseLog} todayLogs={todayExercise} />
-        </div>
-        <div className="space-y-4">
-          <ReadingLog onLog={handleReadingLog} recentLogs={readingLogs} />
-          <StreakCalendar title="Exercise Streak" dates={exerciseDates} color="#3b82f6" />
-          <StreakCalendar title="Reading Streak" dates={readingDates} color="#8b5cf6" />
-        </div>
+        <HabitTracker
+          habits={habits}
+          todayLogs={todayHabitLogs}
+          onToggle={handleHabitToggle}
+          allLogs={habitLogs}
+        />
+        <ExerciseLog
+          onLog={handleExerciseLog}
+          todayLogs={todayExercise}
+          allLogs={exerciseLogs}
+        />
       </div>
+
+      {/* Row 3: Weekly Activity (full width) */}
+      <WeeklyActivity
+        exerciseLogs={exerciseLogs}
+        readingLogs={readingLogs}
+        habitLogs={habitLogs}
+        habits={habits}
+      />
     </motion.div>
   )
 }
