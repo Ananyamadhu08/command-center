@@ -37,19 +37,6 @@ const CATEGORY_LABELS: Record<TechCategory, string> = {
   security: "Security",
 }
 
-const CATEGORY_COLORS: Record<TechCategory, string> = {
-  ai_ml: "text-cosmic-light border-cosmic/40 bg-cosmic/15",
-  twitter_buzz: "text-sky-400 border-sky-500/40 bg-sky-500/15",
-  web_dev: "text-electric-light border-electric/40 bg-electric/15",
-  infra_devops: "text-teal-400 border-teal-500/40 bg-teal-500/15",
-  startups: "text-amber-light border-amber/40 bg-amber/15",
-  open_source: "text-emerald-400 border-emerald-500/40 bg-emerald-500/15",
-  india_tech: "text-orange-400 border-orange-500/40 bg-orange-500/15",
-  tools: "text-cyan-400 border-cyan-500/40 bg-cyan-500/15",
-  mobile: "text-pink-400 border-pink-500/40 bg-pink-500/15",
-  security: "text-red-400 border-red-500/40 bg-red-500/15",
-}
-
 const CATEGORY_ICONS: Record<TechCategory, string> = {
   ai_ml: "\u{1F9E0}",
   twitter_buzz: "\u{1D54F}",
@@ -69,6 +56,88 @@ function parseTechContent(content: string): TechBriefContent | null {
   } catch {
     return null
   }
+}
+
+function GlassBadge({ category }: { category: TechCategory }) {
+  return (
+    <span
+      className={
+        "inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap " +
+        "text-[10px] font-medium px-2.5 py-1 rounded-lg " +
+        "backdrop-blur-md bg-cosmic/10 border border-cosmic/25 text-cosmic-light/80 " +
+        "shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_0_8px_rgba(139,92,246,0.1)]"
+      }
+    >
+      <span className="text-xs leading-none">{CATEGORY_ICONS[category]}</span>
+      {CATEGORY_LABELS[category]}
+    </span>
+  )
+}
+
+function GlassTag({ tag }: { tag: string }) {
+  return (
+    <span
+      className={
+        "text-[9px] px-2 py-0.5 rounded-md font-mono " +
+        "backdrop-blur-sm bg-cosmic/[0.06] border border-cosmic/15 text-cosmic-light/40"
+      }
+    >
+      #{tag}
+    </span>
+  )
+}
+
+function StoryCard({ story, index, onSelect }: { story: TechStory; index: number; onSelect: () => void }) {
+  return (
+    <motion.div
+      key={`news-${story.title}-${index}`}
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{ delay: index * 0.04 }}
+    >
+      <GlassCard hover onClick={onSelect}>
+        <div className="space-y-3">
+          {/* Badge + Source row */}
+          <div className="flex items-center gap-2.5">
+            <GlassBadge category={story.category} />
+            <span className="text-[10px] font-mono text-white/25">{story.source}</span>
+          </div>
+
+          {/* Title */}
+          <h3 className="text-[15px] font-semibold text-white/90 leading-snug tracking-tight">
+            {story.title}
+          </h3>
+
+          {/* Summary */}
+          <p className="text-xs text-white/50 leading-relaxed">{story.summary}</p>
+
+          {/* Tags */}
+          {story.tags && story.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {story.tags.map((tag) => (
+                <GlassTag key={tag} tag={tag} />
+              ))}
+            </div>
+          )}
+
+          {/* Takeaway strip */}
+          <div
+            className={
+              "flex items-center gap-3 px-3 py-2.5 -mx-1 rounded-lg " +
+              "bg-cosmic/[0.04] border border-cosmic/10"
+            }
+          >
+            <span className="text-[9px] font-mono text-cosmic/50 uppercase tracking-widest shrink-0">
+              Takeaway
+            </span>
+            <p className="text-xs text-cosmic-light/50 flex-1 min-w-0 truncate">{story.takeaway}</p>
+            <span className="text-cosmic-light/30 text-sm shrink-0">{"\u2192"}</span>
+          </div>
+        </div>
+      </GlassCard>
+    </motion.div>
+  )
 }
 
 export function TechBriefPage({ brief }: TechBriefPageProps) {
@@ -96,7 +165,10 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
   }, [parsed.stories])
 
   const filteredStories = useMemo(
-    () => (activeCategory === "all" ? parsed.stories : parsed.stories.filter((s) => s.category === activeCategory)),
+    () =>
+      activeCategory === "all"
+        ? parsed.stories
+        : parsed.stories.filter((s) => s.category === activeCategory),
     [parsed.stories, activeCategory],
   )
 
@@ -127,18 +199,20 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
         </div>
       </div>
 
-      {/* Tab Bar */}
+      {/* Tab Bar — glass pill toggle */}
       <div className="flex gap-2">
         <button
           onClick={() => {
             setActiveTab("news")
             setActiveCategory("all")
           }}
-          className={`text-xs px-4 py-2 rounded-lg border transition-all font-medium ${
-            activeTab === "news"
-              ? "border-cosmic/40 bg-cosmic/15 text-cosmic-light"
-              : "border-white/10 text-white/40 hover:border-white/20 hover:text-white/60"
-          }`}
+          className={
+            "text-xs px-5 py-2 rounded-lg border transition-all font-medium " +
+            "backdrop-blur-md " +
+            (activeTab === "news"
+              ? "border-cosmic/30 bg-cosmic/15 text-cosmic-light shadow-[0_0_12px_rgba(139,92,246,0.15)]"
+              : "border-white/10 bg-white/[0.02] text-white/40 hover:border-white/20 hover:text-white/60")
+          }
         >
           News ({newsCount})
         </button>
@@ -147,11 +221,13 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
             setActiveTab("discourse")
             setActiveCategory("all")
           }}
-          className={`text-xs px-4 py-2 rounded-lg border transition-all font-medium ${
-            activeTab === "discourse"
-              ? "border-sky-500/40 bg-sky-500/15 text-sky-400"
-              : "border-white/10 text-white/40 hover:border-white/20 hover:text-white/60"
-          }`}
+          className={
+            "text-xs px-5 py-2 rounded-lg border transition-all font-medium " +
+            "backdrop-blur-md " +
+            (activeTab === "discourse"
+              ? "border-cosmic/30 bg-cosmic/15 text-cosmic-light shadow-[0_0_12px_rgba(139,92,246,0.15)]"
+              : "border-white/10 bg-white/[0.02] text-white/40 hover:border-white/20 hover:text-white/60")
+          }
         >
           Discourse ({discourseCount})
         </button>
@@ -168,15 +244,16 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
             transition={{ duration: 0.2 }}
             className="space-y-5"
           >
-            {/* Category Filter */}
+            {/* Category Filter — glass chips */}
             <div className="flex flex-wrap gap-1.5">
               <button
                 onClick={() => setActiveCategory("all")}
-                className={`text-[10px] px-3 py-1.5 rounded-lg border transition-all ${
-                  activeCategory === "all"
-                    ? "border-white/30 bg-white/10 text-white/80"
-                    : "border-white/10 text-white/40 hover:border-white/20"
-                }`}
+                className={
+                  "text-[10px] px-3 py-1.5 rounded-lg border transition-all backdrop-blur-sm " +
+                  (activeCategory === "all"
+                    ? "border-cosmic/30 bg-cosmic/12 text-cosmic-light shadow-[0_0_8px_rgba(139,92,246,0.12)]"
+                    : "border-white/10 bg-white/[0.02] text-white/40 hover:border-cosmic/20 hover:text-white/60")
+                }
               >
                 All ({newsCount})
               </button>
@@ -184,11 +261,13 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
                 <button
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
-                  className={`text-[10px] px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1 ${
-                    activeCategory === cat
-                      ? CATEGORY_COLORS[cat]
-                      : "border-white/10 text-white/40 hover:border-white/20"
-                  }`}
+                  className={
+                    "text-[10px] px-3 py-1.5 rounded-lg border transition-all backdrop-blur-sm " +
+                    "flex items-center gap-1.5 " +
+                    (activeCategory === cat
+                      ? "border-cosmic/30 bg-cosmic/12 text-cosmic-light shadow-[0_0_8px_rgba(139,92,246,0.12)]"
+                      : "border-white/10 bg-white/[0.02] text-white/40 hover:border-cosmic/20 hover:text-white/60")
+                  }
                 >
                   <span className="text-[9px]">{CATEGORY_ICONS[cat]}</span>
                   {CATEGORY_LABELS[cat]} ({storyCounts[cat]})
@@ -200,47 +279,12 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
             <AnimatePresence mode="popLayout">
               <div className="space-y-3">
                 {filteredStories.map((story, i) => (
-                  <motion.div
+                  <StoryCard
                     key={`news-${story.title}-${i}`}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ delay: i * 0.04 }}
-                  >
-                    <GlassCard hover onClick={() => setSelectedStory(story)}>
-                      <div className="space-y-2.5">
-                        <div className="flex items-start justify-between gap-3">
-                          <h3 className="text-sm font-medium text-white/90 leading-snug">{story.title}</h3>
-                          <span
-                            className={`text-[9px] px-2 py-0.5 rounded-md border whitespace-nowrap shrink-0 ${CATEGORY_COLORS[story.category]}`}
-                          >
-                            {CATEGORY_ICONS[story.category]} {CATEGORY_LABELS[story.category]}
-                          </span>
-                        </div>
-                        <p className="text-[10px] font-mono text-white/30">{story.source}</p>
-                        <p className="text-xs text-white/55 leading-relaxed">{story.summary}</p>
-                        {story.tags && story.tags.length > 0 && (
-                          <div className="flex flex-wrap gap-1">
-                            {story.tags.map((tag) => (
-                              <span
-                                key={tag}
-                                className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 text-white/25 font-mono"
-                              >
-                                #{tag}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                        <div className="flex items-center justify-between pt-1 border-t border-white/5">
-                          <p className="text-xs text-cosmic-light/60">
-                            <span className="text-[10px] font-mono text-white/20 mr-1.5">TAKEAWAY</span>
-                            {story.takeaway}
-                          </p>
-                          <span className="text-[10px] text-white/20 shrink-0 ml-2">Read more {"\u2192"}</span>
-                        </div>
-                      </div>
-                    </GlassCard>
-                  </motion.div>
+                    story={story}
+                    index={i}
+                    onSelect={() => setSelectedStory(story)}
+                  />
                 ))}
               </div>
             </AnimatePresence>
@@ -257,10 +301,10 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
             {/* Hot Takes */}
             {hotTakes.length > 0 && (
               <div>
-                <h2 className="text-xs font-mono text-sky-400/60 uppercase tracking-wider mb-3 flex items-center gap-2">
+                <h2 className="text-xs font-mono text-cosmic-light/50 uppercase tracking-wider mb-3 flex items-center gap-2">
                   <span>{"\u{1D54F}"}</span> Hot Takes
                 </h2>
-                <div className="space-y-2">
+                <div className="space-y-2.5">
                   {hotTakes.map((take, i) => (
                     <motion.div
                       key={`take-${take.handle}-${i}`}
@@ -268,14 +312,25 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.05 }}
                     >
-                      <GlassCard hover={false} className="border-l-2 border-l-sky-500/30">
-                        <div className="space-y-2">
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-medium text-white/80">{take.author}</span>
-                            <span className="text-[10px] font-mono text-sky-400/50">{take.handle}</span>
+                      <GlassCard hover={false} className="border-l-2 border-l-cosmic/40">
+                        <div className="space-y-2.5">
+                          <div className="flex items-center gap-2.5">
+                            <span className="text-sm font-semibold text-white/85">{take.author}</span>
+                            <span className="text-[10px] font-mono text-cosmic-light/40">{take.handle}</span>
                           </div>
-                          <p className="text-xs text-white/60 leading-relaxed">{take.text}</p>
-                          <p className="text-[10px] font-mono text-white/20">{take.engagement}</p>
+                          <p className="text-xs text-white/55 leading-relaxed italic">
+                            {"\u201C"}{take.text}{"\u201D"}
+                          </p>
+                          <div className="flex items-center gap-2">
+                            <span
+                              className={
+                                "text-[9px] px-2 py-0.5 rounded-md font-mono " +
+                                "backdrop-blur-sm bg-cosmic/[0.06] border border-cosmic/15 text-cosmic-light/35"
+                              }
+                            >
+                              {take.engagement}
+                            </span>
+                          </div>
                         </div>
                       </GlassCard>
                     </motion.div>
@@ -287,51 +342,17 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
             {/* Featured Discussions */}
             {discussions.length > 0 && (
               <div>
-                <h2 className="text-xs font-mono text-sky-400/60 uppercase tracking-wider mb-3 flex items-center gap-2">
+                <h2 className="text-xs font-mono text-cosmic-light/50 uppercase tracking-wider mb-3 flex items-center gap-2">
                   <span>{"\u{1F4AC}"}</span> Featured Discussions
                 </h2>
                 <div className="space-y-3">
                   {discussions.map((story, i) => (
-                    <motion.div
+                    <StoryCard
                       key={`disc-${story.title}-${i}`}
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.05 }}
-                    >
-                      <GlassCard hover onClick={() => setSelectedStory(story)}>
-                        <div className="space-y-2.5">
-                          <div className="flex items-start justify-between gap-3">
-                            <h3 className="text-sm font-medium text-white/90 leading-snug">{story.title}</h3>
-                            <span
-                              className={`text-[9px] px-2 py-0.5 rounded-md border whitespace-nowrap shrink-0 ${CATEGORY_COLORS[story.category]}`}
-                            >
-                              {CATEGORY_ICONS[story.category]} {CATEGORY_LABELS[story.category]}
-                            </span>
-                          </div>
-                          <p className="text-[10px] font-mono text-white/30">{story.source}</p>
-                          <p className="text-xs text-white/55 leading-relaxed">{story.summary}</p>
-                          {story.tags && story.tags.length > 0 && (
-                            <div className="flex flex-wrap gap-1">
-                              {story.tags.map((tag) => (
-                                <span
-                                  key={tag}
-                                  className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 text-white/25 font-mono"
-                                >
-                                  #{tag}
-                                </span>
-                              ))}
-                            </div>
-                          )}
-                          <div className="flex items-center justify-between pt-1 border-t border-white/5">
-                            <p className="text-xs text-cosmic-light/60">
-                              <span className="text-[10px] font-mono text-white/20 mr-1.5">TAKEAWAY</span>
-                              {story.takeaway}
-                            </p>
-                            <span className="text-[10px] text-white/20 shrink-0 ml-2">Read more {"\u2192"}</span>
-                          </div>
-                        </div>
-                      </GlassCard>
-                    </motion.div>
+                      story={story}
+                      index={i}
+                      onSelect={() => setSelectedStory(story)}
+                    />
                   ))}
                 </div>
               </div>
@@ -352,7 +373,12 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[11px] px-3 py-1.5 rounded-lg border border-white/10 text-white/50 hover:text-white/80 hover:border-white/20 transition-all"
+                  className={
+                    "text-[11px] px-3 py-1.5 rounded-lg transition-all " +
+                    "backdrop-blur-sm bg-white/[0.02] border border-white/10 text-white/50 " +
+                    "hover:text-cosmic-light hover:border-cosmic/25 hover:bg-cosmic/[0.06] " +
+                    "hover:shadow-[0_0_8px_rgba(139,92,246,0.1)]"
+                  }
                 >
                   {link.label} {"\u2197"}
                 </a>
@@ -366,10 +392,8 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
       <Modal isOpen={!!selectedStory} onClose={() => setSelectedStory(null)} title={selectedStory?.title ?? ""} wide>
         {selectedStory && (
           <div className="space-y-4">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className={`text-[9px] px-2 py-0.5 rounded-md border ${CATEGORY_COLORS[selectedStory.category]}`}>
-                {CATEGORY_ICONS[selectedStory.category]} {CATEGORY_LABELS[selectedStory.category]}
-              </span>
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <GlassBadge category={selectedStory.category} />
               <span className="text-[10px] font-mono text-white/30">{selectedStory.source}</span>
             </div>
 
@@ -382,15 +406,20 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
             {selectedStory.tags && selectedStory.tags.length > 0 && (
               <div className="flex flex-wrap gap-1.5 pt-2 border-t border-white/5">
                 {selectedStory.tags.map((tag) => (
-                  <span key={tag} className="text-[10px] px-2 py-0.5 rounded-md bg-white/5 text-white/30 font-mono">
-                    #{tag}
-                  </span>
+                  <GlassTag key={tag} tag={tag} />
                 ))}
               </div>
             )}
 
-            <div className="pt-3 border-t border-white/5">
-              <p className="text-[10px] font-mono text-white/20 uppercase tracking-wider mb-1">Key Takeaway</p>
+            <div
+              className={
+                "px-4 py-3 rounded-lg " +
+                "bg-cosmic/[0.04] border border-cosmic/10"
+              }
+            >
+              <p className="text-[9px] font-mono text-cosmic/50 uppercase tracking-widest mb-1.5">
+                Key Takeaway
+              </p>
               <p className="text-sm text-cosmic-light/70">{selectedStory.takeaway}</p>
             </div>
           </div>
