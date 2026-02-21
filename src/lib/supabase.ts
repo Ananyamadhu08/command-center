@@ -14,5 +14,10 @@ export function getSupabase(): SupabaseClient | null {
 }
 
 export function isSupabaseConfigured(): boolean {
-  return supabaseUrl.length > 0 && supabaseAnonKey.length > 0
+  return (
+    supabaseUrl.length > 0 &&
+    supabaseAnonKey.length > 0 &&
+    !supabaseUrl.includes("your-project") &&
+    !supabaseAnonKey.includes("your-anon-key")
+  )
 }

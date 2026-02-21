@@ -69,6 +69,35 @@ export function HabitsView() {
     }
   }
 
+  async function handleHabitCreate(habit: { name: string; icon: string; color: string }) {
+    const newHabit: Habit = {
+      id: `habit-${Date.now()}`,
+      ...habit,
+      created_at: "",
+    }
+    setHabits((prev) => [...prev, newHabit])
+    try {
+      await fetch("/api/habits", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(habit),
+      })
+    } catch {
+      // Optimistic update remains
+    }
+  }
+
+  function handleHabitUpdate(habitId: string, updates: { name: string; icon: string; color: string }) {
+    setHabits((prev) =>
+      prev.map((h) => (h.id === habitId ? { ...h, ...updates } : h)),
+    )
+  }
+
+  function handleHabitDelete(habitId: string) {
+    setHabits((prev) => prev.filter((h) => h.id !== habitId))
+    setHabitLogs((prev) => prev.filter((l) => l.habit_id !== habitId))
+  }
+
   async function handleExerciseLog(entry: {
     date: string
     type: string
@@ -133,20 +162,23 @@ export function HabitsView() {
       {/* Row 1: Reading Tracker (full width) */}
       <ReadingTracker onLog={handleReadingLog} recentLogs={readingLogs} />
 
-      {/* Row 2: Daily Habits + Exercise Log */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <HabitTracker
-          habits={habits}
-          todayLogs={todayHabitLogs}
-          onToggle={handleHabitToggle}
-          allLogs={habitLogs}
-        />
-        <ExerciseLog
-          onLog={handleExerciseLog}
-          todayLogs={todayExercise}
-          allLogs={exerciseLogs}
-        />
-      </div>
+      {/* Row 2: Daily Habits (full width) */}
+      <HabitTracker
+        habits={habits}
+        todayLogs={todayHabitLogs}
+        onToggle={handleHabitToggle}
+        onCreate={handleHabitCreate}
+        onUpdate={handleHabitUpdate}
+        onDelete={handleHabitDelete}
+        allLogs={habitLogs}
+      />
+
+      {/* Row 3: Exercise Log (full width) */}
+      <ExerciseLog
+        onLog={handleExerciseLog}
+        todayLogs={todayExercise}
+        allLogs={exerciseLogs}
+      />
 
       {/* Row 3: Weekly Activity (full width) */}
       <WeeklyActivity

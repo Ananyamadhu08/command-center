@@ -9,14 +9,16 @@ import type {
   TechBriefContent,
   EveningBriefContent,
 } from "./types"
-import { getToday } from "./utils"
+function localDate(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`
+}
 
-const today = getToday()
+const today = localDate(new Date())
 
 function daysAgo(n: number): string {
   const d = new Date()
   d.setDate(d.getDate() - n)
-  return d.toISOString().split("T")[0]
+  return localDate(d)
 }
 
 const techBriefContent: TechBriefContent = {
@@ -391,6 +393,9 @@ export const SAMPLE_HABIT_LOGS: HabitLog[] = [
 
 export const SAMPLE_EXERCISE_LOGS: ExerciseLogType[] = [
   { id: "e1", date: today, type: "morning_stretch", duration_minutes: 20, notes: "Full body stretch", created_at: "" },
+  { id: "e1b", date: today, type: "walk", duration_minutes: 30, notes: "Morning walk around the block", created_at: "" },
+  { id: "e1c", date: today, type: "gym", duration_minutes: 45, notes: "Chest and shoulders", created_at: "" },
+  { id: "e1d", date: today, type: "walk", duration_minutes: 25, notes: "Evening walk", created_at: "" },
   { id: "e2", date: daysAgo(1), type: "gym", duration_minutes: 45, notes: "Upper body", created_at: "" },
   { id: "e3", date: daysAgo(1), type: "walk", duration_minutes: 30, notes: "Evening walk", created_at: "" },
   { id: "e4", date: daysAgo(2), type: "morning_stretch", duration_minutes: 15, notes: "Quick stretch", created_at: "" },

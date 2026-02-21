@@ -25,6 +25,7 @@ export function ExerciseLog({ onLog, todayLogs, allLogs = [] }: ExerciseLogProps
   const [exerciseType, setExerciseType] = useState<string>("morning_stretch")
   const [duration, setDuration] = useState("")
   const [notes, setNotes] = useState("")
+  const [selectedDate, setSelectedDate] = useState<string>(getToday())
 
   const streak = useMemo(() => {
     const dates = [...new Set(allLogs.map((l) => l.date))]
@@ -63,6 +64,18 @@ export function ExerciseLog({ onLog, todayLogs, allLogs = [] }: ExerciseLogProps
     return { bars: items, maxMinutes: max }
   }, [allLogs, last7])
 
+  const selectedDayLogs = useMemo(
+    () => allLogs.filter((l) => l.date === selectedDate),
+    [allLogs, selectedDate],
+  )
+
+  const selectedDayLabel = useMemo(() => {
+    const today = getToday()
+    if (selectedDate === today) return "Today"
+    const d = new Date(selectedDate + "T00:00:00")
+    return d.toLocaleDateString("en-IN", { weekday: "short", month: "short", day: "numeric" })
+  }, [selectedDate])
+
   function handleSubmit() {
     const mins = parseInt(duration, 10)
     if (!mins || mins <= 0) return
@@ -77,6 +90,7 @@ export function ExerciseLog({ onLog, todayLogs, allLogs = [] }: ExerciseLogProps
   }
 
   const totalMinutes = todayLogs.reduce((sum, log) => sum + log.duration_minutes, 0)
+  const isToday = selectedDate === getToday()
 
   return (
     <GlassCard glow="cosmic">
@@ -93,7 +107,7 @@ export function ExerciseLog({ onLog, todayLogs, allLogs = [] }: ExerciseLogProps
       </div>
 
       {/* Streak + Weekly Stats */}
-      <div className="flex items-center gap-3 mb-3">
+      <div className="flex items-center gap-3 mb-4">
         {streak > 0 && (
           <span className="text-sm font-semibold text-electric-light">
             {streak}-day streak
@@ -106,84 +120,135 @@ export function ExerciseLog({ onLog, todayLogs, allLogs = [] }: ExerciseLogProps
         )}
       </div>
 
-      {/* 7-Day Bar Chart */}
-      <div className="flex items-end gap-1 h-16 mb-3">
-        {bars.map((day) => (
-          <div key={day.date} className="flex-1 flex flex-col items-center gap-0.5">
-            <div className="w-full flex flex-col-reverse rounded-sm overflow-hidden" style={{ height: "48px" }}>
-              {day.segments.length > 0 ? (
-                day.segments.map((seg) => (
-                  <div
-                    key={seg.type}
-                    style={{
-                      backgroundColor: seg.color,
-                      height: `${(seg.minutes / maxMinutes) * 100}%`,
-                      minHeight: seg.minutes > 0 ? "2px" : "0",
-                    }}
-                  />
-                ))
-              ) : (
-                <div className="w-full h-full bg-white/[0.03] rounded-sm" />
+      {/* 7-Day Interactive Bar Chart */}
+      <div className="flex items-end gap-3 mb-2" style={{ height: "180px" }}>
+        {bars.map((day) => {
+          const isSelected = day.date === selectedDate
+          return (
+            <button
+              key={day.date}
+              onClick={() => setSelectedDate(day.date)}
+              className="flex-1 flex flex-col items-center gap-2 h-full group"
+            >
+              {/* Minute label */}
+              {day.total > 0 && (
+                <span className={`text-[10px] font-mono tabular-nums transition-colors ${isSelected ? "text-electric-light/70" : "text-white/25"}`}>
+                  {day.total}m
+                </span>
               )}
-            </div>
-            <span className="text-[8px] text-white/20">{day.dayOfWeek.charAt(0)}</span>
-          </div>
-        ))}
+              {/* Bar */}
+              <div
+                className={`w-full flex-1 flex flex-col-reverse rounded-lg overflow-hidden transition-all ${
+                  isSelected
+                    ? "ring-2 ring-electric/40 ring-offset-1 ring-offset-transparent"
+                    : "group-hover:opacity-80"
+                }`}
+              >
+                {day.segments.length > 0 ? (
+                  day.segments.map((seg) => (
+                    <div
+                      key={seg.type}
+                      className="w-full transition-all"
+                      style={{
+                        backgroundColor: seg.color,
+                        height: `${(seg.minutes / maxMinutes) * 100}%`,
+                        minHeight: seg.minutes > 0 ? "4px" : "0",
+                        boxShadow: isSelected ? `0 0 14px ${seg.color}55` : `0 0 8px ${seg.color}22`,
+                      }}
+                    />
+                  ))
+                ) : (
+                  <div className="w-full h-full bg-white/[0.03] rounded-lg" />
+                )}
+              </div>
+              {/* Day label */}
+              <span className={`text-[11px] transition-colors ${isSelected ? "text-electric-light/80 font-medium" : "text-white/25"}`}>
+                {day.dayOfWeek}
+              </span>
+            </button>
+          )
+        })}
       </div>
 
-      {todayLogs.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 mb-3">
-          {todayLogs.map((log, i) => {
-            const typeInfo = EXERCISE_TYPES.find((t) => t.id === log.type)
-            return (
-              <span
-                key={i}
-                className="text-[10px] px-2 py-0.5 rounded-lg bg-electric/10 border border-electric/20 text-electric-light/70"
+      {/* Selected Day Sessions */}
+      <div className="mb-4 pt-3 border-t border-white/[0.05]">
+        <p className="text-[10px] text-white/30 uppercase tracking-wider mb-2.5">{selectedDayLabel}</p>
+        {selectedDayLogs.length > 0 ? (
+          <div className="space-y-2">
+            {selectedDayLogs.map((log) => {
+              const typeInfo = EXERCISE_TYPES.find((t) => t.id === log.type)
+              return (
+                <div key={log.id} className="flex items-center gap-3 py-1.5 px-3 rounded-xl bg-white/[0.02]">
+                  <span className="text-sm">{typeInfo?.icon}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs text-white/70">{typeInfo?.label}</p>
+                    {log.notes && (
+                      <p className="text-[10px] text-white/25 truncate">{log.notes}</p>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-1.5 flex-shrink-0">
+                    <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: typeInfo?.color }} />
+                    <span className="text-xs font-mono text-white/50 tabular-nums">{log.duration_minutes}m</span>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        ) : (
+          <p className="text-[11px] text-white/15 py-2">No exercises logged</p>
+        )}
+      </div>
+
+      {/* Log Form — only show when today is selected */}
+      {isToday && (
+        <div className="space-y-3 pt-3 border-t border-white/[0.05]">
+          <div className="flex flex-wrap gap-1.5">
+            {EXERCISE_TYPES.map((type) => (
+              <button
+                key={type.id}
+                onClick={() => setExerciseType(type.id)}
+                className={`text-[10px] px-2.5 py-1 rounded-lg border transition-all ${
+                  exerciseType === type.id
+                    ? "border-electric/40 bg-electric/15 text-electric-light"
+                    : "border-white/10 text-white/40 hover:border-white/20"
+                }`}
               >
-                {typeInfo?.icon} {log.duration_minutes}m
-              </span>
-            )
-          })}
+                {type.icon} {type.label}
+              </button>
+            ))}
+          </div>
+          <Input
+            value={duration}
+            onChange={setDuration}
+            placeholder="Duration in minutes"
+            type="number"
+          />
+          <TextArea
+            value={notes}
+            onChange={setNotes}
+            placeholder="Notes (optional)"
+            rows={2}
+          />
+          <GlowButton
+            variant="electric"
+            size="sm"
+            onClick={handleSubmit}
+            disabled={!duration || parseInt(duration, 10) <= 0}
+          >
+            Log Exercise
+          </GlowButton>
         </div>
       )}
 
-      <div className="space-y-3">
-        <div className="flex flex-wrap gap-1.5">
-          {EXERCISE_TYPES.map((type) => (
-            <button
-              key={type.id}
-              onClick={() => setExerciseType(type.id)}
-              className={`text-[10px] px-2.5 py-1 rounded-lg border transition-all ${
-                exerciseType === type.id
-                  ? "border-electric/40 bg-electric/15 text-electric-light"
-                  : "border-white/10 text-white/40 hover:border-white/20"
-              }`}
-            >
-              {type.icon} {type.label}
-            </button>
-          ))}
-        </div>
-        <Input
-          value={duration}
-          onChange={setDuration}
-          placeholder="Duration in minutes"
-          type="number"
-        />
-        <TextArea
-          value={notes}
-          onChange={setNotes}
-          placeholder="Notes (optional)"
-          rows={2}
-        />
-        <GlowButton
-          variant="electric"
-          size="sm"
-          onClick={handleSubmit}
-          disabled={!duration || parseInt(duration, 10) <= 0}
+      {/* Show hint to return to today when viewing another day */}
+      {!isToday && (
+        <button
+          onClick={() => setSelectedDate(getToday())}
+          className="w-full text-center text-[11px] text-electric-light/40 hover:text-electric-light/70 transition-colors pt-2"
         >
-          Log Exercise
-        </GlowButton>
-      </div>
+          Back to today to log exercise
+        </button>
+      )}
     </GlassCard>
   )
 }

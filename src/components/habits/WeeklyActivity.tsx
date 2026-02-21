@@ -175,7 +175,7 @@ export function WeeklyActivity({ exerciseLogs, readingLogs, habitLogs, habits }:
         secondaryValue={`${weeklyMinutes} min`}
         color="#3b82f6"
         colorLight="#60a5fa"
-        glowClass="electric"
+        glowClass="cosmic"
         days={days}
         activeDates={exerciseDates}
       />
@@ -199,7 +199,7 @@ export function WeeklyActivity({ exerciseLogs, readingLogs, habitLogs, habits }:
         secondaryValue={`${habitAvg}%`}
         color="#f59e0b"
         colorLight="#fbbf24"
-        glowClass="amber"
+        glowClass="cosmic"
         days={days}
         activeDates={habitActiveDates}
       />
