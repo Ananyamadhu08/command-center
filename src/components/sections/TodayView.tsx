@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { GlassCard } from "@/components/ui/GlassCard"
 import { BriefCard } from "@/components/briefs/BriefCard"
-import { BriefDetail } from "@/components/briefs/BriefDetail"
 import { MealPlanCard } from "@/components/meals/MealPlanCard"
 import { NutritionTips } from "@/components/meals/NutritionTips"
 import { HabitTracker } from "@/components/habits/HabitTracker"
@@ -33,7 +32,6 @@ export function TodayView({ onNavigate }: TodayViewProps) {
   const [briefs, setBriefs] = useState<Brief[]>([])
   const [habits, setHabits] = useState<Habit[]>([])
   const [habitLogs, setHabitLogs] = useState<HabitLog[]>([])
-  const [selectedBrief, setSelectedBrief] = useState<Brief | null>(null)
 
   const today = getToday()
   const mealPlan = getTodaysMealPlan()
@@ -99,7 +97,7 @@ export function TodayView({ onNavigate }: TodayViewProps) {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {briefs.slice(0, 3).map((brief) => (
-              <BriefCard key={brief.id} brief={brief} onClick={() => setSelectedBrief(brief)} />
+              <BriefCard key={brief.id} brief={brief} />
             ))}
           </div>
         </motion.div>
@@ -137,12 +135,10 @@ export function TodayView({ onNavigate }: TodayViewProps) {
       <motion.div variants={item}>
         <GlassCard className="text-center py-8">
           <p className="text-xs text-white/20 font-mono">
-            Press 1-5 to navigate · Connected to the cosmos
+            Press 1-6 to navigate · Connected to the cosmos
           </p>
         </GlassCard>
       </motion.div>
-
-      <BriefDetail brief={selectedBrief} onClose={() => setSelectedBrief(null)} />
     </motion.div>
   )
 }

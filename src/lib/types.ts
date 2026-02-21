@@ -9,6 +9,78 @@ export interface Brief {
   created_at: string
 }
 
+export type TechCategory =
+  | "ai_ml"
+  | "twitter_buzz"
+  | "web_dev"
+  | "infra_devops"
+  | "startups"
+  | "open_source"
+  | "india_tech"
+  | "tools"
+  | "mobile"
+  | "security"
+
+export interface TechStory {
+  title: string
+  source: string
+  summary: string
+  detail: string
+  takeaway: string
+  tags?: string[]
+  url?: string
+  category: TechCategory
+}
+
+export interface TechBriefContent {
+  stories: TechStory[]
+  featured_discussions: TechStory[]
+  quick_links: { label: string; url: string }[]
+  twitter_hot_takes?: { author: string; handle: string; text: string; engagement: string }[]
+}
+
+export interface EveningBriefContent {
+  completed: string[]
+  in_progress: string[]
+  tomorrow: string[]
+  reflection: string
+}
+
+export interface AnalyticsExercise {
+  total_minutes_7d: number
+  total_minutes_14d: number
+  daily_breakdown: { date: string; minutes: number }[]
+  type_breakdown: Record<string, number>
+  active_days_7d: number
+}
+
+export interface AnalyticsHabits {
+  total_habits: number
+  completion_rate_7d: number
+  best_streak: string
+  per_habit: { name: string; icon: string; rate: number }[]
+}
+
+export interface AnalyticsReading {
+  pages_7d: number
+  pages_14d: number
+  current_book: string
+  daily_breakdown: { date: string; pages: number }[]
+}
+
+export interface AnalyticsMeals {
+  tracked_days_7d: number
+  total_logged: number
+}
+
+export interface AnalyticsData {
+  exercise: AnalyticsExercise
+  habits: AnalyticsHabits
+  reading: AnalyticsReading
+  meals: AnalyticsMeals
+  overall: { on_track: string[]; off_track: string[] }
+}
+
 export interface MealPlan {
   id: string
   date: string
@@ -75,4 +147,4 @@ export interface Note {
   created_at: string
 }
 
-export type NavSection = "today" | "briefs" | "meals" | "habits" | "notes"
+export type NavSection = "today" | "briefs" | "meals" | "habits" | "analytics" | "notes"

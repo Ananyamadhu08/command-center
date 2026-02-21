@@ -8,9 +8,10 @@ interface ModalProps {
   onClose: () => void
   title: string
   children: React.ReactNode
+  wide?: boolean
 }
 
-export function Modal({ isOpen, onClose, title, children }: ModalProps) {
+export function Modal({ isOpen, onClose, title, children, wide = false }: ModalProps) {
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose()
@@ -45,7 +46,7 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="glass glow-cosmic relative z-10 w-full max-w-lg max-h-[85vh] overflow-y-auto p-6"
+            className={`glass glow-cosmic relative z-10 w-full max-h-[85vh] overflow-y-auto p-6 ${wide ? "max-w-2xl" : "max-w-lg"}`}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">

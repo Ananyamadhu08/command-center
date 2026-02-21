@@ -1,11 +1,11 @@
 "use client"
 
+import Link from "next/link"
 import { GlassCard } from "@/components/ui/GlassCard"
 import type { Brief, BriefType } from "@/lib/types"
 
 interface BriefCardProps {
   brief: Brief
-  onClick: () => void
 }
 
 const TYPE_CONFIG: Record<BriefType, { icon: string; color: string; glow: "cosmic" | "electric" | "amber" }> = {
@@ -26,30 +26,33 @@ const TYPE_TIMES: Record<BriefType, string> = {
   evening_review: "8:00 PM",
 }
 
-export function BriefCard({ brief, onClick }: BriefCardProps) {
+export function BriefCard({ brief }: BriefCardProps) {
   const config = TYPE_CONFIG[brief.type]
-  const preview = brief.content.slice(0, 120) + (brief.content.length > 120 ? "..." : "")
+  const rawPreview = brief.content.startsWith("{") ? TYPE_LABELS[brief.type] + " — tap to view" : brief.content
+  const preview = rawPreview.slice(0, 120) + (rawPreview.length > 120 ? "..." : "")
 
   return (
-    <GlassCard glow={config.glow} onClick={onClick}>
-      <div className="flex items-start gap-3">
-        <span className={`text-lg ${config.color}`}>{config.icon}</span>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-mono text-white/30 uppercase tracking-wider">
-              {TYPE_LABELS[brief.type]}
-            </span>
-            <span className="text-[10px] font-mono text-white/20">
-              {TYPE_TIMES[brief.type]}
-            </span>
+    <Link href={`/briefs/${brief.type}`} className="block">
+      <GlassCard glow={config.glow}>
+        <div className="flex items-start gap-3">
+          <span className={`text-lg ${config.color}`}>{config.icon}</span>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-[10px] font-mono text-white/30 uppercase tracking-wider">
+                {TYPE_LABELS[brief.type]}
+              </span>
+              <span className="text-[10px] font-mono text-white/20">
+                {TYPE_TIMES[brief.type]}
+              </span>
+            </div>
+            <h3 className="text-sm font-medium text-white/90 mb-1.5 truncate">
+              {brief.title}
+            </h3>
+            <p className="text-xs text-white/40 leading-relaxed">{preview}</p>
           </div>
-          <h3 className="text-sm font-medium text-white/90 mb-1.5 truncate">
-            {brief.title}
-          </h3>
-          <p className="text-xs text-white/40 leading-relaxed">{preview}</p>
         </div>
-      </div>
-    </GlassCard>
+      </GlassCard>
+    </Link>
   )
 }
 

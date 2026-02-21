@@ -13,7 +13,8 @@ const NAV_ITEMS: { id: NavSection; label: string; icon: string; shortcut: string
   { id: "briefs", label: "Briefs", icon: "◈", shortcut: "2" },
   { id: "meals", label: "Meals", icon: "◇", shortcut: "3" },
   { id: "habits", label: "Habits", icon: "△", shortcut: "4" },
-  { id: "notes", label: "Notes", icon: "□", shortcut: "5" },
+  { id: "analytics", label: "Analytics", icon: "◎", shortcut: "5" },
+  { id: "notes", label: "Notes", icon: "□", shortcut: "6" },
 ]
 
 export function Sidebar({ active, onChange }: SidebarProps) {

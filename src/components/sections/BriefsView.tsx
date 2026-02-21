@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { BriefCard, PendingBriefCard } from "@/components/briefs/BriefCard"
-import { BriefDetail } from "@/components/briefs/BriefDetail"
 import { getToday } from "@/lib/utils"
 import type { Brief, BriefType } from "@/lib/types"
 
@@ -11,7 +10,6 @@ const BRIEF_TYPES: BriefType[] = ["morning_briefing", "tech_news", "evening_revi
 
 export function BriefsView() {
   const [briefs, setBriefs] = useState<Brief[]>([])
-  const [selectedBrief, setSelectedBrief] = useState<Brief | null>(null)
   const [filter, setFilter] = useState<BriefType | "all">("all")
 
   const today = getToday()
@@ -61,7 +59,7 @@ export function BriefsView() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {filtered.map((brief) => (
-          <BriefCard key={brief.id} brief={brief} onClick={() => setSelectedBrief(brief)} />
+          <BriefCard key={brief.id} brief={brief} />
         ))}
       </div>
 
@@ -70,8 +68,6 @@ export function BriefsView() {
           <p className="text-sm text-white/20">No briefs yet. They&apos;ll arrive on schedule.</p>
         </div>
       )}
-
-      <BriefDetail brief={selectedBrief} onClose={() => setSelectedBrief(null)} />
     </motion.div>
   )
 }

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { getSupabase, isSupabaseConfigured } from "@/lib/supabase"
+import { SAMPLE_MEAL_LOGS } from "@/lib/sample-data"
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -7,7 +8,9 @@ export async function GET(request: Request) {
   const logOnly = searchParams.get("logs") === "true"
 
   if (!isSupabaseConfigured()) {
-    return NextResponse.json({ success: true, data: [] })
+    let filtered = SAMPLE_MEAL_LOGS
+    if (date) filtered = filtered.filter((m) => m.date === date)
+    return NextResponse.json({ success: true, data: filtered })
   }
 
   const supabase = getSupabase()!

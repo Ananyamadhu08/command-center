@@ -33,13 +33,13 @@ export function StarBackground() {
 
     function initStars() {
       if (!canvas) return
-      const count = Math.floor((canvas.width * canvas.height) / 8000)
+      const count = Math.floor((canvas.width * canvas.height) / 12000)
       stars = Array.from({ length: count }, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
         radius: Math.random() * 1.2 + 0.3,
         opacity: Math.random() * 0.6 + 0.2,
-        twinkleSpeed: Math.random() * 0.015 + 0.005,
+        twinkleSpeed: Math.random() * 0.006 + 0.002,
         twinklePhase: Math.random() * Math.PI * 2,
       }))
     }
@@ -50,7 +50,7 @@ export function StarBackground() {
 
       for (const star of stars) {
         const twinkle = Math.sin(time * star.twinkleSpeed + star.twinklePhase)
-        const opacity = star.opacity + twinkle * 0.25
+        const opacity = star.opacity + twinkle * 0.08
         const clampedOpacity = Math.max(0.05, Math.min(1, opacity))
 
         ctx.beginPath()
@@ -61,7 +61,7 @@ export function StarBackground() {
         if (star.radius > 1) {
           ctx.beginPath()
           ctx.arc(star.x, star.y, star.radius * 2.5, 0, Math.PI * 2)
-          ctx.fillStyle = `rgba(139, 92, 246, ${clampedOpacity * 0.08})`
+          ctx.fillStyle = `rgba(139, 92, 246, ${clampedOpacity * 0.03})`
           ctx.fill()
         }
       }
