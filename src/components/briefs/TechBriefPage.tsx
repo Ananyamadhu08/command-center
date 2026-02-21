@@ -129,13 +129,12 @@ function StoryCard({ story, index, onSelect }: { story: TechStory; index: number
             </div>
           )}
 
-          {/* Takeaway — purple text is the accent */}
-          <div className="flex items-center gap-3 pt-2.5 border-t border-white/[0.06]">
-            <span className="text-[9px] font-mono text-white/20 uppercase tracking-widest shrink-0">
+          {/* Takeaway */}
+          <div className="pt-2.5 border-t border-white/[0.06] space-y-1.5">
+            <span className="inline-block text-[9px] font-mono px-2 py-0.5 rounded-md bg-white/[0.05] border border-white/[0.1] text-white/35 uppercase tracking-widest">
               Takeaway
             </span>
-            <p className="text-xs text-cosmic-light flex-1 min-w-0 truncate">{story.takeaway}</p>
-            <span className="text-white/20 text-sm shrink-0">{"\u2192"}</span>
+            <p className="text-xs text-cosmic-light leading-relaxed">{story.takeaway}</p>
           </div>
         </div>
       </GlassCard>
@@ -403,11 +402,11 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
               </div>
             )}
 
-            <div className="pt-3 border-t border-white/[0.06]">
-              <p className="text-[9px] font-mono text-white/20 uppercase tracking-widest mb-1.5">
+            <div className="pt-3 border-t border-white/[0.06] space-y-2">
+              <span className="inline-block text-[9px] font-mono px-2 py-0.5 rounded-md bg-white/[0.05] border border-white/[0.1] text-white/35 uppercase tracking-widest">
                 Key Takeaway
-              </p>
-              <p className="text-sm text-cosmic-light">{selectedStory.takeaway}</p>
+              </span>
+              <p className="text-sm text-cosmic-light leading-relaxed">{selectedStory.takeaway}</p>
             </div>
           </div>
         )}
