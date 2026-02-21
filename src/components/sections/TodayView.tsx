@@ -258,33 +258,34 @@ export function TodayView({ onNavigate }: TodayViewProps) {
         </div>
       </motion.div>
 
-      {/* Nutrition + Habits */}
-      <motion.div variants={item} className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-xs font-mono text-white/30 uppercase tracking-wider">Nutrition</h3>
-            <button
-              onClick={() => onNavigate("meals")}
-              className="text-[10px] text-amber-light/50 hover:text-amber-light transition-colors"
-            >
-              Full plan {"\u2192"}
-            </button>
-          </div>
+      {/* Habits — full width */}
+      <motion.div variants={item}>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-xs font-mono text-white/30 uppercase tracking-wider">Habits</h3>
+          <button
+            onClick={() => onNavigate("habits")}
+            className="text-[10px] text-cosmic-light/50 hover:text-cosmic-light transition-colors"
+          >
+            Details {"\u2192"}
+          </button>
+        </div>
+        <HabitTracker habits={habits} todayLogs={habitLogs} onToggle={handleHabitToggle} />
+      </motion.div>
+
+      {/* Nutrition */}
+      <motion.div variants={item} className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-xs font-mono text-white/30 uppercase tracking-wider">Nutrition</h3>
+          <button
+            onClick={() => onNavigate("meals")}
+            className="text-[10px] text-amber-light/50 hover:text-amber-light transition-colors"
+          >
+            Full plan {"\u2192"}
+          </button>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
           <MealPlanCard plan={mealPlan} />
           <NutritionTips />
-        </div>
-
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-xs font-mono text-white/30 uppercase tracking-wider">Habits</h3>
-            <button
-              onClick={() => onNavigate("habits")}
-              className="text-[10px] text-cosmic-light/50 hover:text-cosmic-light transition-colors"
-            >
-              Details {"\u2192"}
-            </button>
-          </div>
-          <HabitTracker habits={habits} todayLogs={habitLogs} onToggle={handleHabitToggle} />
         </div>
       </motion.div>
     </motion.div>
