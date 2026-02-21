@@ -283,10 +283,8 @@ export function TodayView({ onNavigate }: TodayViewProps) {
             Full plan {"\u2192"}
           </button>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
-          <MealPlanCard plan={mealPlan} />
-          <NutritionTips />
-        </div>
+        <MealPlanCard plan={mealPlan} />
+        <NutritionTips />
       </motion.div>
     </motion.div>
   )
