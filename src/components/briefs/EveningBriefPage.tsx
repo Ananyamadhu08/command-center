@@ -64,9 +64,9 @@ export function EveningBriefPage({ brief }: EveningBriefPageProps) {
   }, [])
 
   const statCards = [
-    { label: "Exercise", value: `${stats.exerciseMinutes} min`, icon: "💪", glow: "electric" as const },
+    { label: "Exercise", value: `${stats.exerciseMinutes} min`, icon: "💪", glow: "cosmic" as const },
     { label: "Habits", value: `${stats.habitsCompleted}/${stats.habitsTotal}`, icon: "✓", glow: "cosmic" as const },
-    { label: "Reading", value: `${stats.pagesRead} pages`, icon: "📖", glow: "amber" as const },
+    { label: "Reading", value: `${stats.pagesRead} pages`, icon: "📖", glow: "cosmic" as const },
     { label: "Meals", value: `${stats.mealsTracked} logged`, icon: "🍽", glow: "none" as const },
   ]
 
@@ -118,7 +118,7 @@ export function EveningBriefPage({ brief }: EveningBriefPageProps) {
           )}
 
           {parsed.in_progress.length > 0 && (
-            <GlassCard glow="electric">
+            <GlassCard glow="cosmic">
               <h3 className="text-xs font-mono text-electric-light/60 uppercase tracking-wider mb-3">
                 In Progress
               </h3>
@@ -134,7 +134,7 @@ export function EveningBriefPage({ brief }: EveningBriefPageProps) {
           )}
 
           {parsed.tomorrow.length > 0 && (
-            <GlassCard glow="amber">
+            <GlassCard glow="cosmic">
               <h3 className="text-xs font-mono text-amber-light/60 uppercase tracking-wider mb-3">
                 Tomorrow&apos;s Priorities
               </h3>

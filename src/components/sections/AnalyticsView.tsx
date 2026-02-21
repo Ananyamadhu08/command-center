@@ -71,7 +71,7 @@ export function AnalyticsView() {
           value={`${data.exercise.total_minutes_7d}`}
           subtitle={`${data.exercise.active_days_7d}/7 active days`}
           trend={exerciseTrend}
-          glow="electric"
+          glow="cosmic"
         />
         <StatCard
           label="Habits"
@@ -84,7 +84,7 @@ export function AnalyticsView() {
           value={`${data.reading.pages_7d}`}
           subtitle={`pages · ${data.reading.current_book}`}
           trend={readingTrend}
-          glow="amber"
+          glow="cosmic"
         />
         <StatCard
           label="Meals"
@@ -94,7 +94,7 @@ export function AnalyticsView() {
       </motion.div>
 
       <motion.div variants={item} className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <GlassCard glow="electric">
+        <GlassCard glow="cosmic">
           <h3 className="text-xs font-mono text-electric-light/60 uppercase tracking-wider mb-4">
             Exercise — 14 Day Trend
           </h3>
@@ -115,7 +115,7 @@ export function AnalyticsView() {
           )}
         </GlassCard>
 
-        <GlassCard glow="amber">
+        <GlassCard glow="cosmic">
           <h3 className="text-xs font-mono text-amber-light/60 uppercase tracking-wider mb-4">
             Reading — 14 Day Trend
           </h3>

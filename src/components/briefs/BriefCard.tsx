@@ -10,7 +10,7 @@ interface BriefCardProps {
 
 const TYPE_CONFIG: Record<BriefType, { icon: string; color: string; glow: "cosmic" | "electric" | "amber" }> = {
   morning_briefing: { icon: "☀", color: "text-cosmic-light", glow: "cosmic" },
-  tech_news: { icon: "⚡", color: "text-electric-light", glow: "electric" },
+  tech_news: { icon: "⚡", color: "text-cosmic-light", glow: "cosmic" },
   evening_review: { icon: "🌙", color: "text-cosmic-light", glow: "cosmic" },
 }
 

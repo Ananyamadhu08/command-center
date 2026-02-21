@@ -39,7 +39,7 @@ export function ExerciseLog({ onLog, todayLogs }: ExerciseLogProps) {
   const totalMinutes = todayLogs.reduce((sum, log) => sum + log.duration_minutes, 0)
 
   return (
-    <GlassCard glow="electric">
+    <GlassCard glow="cosmic">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-sm font-semibold text-white/90 flex items-center gap-2">
           <span className="text-electric-light">△</span>

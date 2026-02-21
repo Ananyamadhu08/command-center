@@ -52,7 +52,7 @@ export function MorningBriefPage({ brief }: MorningBriefPageProps) {
       </div>
 
       {weather && (
-        <GlassCard glow="amber">
+        <GlassCard glow="cosmic">
           <div className="flex items-center gap-3">
             <span className="text-lg">🌤</span>
             <div>
@@ -64,7 +64,7 @@ export function MorningBriefPage({ brief }: MorningBriefPageProps) {
       )}
 
       {focuses.length > 0 && (
-        <GlassCard glow="electric">
+        <GlassCard glow="cosmic">
           <h3 className="text-xs font-mono text-electric-light/60 uppercase tracking-wider mb-3">
             Today&apos;s Focus
           </h3>
