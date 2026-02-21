@@ -26,7 +26,7 @@ export function MealLogger({ onLog }: MealLoggerProps) {
   }
 
   return (
-    <GlassCard>
+    <GlassCard glow="cosmic">
       <h3 className="text-sm font-semibold text-white/90 mb-3 flex items-center gap-2">
         <span className="text-cosmic-light">✏</span>
         Log a Meal
