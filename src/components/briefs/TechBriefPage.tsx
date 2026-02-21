@@ -50,6 +50,19 @@ const CATEGORY_ICONS: Record<TechCategory, string> = {
   security: "\u{1F512}",
 }
 
+const CATEGORY_GLASS: Record<TechCategory, string> = {
+  ai_ml: "bg-violet-500/[0.08] border-violet-400/20 text-violet-300",
+  twitter_buzz: "bg-sky-500/[0.08] border-sky-400/20 text-sky-300",
+  web_dev: "bg-blue-500/[0.08] border-blue-400/20 text-blue-300",
+  infra_devops: "bg-teal-500/[0.08] border-teal-400/20 text-teal-300",
+  startups: "bg-amber-500/[0.08] border-amber-400/20 text-amber-300",
+  open_source: "bg-emerald-500/[0.08] border-emerald-400/20 text-emerald-300",
+  india_tech: "bg-orange-500/[0.08] border-orange-400/20 text-orange-300",
+  tools: "bg-cyan-500/[0.08] border-cyan-400/20 text-cyan-300",
+  mobile: "bg-pink-500/[0.08] border-pink-400/20 text-pink-300",
+  security: "bg-red-500/[0.08] border-red-400/20 text-red-300",
+}
+
 function parseTechContent(content: string): TechBriefContent | null {
   try {
     return JSON.parse(content) as TechBriefContent
@@ -64,8 +77,9 @@ function GlassBadge({ category }: { category: TechCategory }) {
       className={
         "inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap " +
         "text-[10px] font-medium px-2.5 py-1 rounded-lg " +
-        "backdrop-blur-md bg-white/[0.05] border border-white/[0.12] text-white/70 " +
-        "shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]"
+        "backdrop-blur-md border " +
+        "shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] " +
+        CATEGORY_GLASS[category]
       }
     >
       <span className="text-xs leading-none">{CATEGORY_ICONS[category]}</span>
