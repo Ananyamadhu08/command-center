@@ -10,7 +10,7 @@ interface SidebarProps {
 
 const NAV_ITEMS: { id: NavSection; label: string; icon: string; shortcut: string }[] = [
   { id: "today", label: "Today", icon: "◉", shortcut: "1" },
-  { id: "briefs", label: "Briefs", icon: "◈", shortcut: "2" },
+  { id: "briefs", label: "Tech News", icon: "⚡", shortcut: "2" },
   { id: "meals", label: "Meals", icon: "◇", shortcut: "3" },
   { id: "habits", label: "Habits", icon: "△", shortcut: "4" },
   { id: "analytics", label: "Analytics", icon: "◎", shortcut: "5" },

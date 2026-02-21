@@ -2,72 +2,40 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { BriefCard, PendingBriefCard } from "@/components/briefs/BriefCard"
-import { getToday } from "@/lib/utils"
-import type { Brief, BriefType } from "@/lib/types"
-
-const BRIEF_TYPES: BriefType[] = ["morning_briefing", "tech_news", "evening_review"]
+import { TechBriefPage } from "@/components/briefs/TechBriefPage"
+import type { Brief } from "@/lib/types"
 
 export function BriefsView() {
-  const [briefs, setBriefs] = useState<Brief[]>([])
-  const [filter, setFilter] = useState<BriefType | "all">("all")
-
-  const today = getToday()
+  const [brief, setBrief] = useState<Brief | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch("/api/briefs")
+    fetch("/api/briefs?type=tech_news")
       .then((r) => r.json())
-      .then((r) => { if (r.success) setBriefs(r.data) })
+      .then((r) => {
+        if (r.success && r.data.length > 0) {
+          setBrief(r.data[0])
+        }
+      })
       .catch(() => {})
+      .finally(() => setLoading(false))
   }, [])
 
-  const filtered = filter === "all" ? briefs : briefs.filter((b) => b.type === filter)
-  const todayBriefTypes = new Set(briefs.filter((b) => b.date === today).map((b) => b.type))
-  const pendingTypes = BRIEF_TYPES.filter((t) => !todayBriefTypes.has(t))
+  if (loading) {
+    return (
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center justify-center py-20">
+        <p className="text-white/20 text-sm font-mono animate-pulse">Loading tech news...</p>
+      </motion.div>
+    )
+  }
 
-  return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-white/80">Briefs</h2>
-        <div className="flex gap-1.5">
-          {(["all", ...BRIEF_TYPES] as const).map((type) => (
-            <button
-              key={type}
-              onClick={() => setFilter(type)}
-              className={`text-[10px] px-3 py-1 rounded-lg border transition-all ${
-                filter === type
-                  ? "border-cosmic/40 bg-cosmic/15 text-cosmic-light"
-                  : "border-white/10 text-white/40 hover:border-white/20"
-              }`}
-            >
-              {type === "all" ? "All" : type.replace(/_/g, " ")}
-            </button>
-          ))}
-        </div>
-      </div>
+  if (!brief) {
+    return (
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
+        <p className="text-sm text-white/20">No tech news brief available yet.</p>
+      </motion.div>
+    )
+  }
 
-      {pendingTypes.length > 0 && (
-        <div>
-          <h3 className="text-xs font-mono text-white/20 uppercase tracking-wider mb-2">Pending</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            {pendingTypes.map((type) => (
-              <PendingBriefCard key={type} type={type} />
-            ))}
-          </div>
-        </div>
-      )}
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        {filtered.map((brief) => (
-          <BriefCard key={brief.id} brief={brief} />
-        ))}
-      </div>
-
-      {filtered.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-sm text-white/20">No briefs yet. They&apos;ll arrive on schedule.</p>
-        </div>
-      )}
-    </motion.div>
-  )
+  return <TechBriefPage brief={brief} />
 }
