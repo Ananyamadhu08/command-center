@@ -61,7 +61,7 @@ export function AnalyticsView() {
   return (
     <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-6">
       <motion.div variants={item}>
-        <h2 className="text-lg font-semibold text-white/80 mb-1">Analytics</h2>
+        <h2 className="text-lg font-semibold text-white/80 mb-2">Analytics</h2>
         <p className="text-xs text-white/30 font-mono">Last 7 days overview</p>
       </motion.div>
 

@@ -15,6 +15,21 @@ async function githubFetch(path: string) {
   return res.json()
 }
 
+async function fetchAllRepos() {
+  const all: { full_name: string; description: string }[] = []
+  let page = 1
+  while (true) {
+    const batch = await githubFetch(`/user/repos?sort=updated&per_page=100&page=${page}&type=owner`)
+    if (!Array.isArray(batch) || batch.length === 0) break
+    for (const r of batch) {
+      all.push({ full_name: r.full_name, description: r.description ?? "" })
+    }
+    if (batch.length < 100) break
+    page++
+  }
+  return all
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const action = searchParams.get("action")
@@ -25,11 +40,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ success: true, data: SAMPLE_GITHUB_REPOS })
     }
     try {
-      const repos = await githubFetch("/user/repos?sort=updated&per_page=30&type=owner")
-      const data = repos.map((r: { full_name: string; description: string | null }) => ({
-        full_name: r.full_name,
-        description: r.description ?? "",
-      }))
+      const data = await fetchAllRepos()
       return NextResponse.json({ success: true, data })
     } catch {
       return NextResponse.json({ success: true, data: SAMPLE_GITHUB_REPOS })

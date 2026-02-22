@@ -26,10 +26,10 @@ export function CookCard({ plan }: CookCardProps) {
 
   return (
     <GlassCard glow="cosmic">
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <span className="text-cosmic-light text-sm">📋</span>
-          <h3 className="text-sm font-semibold text-white/90">Cook&apos;s Card</h3>
+          <h3 className="text-base font-semibold text-white/90">Cook&apos;s Card</h3>
         </div>
         <GlowButton variant="cosmic" size="sm" onClick={handleCopy}>
           {copied ? "Copied!" : "Copy"}

@@ -47,7 +47,7 @@ export function ProjectTaskList({ tasks, onAddTask, onCycleStatus, onDeleteTask 
 
   return (
     <GlassCard hover={false} className="space-y-4">
-      <h3 className="text-sm font-semibold text-white/70">Tasks</h3>
+      <h3 className="text-base font-semibold text-white/70">Tasks</h3>
 
       <form onSubmit={handleSubmit} className="flex gap-2">
         <input
@@ -71,7 +71,7 @@ export function ProjectTaskList({ tasks, onAddTask, onCycleStatus, onDeleteTask 
           const items = groups[status]
           if (items.length === 0) return null
           return (
-            <div key={status} className="space-y-1">
+            <div key={status} className="space-y-1.5">
               <p className="text-[10px] text-white/30 uppercase tracking-wider font-medium">
                 {STATUS_BADGE[status].label} ({items.length})
               </p>

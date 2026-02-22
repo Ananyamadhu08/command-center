@@ -45,7 +45,7 @@ function StreakCard({
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2.5">
           <span className="text-base" style={{ color: colorLight }}>{icon}</span>
-          <span className="text-sm font-medium text-white/70">{title}</span>
+          <span className="text-base font-semibold text-white/80">{title}</span>
         </div>
         <span className="text-[11px] text-white/25">{activeCount}/30 days</span>
       </div>

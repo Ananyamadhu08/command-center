@@ -72,7 +72,7 @@ export function EveningBriefPage({ brief }: EveningBriefPageProps) {
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-      <div className="flex items-center gap-3 mb-2">
+      <div className="flex items-center gap-3 mb-3">
         <span className="text-2xl">🌙</span>
         <div>
           <h1 className="text-xl font-semibold text-white/90">{brief.title}</h1>

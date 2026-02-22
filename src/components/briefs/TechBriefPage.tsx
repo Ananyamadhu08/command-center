@@ -186,7 +186,7 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-2">
+      <div className="flex items-center gap-3 mb-3">
         <span className="text-2xl">{"\u26A1"}</span>
         <div className="flex-1">
           <h1 className="text-xl font-semibold text-white/90">{brief.title}</h1>
@@ -245,7 +245,7 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
             className="space-y-5"
           >
             {/* Category Filters */}
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => setActiveCategory("all")}
                 className={

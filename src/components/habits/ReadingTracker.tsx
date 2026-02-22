@@ -137,7 +137,7 @@ export function ReadingTracker({ onLog, recentLogs }: ReadingTrackerProps) {
     <>
       <GlassCard glow="cosmic">
         <div className="flex items-center justify-between mb-5">
-          <h3 className="text-sm font-semibold text-white/90 flex items-center gap-2">
+          <h3 className="text-base font-semibold text-white/90 flex items-center gap-2">
             <span className="text-cosmic-light">□</span>
             Reading
           </h3>

@@ -28,7 +28,7 @@ export function StreakCalendar({ title, dates, color = "#8b5cf6" }: StreakCalend
   return (
     <GlassCard>
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-semibold text-white/90">{title}</h3>
+        <h3 className="text-base font-semibold text-white/90">{title}</h3>
         {currentStreak > 0 && (
           <span className="text-[10px] font-mono" style={{ color: `${color}aa` }}>
             {currentStreak} day streak

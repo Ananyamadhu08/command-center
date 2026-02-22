@@ -40,7 +40,7 @@ export function GitHubStatsPanel({ repo }: GitHubStatsPanelProps) {
 
   return (
     <GlassCard hover={false} className="space-y-4">
-      <h3 className="text-sm font-semibold text-white/70">GitHub</h3>
+      <h3 className="text-base font-semibold text-white/70">GitHub</h3>
 
       <div className="grid grid-cols-3 gap-3">
         <div className="rounded-lg bg-white/5 p-3 text-center">
@@ -58,7 +58,7 @@ export function GitHubStatsPanel({ repo }: GitHubStatsPanelProps) {
       </div>
 
       {stats.open_prs.length > 0 && (
-        <div className="space-y-1.5">
+        <div className="space-y-2">
           <p className="text-[10px] text-white/30 uppercase tracking-wider font-medium">
             Open Pull Requests
           </p>
@@ -72,7 +72,7 @@ export function GitHubStatsPanel({ repo }: GitHubStatsPanelProps) {
       )}
 
       {stats.branches.length > 0 && (
-        <div className="space-y-1.5">
+        <div className="space-y-2">
           <p className="text-[10px] text-white/30 uppercase tracking-wider font-medium">
             Branches
           </p>
@@ -90,7 +90,7 @@ export function GitHubStatsPanel({ repo }: GitHubStatsPanelProps) {
       )}
 
       {stats.recent_commits.length > 0 && (
-        <div className="space-y-1.5">
+        <div className="space-y-2">
           <p className="text-[10px] text-white/30 uppercase tracking-wider font-medium">
             Recent Commits
           </p>

@@ -24,7 +24,7 @@ export function ProjectCard({ project, tasks, onClick }: ProjectCardProps) {
   return (
     <GlassCard onClick={onClick} className="space-y-3">
       <div className="flex items-start justify-between gap-2">
-        <h3 className="text-sm font-semibold text-white/90 truncate">{project.name}</h3>
+        <h3 className="text-base font-semibold text-white/90 truncate">{project.name}</h3>
         <span
           className={cn(
             "shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider",
@@ -41,7 +41,7 @@ export function ProjectCard({ project, tasks, onClick }: ProjectCardProps) {
         <p className="text-xs text-white/50 line-clamp-2">{project.description}</p>
       )}
 
-      <div className="space-y-1.5 pt-1">
+      <div className="space-y-1.5 pt-2">
         <div className="flex items-center justify-between text-[10px] text-white/40">
           <span>{done}/{total} tasks</span>
           <span>{pct}%</span>

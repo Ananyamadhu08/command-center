@@ -37,7 +37,7 @@ export function BriefCard({ brief }: BriefCardProps) {
         <div className="flex items-start gap-3">
           <span className={`text-lg ${config.color}`}>{config.icon}</span>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex items-center gap-2 mb-2">
               <span className="text-[10px] font-mono text-white/30 uppercase tracking-wider">
                 {TYPE_LABELS[brief.type]}
               </span>
@@ -45,7 +45,7 @@ export function BriefCard({ brief }: BriefCardProps) {
                 {TYPE_TIMES[brief.type]}
               </span>
             </div>
-            <h3 className="text-sm font-medium text-white/90 mb-1.5 truncate">
+            <h3 className="text-base font-medium text-white/90 mb-2 truncate">
               {brief.title}
             </h3>
             <p className="text-xs text-white/40 leading-relaxed line-clamp-2">{preview}</p>
@@ -68,7 +68,7 @@ export function PendingBriefCard({ type }: PendingBriefCardProps) {
       <div className="flex items-start gap-3">
         <span className={`text-lg ${config.color} opacity-40`}>{config.icon}</span>
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex items-center gap-2 mb-2">
             <span className="text-[10px] font-mono text-white/30 uppercase tracking-wider">
               {TYPE_LABELS[type]}
             </span>
@@ -76,7 +76,7 @@ export function PendingBriefCard({ type }: PendingBriefCardProps) {
               {TYPE_TIMES[type]}
             </span>
           </div>
-          <h3 className="text-sm font-medium text-white/40 mb-1.5">
+          <h3 className="text-base font-medium text-white/40 mb-2">
             Pending
           </h3>
           <p className="text-xs text-white/25 leading-relaxed line-clamp-2">

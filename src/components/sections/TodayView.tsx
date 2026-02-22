@@ -174,7 +174,7 @@ export function TodayView({ onNavigate }: TodayViewProps) {
     <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-6">
       {/* Today's Overview — Stat Cards */}
       <motion.div variants={item}>
-        <h2 className="text-lg font-semibold text-white/80 mb-3">Today&apos;s Overview</h2>
+        <h2 className="text-lg font-semibold text-white/80 mb-4">Today&apos;s Overview</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
           {/* Weather */}
           <GlassCard hover={false} className="h-full text-center py-4">
@@ -237,7 +237,7 @@ export function TodayView({ onNavigate }: TodayViewProps) {
 
       {/* Briefs */}
       <motion.div variants={item}>
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center justify-between mb-4">
           <h3 className="text-xs font-mono text-white/30 uppercase tracking-wider">Briefs</h3>
           <button
             onClick={() => onNavigate("briefs")}
@@ -260,7 +260,7 @@ export function TodayView({ onNavigate }: TodayViewProps) {
 
       {/* Habits — full width */}
       <motion.div variants={item}>
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center justify-between mb-4">
           <h3 className="text-xs font-mono text-white/30 uppercase tracking-wider">Habits</h3>
           <button
             onClick={() => onNavigate("habits")}
@@ -273,7 +273,7 @@ export function TodayView({ onNavigate }: TodayViewProps) {
       </motion.div>
 
       {/* Nutrition */}
-      <motion.div variants={item} className="space-y-4">
+      <motion.div variants={item} className="space-y-5">
         <div className="flex items-center justify-between">
           <h3 className="text-xs font-mono text-white/30 uppercase tracking-wider">Nutrition</h3>
           <button

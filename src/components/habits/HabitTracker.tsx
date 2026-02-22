@@ -94,8 +94,8 @@ export function HabitTracker({ habits, todayLogs, onToggle, onCreate, onUpdate, 
   return (
     <>
       <GlassCard glow="cosmic">
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-sm font-semibold text-white/90 flex items-center gap-2">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-base font-semibold text-white/90 flex items-center gap-2">
             <span className="text-cosmic-light">◈</span>
             Daily Habits
           </h3>
@@ -120,7 +120,7 @@ export function HabitTracker({ habits, todayLogs, onToggle, onCreate, onUpdate, 
         </div>
 
         {/* Progress bar + count right below header */}
-        <div className="flex items-center gap-3 mt-1 mb-4">
+        <div className="flex items-center gap-3 mt-2 mb-4">
           <div className="h-2 bg-white/5 rounded-full overflow-hidden flex-1">
             <div
               className="h-full bg-gradient-to-r from-cosmic to-cosmic-light rounded-full transition-all duration-500"
@@ -132,7 +132,7 @@ export function HabitTracker({ habits, todayLogs, onToggle, onCreate, onUpdate, 
           </span>
         </div>
 
-        <div className="space-y-1">
+        <div className="space-y-2">
           {habits.map((habit) => {
             const done = completedIds.has(habit.id)
             const streak = streakByHabit.get(habit.id) ?? 0
@@ -259,7 +259,7 @@ export function HabitTracker({ habits, todayLogs, onToggle, onCreate, onUpdate, 
 
       {/* Manage Habits Modal */}
       <Modal isOpen={showManage} onClose={() => { setShowManage(false); setEditingId(null) }} title="Manage Habits">
-        <div className="space-y-2">
+        <div className="space-y-3">
           {habits.map((habit) => {
             const isEditing = editingId === habit.id
             if (isEditing) {

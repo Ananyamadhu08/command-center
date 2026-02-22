@@ -38,7 +38,7 @@ export function ProjectDetailView({
       </div>
 
       <div className="flex items-start justify-between gap-4 flex-wrap">
-        <div className="space-y-1">
+        <div className="space-y-1.5">
           <h2 className="text-lg font-semibold text-white/90">{project.name}</h2>
           <a
             href={`https://github.com/${project.repo}`}

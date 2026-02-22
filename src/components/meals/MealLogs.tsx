@@ -127,7 +127,7 @@ export function MealLogs({ refreshKey }: MealLogsProps) {
     <GlassCard hover={false} glow="cosmic">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-semibold text-white/90 flex items-center gap-2">
+        <h3 className="text-base font-semibold text-white/90 flex items-center gap-2">
           <span className="text-cosmic-light">◈</span>
           Today&apos;s Log
         </h3>
@@ -189,7 +189,7 @@ export function MealLogs({ refreshKey }: MealLogsProps) {
           </div>
 
           {/* Column headers */}
-          <div className="grid grid-cols-[auto_1fr_auto_auto] gap-x-3 px-1 pb-1 border-b border-white/5">
+          <div className="grid grid-cols-[auto_1fr_auto_auto] gap-x-3 px-1 pb-2 border-b border-white/5">
             <span className="text-[9px] font-mono uppercase tracking-widest text-white/20 w-20">
               Meal
             </span>
@@ -205,7 +205,7 @@ export function MealLogs({ refreshKey }: MealLogsProps) {
           </div>
 
           {/* Meal rows */}
-          <div className="space-y-0.5">
+          <div className="space-y-1">
             {enriched.map(({ log, calories, time }, i) => (
               <motion.div
                 key={log.id}
