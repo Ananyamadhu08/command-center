@@ -1,6 +1,7 @@
 "use client"
 
 import { useMemo } from "react"
+import { Activity, BookOpen, Target } from "lucide-react"
 import { GlassCard } from "@/components/ui/GlassCard"
 import { calculateStreak, getLast7Days, getLast30Days } from "@/lib/streaks"
 import type { ExerciseLog, ReadingLog, Habit, HabitLog } from "@/lib/types"
@@ -14,7 +15,7 @@ interface WeeklyActivityProps {
 
 interface StreakCardProps {
   title: string
-  icon: string
+  icon: React.ReactNode
   streak: number
   secondaryLabel: string
   secondaryValue: string
@@ -44,7 +45,7 @@ function StreakCard({
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2.5">
-          <span className="text-base" style={{ color: colorLight }}>{icon}</span>
+          <span style={{ color: colorLight }}>{icon}</span>
           <span className="text-base font-semibold text-white/80">{title}</span>
         </div>
         <span className="text-[11px] text-white/25">{activeCount}/30 days</span>
@@ -169,7 +170,7 @@ export function WeeklyActivity({ exerciseLogs, readingLogs, habitLogs, habits }:
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       <StreakCard
         title="Exercise"
-        icon="△"
+        icon={<Activity size={16} />}
         streak={exerciseStreak}
         secondaryLabel="This week"
         secondaryValue={`${weeklyMinutes} min`}
@@ -181,7 +182,7 @@ export function WeeklyActivity({ exerciseLogs, readingLogs, habitLogs, habits }:
       />
       <StreakCard
         title="Reading"
-        icon="□"
+        icon={<BookOpen size={16} />}
         streak={readingStreak}
         secondaryLabel="This week"
         secondaryValue={`${weeklyPages} pg`}
@@ -193,7 +194,7 @@ export function WeeklyActivity({ exerciseLogs, readingLogs, habitLogs, habits }:
       />
       <StreakCard
         title="Habits"
-        icon="◈"
+        icon={<Target size={16} />}
         streak={habitStreak}
         secondaryLabel="Avg completion (7d)"
         secondaryValue={`${habitAvg}%`}

@@ -6,6 +6,7 @@ import { GlowButton } from "@/components/ui/GlowButton"
 import { Input, TextArea } from "@/components/ui/Input"
 import { getToday } from "@/lib/utils"
 import { calculateStreak, getLast7Days } from "@/lib/streaks"
+import { Activity } from "lucide-react"
 import type { ExerciseLog as ExerciseLogType } from "@/lib/types"
 
 const EXERCISE_TYPES = [
@@ -96,7 +97,7 @@ export function ExerciseLog({ onLog, todayLogs, allLogs = [] }: ExerciseLogProps
     <GlassCard glow="cosmic">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-base font-semibold text-white/90 flex items-center gap-2">
-          <span className="text-electric-light">△</span>
+          <Activity size={14} className="text-electric-light" />
           Exercise Log
         </h3>
         {totalMinutes > 0 && (

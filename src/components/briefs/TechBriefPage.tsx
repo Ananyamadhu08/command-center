@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { Brain, AtSign, Globe, Cloud, Rocket, Package, Flag, Wrench, Smartphone, Lock, Zap, MessageCircle, ExternalLink } from "lucide-react"
 import { GlassCard } from "@/components/ui/GlassCard"
 import { Modal } from "@/components/ui/Modal"
 import type { Brief, TechBriefContent, TechStory, TechCategory } from "@/lib/types"
@@ -37,17 +38,17 @@ const CATEGORY_LABELS: Record<TechCategory, string> = {
   security: "Security",
 }
 
-const CATEGORY_ICONS: Record<TechCategory, string> = {
-  ai_ml: "\u{1F9E0}",
-  twitter_buzz: "\u{1D54F}",
-  web_dev: "\u{1F310}",
-  infra_devops: "\u2601",
-  startups: "\u{1F680}",
-  open_source: "\u{1F4E6}",
-  india_tech: "\u{1F1EE}\u{1F1F3}",
-  tools: "\u{1F527}",
-  mobile: "\u{1F4F1}",
-  security: "\u{1F512}",
+const CATEGORY_ICONS: Record<TechCategory, React.ReactNode> = {
+  ai_ml: <Brain size={12} />,
+  twitter_buzz: <AtSign size={12} />,
+  web_dev: <Globe size={12} />,
+  infra_devops: <Cloud size={12} />,
+  startups: <Rocket size={12} />,
+  open_source: <Package size={12} />,
+  india_tech: <Flag size={12} />,
+  tools: <Wrench size={12} />,
+  mobile: <Smartphone size={12} />,
+  security: <Lock size={12} />,
 }
 
 const CATEGORY_GLASS: Record<TechCategory, string> = {
@@ -82,7 +83,7 @@ function GlassBadge({ category }: { category: TechCategory }) {
         CATEGORY_GLASS[category]
       }
     >
-      <span className="text-xs leading-none">{CATEGORY_ICONS[category]}</span>
+      <span className="leading-none">{CATEGORY_ICONS[category]}</span>
       {CATEGORY_LABELS[category]}
     </span>
   )
@@ -187,7 +188,7 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3 mb-3">
-        <span className="text-2xl">{"\u26A1"}</span>
+        <Zap size={24} className="text-cosmic-light" />
         <div className="flex-1">
           <h1 className="text-xl font-semibold text-white/90">{brief.title}</h1>
           <p className="text-xs font-mono text-white/30">
@@ -268,7 +269,7 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
                       : "border-white/[0.08] text-white/30 hover:border-white/15 hover:text-white/50")
                   }
                 >
-                  <span className="text-[9px]">{CATEGORY_ICONS[cat]}</span>
+                  <span>{CATEGORY_ICONS[cat]}</span>
                   {CATEGORY_LABELS[cat]} ({storyCounts[cat]})
                 </button>
               ))}
@@ -301,7 +302,7 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
             {hotTakes.length > 0 && (
               <div>
                 <h2 className="text-xs font-mono text-white/35 uppercase tracking-wider mb-3 flex items-center gap-2">
-                  <span>{"\u{1D54F}"}</span> Hot Takes
+                  <AtSign size={12} /> Hot Takes
                 </h2>
                 <div className="space-y-2.5">
                   {hotTakes.map((take, i) => (
@@ -335,7 +336,7 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
             {discussions.length > 0 && (
               <div>
                 <h2 className="text-xs font-mono text-white/35 uppercase tracking-wider mb-3 flex items-center gap-2">
-                  <span>{"\u{1F4AC}"}</span> Featured Discussions
+                  <MessageCircle size={12} /> Featured Discussions
                 </h2>
                 <div className="space-y-3">
                   {discussions.map((story, i) => (
@@ -371,7 +372,7 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
                     "hover:text-white/70 hover:border-white/20 hover:bg-white/[0.04]"
                   }
                 >
-                  {link.label} {"\u2197"}
+                  {link.label} <ExternalLink size={10} className="inline ml-0.5" />
                 </a>
               ))}
             </div>

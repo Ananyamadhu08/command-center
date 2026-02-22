@@ -2,6 +2,7 @@
 
 import { useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { X } from "lucide-react"
 
 interface ModalProps {
   isOpen: boolean
@@ -53,10 +54,10 @@ export function Modal({ isOpen, onClose, title, children, wide = false }: ModalP
               <h2 className="text-lg font-semibold text-white">{title}</h2>
               <button
                 onClick={onClose}
-                className="text-white/40 hover:text-white/80 transition-colors text-xl leading-none"
+                className="text-white/40 hover:text-white/80 transition-colors"
                 aria-label="Close modal"
               >
-                &times;
+                <X size={18} />
               </button>
             </div>
             {children}

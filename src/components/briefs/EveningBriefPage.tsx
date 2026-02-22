@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
+import { CheckCircle, Circle, Dumbbell, Target, BookOpen, UtensilsCrossed, Moon } from "lucide-react"
 import { GlassCard } from "@/components/ui/GlassCard"
 import type { Brief, EveningBriefContent, ExerciseLog, ReadingLog, HabitLog, Habit, MealLog } from "@/lib/types"
 
@@ -64,16 +65,16 @@ export function EveningBriefPage({ brief }: EveningBriefPageProps) {
   }, [])
 
   const statCards = [
-    { label: "Exercise", value: `${stats.exerciseMinutes} min`, icon: "💪", glow: "cosmic" as const },
-    { label: "Habits", value: `${stats.habitsCompleted}/${stats.habitsTotal}`, icon: "✓", glow: "cosmic" as const },
-    { label: "Reading", value: `${stats.pagesRead} pages`, icon: "📖", glow: "cosmic" as const },
-    { label: "Meals", value: `${stats.mealsTracked} logged`, icon: "🍽", glow: "none" as const },
+    { label: "Exercise", value: `${stats.exerciseMinutes} min`, icon: <Dumbbell size={20} className="text-electric-light" />, glow: "cosmic" as const },
+    { label: "Habits", value: `${stats.habitsCompleted}/${stats.habitsTotal}`, icon: <Target size={20} className="text-cosmic-light" />, glow: "cosmic" as const },
+    { label: "Reading", value: `${stats.pagesRead} pages`, icon: <BookOpen size={20} className="text-cosmic-light" />, glow: "cosmic" as const },
+    { label: "Meals", value: `${stats.mealsTracked} logged`, icon: <UtensilsCrossed size={20} className="text-white/50" />, glow: "none" as const },
   ]
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
       <div className="flex items-center gap-3 mb-3">
-        <span className="text-2xl">🌙</span>
+        <Moon size={24} className="text-cosmic-light" />
         <div>
           <h1 className="text-xl font-semibold text-white/90">{brief.title}</h1>
           <p className="text-xs font-mono text-white/30">
@@ -91,7 +92,7 @@ export function EveningBriefPage({ brief }: EveningBriefPageProps) {
         {statCards.map((card) => (
           <GlassCard key={card.label} glow={card.glow}>
             <div className="text-center">
-              <span className="text-lg">{card.icon}</span>
+              <span className="flex justify-center">{card.icon}</span>
               <p className="text-lg font-semibold text-white/90 mt-1">{card.value}</p>
               <p className="text-[10px] font-mono text-white/30 uppercase tracking-wider">{card.label}</p>
             </div>
@@ -109,7 +110,7 @@ export function EveningBriefPage({ brief }: EveningBriefPageProps) {
               <ul className="space-y-2">
                 {parsed.completed.map((item, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-white/70">
-                    <span className="text-cosmic-light/60 mt-0.5">✓</span>
+                    <CheckCircle size={12} className="text-cosmic-light/60 mt-0.5 shrink-0" />
                     {item}
                   </li>
                 ))}
@@ -125,7 +126,7 @@ export function EveningBriefPage({ brief }: EveningBriefPageProps) {
               <ul className="space-y-2">
                 {parsed.in_progress.map((item, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-white/70">
-                    <span className="text-electric-light/50 mt-0.5">◌</span>
+                    <Circle size={12} className="text-electric-light/50 mt-0.5 shrink-0" />
                     {item}
                   </li>
                 ))}

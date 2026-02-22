@@ -2,6 +2,7 @@
 
 import { GlassCard } from "@/components/ui/GlassCard"
 import { MEAL_TYPE_LABELS } from "@/lib/nutrition"
+import { ClipboardList } from "lucide-react"
 import type { MealPlanData } from "@/lib/types"
 
 interface MealPlanCardProps {
@@ -24,7 +25,7 @@ export function MealPlanCard({ plan }: MealPlanCardProps) {
   return (
     <GlassCard glow="cosmic" className="h-full space-y-3">
       <div className="flex items-center gap-2 mb-4">
-        <span className="text-cosmic-light text-base leading-none">◇</span>
+        <ClipboardList size={14} className="text-cosmic-light" />
         <h3 className="text-base font-semibold text-white/90">Today&apos;s Meal Plan</h3>
       </div>
       <div className="space-y-2.5">

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { GlassCard } from "@/components/ui/GlassCard"
+import { CheckCircle, AlertTriangle } from "lucide-react"
 import { StatCard } from "@/components/analytics/StatCard"
 import { BarChart } from "@/components/analytics/BarChart"
 import type { AnalyticsData } from "@/lib/types"
@@ -160,7 +161,7 @@ export function AnalyticsView() {
                 <ul className="space-y-1.5">
                   {data.overall.on_track.map((item, i) => (
                     <li key={i} className="flex items-start gap-2 text-xs text-white/60">
-                      <span className="text-emerald-400/60 mt-0.5">✓</span>
+                      <CheckCircle size={12} className="text-emerald-400/60 mt-0.5 shrink-0" />
                       {item}
                     </li>
                   ))}
@@ -177,7 +178,7 @@ export function AnalyticsView() {
                 <ul className="space-y-1.5">
                   {data.overall.off_track.map((item, i) => (
                     <li key={i} className="flex items-start gap-2 text-xs text-white/60">
-                      <span className="text-red-400/60 mt-0.5">!</span>
+                      <AlertTriangle size={12} className="text-red-400/60 mt-0.5 shrink-0" />
                       {item}
                     </li>
                   ))}

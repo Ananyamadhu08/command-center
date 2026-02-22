@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { ListChecks, Check } from "lucide-react"
 import { GlassCard } from "@/components/ui/GlassCard"
 import { DAILY_ESSENTIALS } from "@/lib/nutrition"
 
@@ -25,7 +26,7 @@ export function NutritionTips() {
     <GlassCard glow="cosmic" className="h-full">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-base font-semibold text-white/90 flex items-center gap-2">
-          <span className="text-cosmic-light">✓</span>
+          <ListChecks size={14} className="text-cosmic-light" />
           Daily Essentials
         </h3>
         <span className="text-[10px] font-mono text-white/30">
@@ -54,7 +55,7 @@ export function NutritionTips() {
                   : "border-white/15 group-hover:border-white/30"
               }`}
             >
-              {checked.has(i) && <span className="text-[8px]">✓</span>}
+              {checked.has(i) && <Check size={10} />}
             </div>
             <span className="text-xs mr-1">{item.icon}</span>
             <span

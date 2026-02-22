@@ -4,6 +4,7 @@ import { useState } from "react"
 import { GlassCard } from "@/components/ui/GlassCard"
 import { GlowButton } from "@/components/ui/GlowButton"
 import { Input, TextArea } from "@/components/ui/Input"
+import { BookOpen } from "lucide-react"
 import { getToday } from "@/lib/utils"
 
 interface ReadingLogProps {
@@ -37,7 +38,7 @@ export function ReadingLog({ onLog, recentLogs }: ReadingLogProps) {
     <GlassCard glow="cosmic">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-base font-semibold text-white/90 flex items-center gap-2">
-          <span className="text-cosmic-light">□</span>
+          <BookOpen size={14} className="text-cosmic-light" />
           Reading Log
         </h3>
         {totalPages > 0 && (

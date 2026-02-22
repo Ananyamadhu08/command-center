@@ -5,6 +5,7 @@ import { GlassCard } from "@/components/ui/GlassCard"
 import { GlowButton } from "@/components/ui/GlowButton"
 import { Input } from "@/components/ui/Input"
 import { Modal } from "@/components/ui/Modal"
+import { BookOpen, Plus } from "lucide-react"
 import { getToday } from "@/lib/utils"
 
 interface Book {
@@ -138,7 +139,7 @@ export function ReadingTracker({ onLog, recentLogs }: ReadingTrackerProps) {
       <GlassCard glow="cosmic">
         <div className="flex items-center justify-between mb-5">
           <h3 className="text-base font-semibold text-white/90 flex items-center gap-2">
-            <span className="text-cosmic-light">□</span>
+            <BookOpen size={14} className="text-cosmic-light" />
             Reading
           </h3>
           <div className="flex items-center gap-2">
@@ -152,10 +153,10 @@ export function ReadingTracker({ onLog, recentLogs }: ReadingTrackerProps) {
             )}
             <button
               onClick={() => setShowAddForm(true)}
-              className="w-5 h-5 rounded-md border border-cosmic/25 text-cosmic-light/60 hover:bg-cosmic/10 hover:text-cosmic-light flex items-center justify-center transition-all text-xs leading-none"
+              className="w-5 h-5 rounded-md border border-cosmic/25 text-cosmic-light/60 hover:bg-cosmic/10 hover:text-cosmic-light flex items-center justify-center transition-all"
               title="Add book"
             >
-              +
+              <Plus size={12} />
             </button>
           </div>
         </div>

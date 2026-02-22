@@ -59,7 +59,7 @@ export async function POST(request: Request) {
       .from("habits")
       .insert({
         name: body.name,
-        icon: body.icon ?? "◉",
+        icon: body.icon ?? "🎯",
         color: body.color ?? "#8b5cf6",
       })
       .select()

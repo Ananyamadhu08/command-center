@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { ChevronDown } from "lucide-react"
 import { GlassCard } from "@/components/ui/GlassCard"
 import type { GitHubRepoStats } from "@/lib/types"
 
@@ -48,19 +49,10 @@ export function GitHubStatsPanel({ repo }: GitHubStatsPanelProps) {
         className="flex w-full items-center justify-between"
       >
         <h3 className="text-base font-semibold text-white/70">GitHub</h3>
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+        <ChevronDown
+          size={16}
           className={`text-white/30 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
-        >
-          <path d="m6 9 6 6 6-6" />
-        </svg>
+        />
       </button>
 
       {/* Stat cards — always visible */}

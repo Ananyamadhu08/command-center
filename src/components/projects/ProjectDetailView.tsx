@@ -1,5 +1,6 @@
 "use client"
 
+import { ArrowLeft, ExternalLink } from "lucide-react"
 import { GlowButton } from "@/components/ui/GlowButton"
 import { ProjectTaskList } from "./ProjectTaskList"
 import { KanbanBoard } from "./KanbanBoard"
@@ -34,7 +35,7 @@ export function ProjectDetailView({
     <div className="space-y-6">
       <div className="flex items-center gap-3">
         <GlowButton variant="ghost" size="sm" onClick={onBack}>
-          &larr; Back
+          <ArrowLeft size={14} /> Back
         </GlowButton>
       </div>
 
@@ -47,7 +48,7 @@ export function ProjectDetailView({
             rel="noopener noreferrer"
             className="text-xs text-cosmic-light/70 hover:text-cosmic-light font-mono transition-colors"
           >
-            {project.repo} &nearr;
+            {project.repo} <ExternalLink size={12} className="inline ml-1" />
           </a>
         </div>
         <span

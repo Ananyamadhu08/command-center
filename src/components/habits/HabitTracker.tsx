@@ -6,6 +6,7 @@ import { GlowButton } from "@/components/ui/GlowButton"
 import { Input } from "@/components/ui/Input"
 import { Modal } from "@/components/ui/Modal"
 import { calculateStreak, getLast7Days } from "@/lib/streaks"
+import { CheckCircle, Pencil, Plus, Check } from "lucide-react"
 import type { Habit, HabitLog } from "@/lib/types"
 import { getToday } from "@/lib/utils"
 
@@ -96,7 +97,7 @@ export function HabitTracker({ habits, todayLogs, onToggle, onCreate, onUpdate, 
       <GlassCard glow="cosmic">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-base font-semibold text-white/90 flex items-center gap-2">
-            <span className="text-cosmic-light">◈</span>
+            <CheckCircle size={14} className="text-cosmic-light" />
             Daily Habits
           </h3>
           <div className="flex items-center gap-2">
@@ -106,15 +107,15 @@ export function HabitTracker({ habits, todayLogs, onToggle, onCreate, onUpdate, 
                 className="w-5 h-5 rounded-md border border-white/10 text-white/30 hover:bg-white/5 hover:text-white/60 flex items-center justify-center transition-all text-[10px] leading-none"
                 title="Manage habits"
               >
-                ✎
+                <Pencil size={10} />
               </button>
             )}
             <button
               onClick={() => setShowCreate(true)}
-              className="w-5 h-5 rounded-md border border-cosmic/25 text-cosmic-light/60 hover:bg-cosmic/10 hover:text-cosmic-light flex items-center justify-center transition-all text-xs leading-none"
+              className="w-5 h-5 rounded-md border border-cosmic/25 text-cosmic-light/60 hover:bg-cosmic/10 hover:text-cosmic-light flex items-center justify-center transition-all"
               title="Add habit"
             >
-              +
+              <Plus size={12} />
             </button>
           </div>
         </div>
@@ -149,7 +150,7 @@ export function HabitTracker({ habits, todayLogs, onToggle, onCreate, onUpdate, 
                       : "border-white/15 group-hover:border-white/30"
                   }`}
                 >
-                  {done && <span className="text-[9px] text-cosmic-light">✓</span>}
+                  {done && <Check size={10} className="text-cosmic-light" />}
                 </div>
                 <span className="text-sm mr-1">{habit.icon}</span>
                 <span

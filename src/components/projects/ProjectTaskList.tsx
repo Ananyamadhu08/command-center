@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { GlassCard } from "@/components/ui/GlassCard"
+import { Plus, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { TASK_STATUSES, TASK_STATUS_CONFIG } from "@/lib/types"
 import type { ProjectTask, TaskStatus } from "@/lib/types"
@@ -37,9 +38,7 @@ export function ProjectTaskList({
           aria-label="Add task"
           className="flex size-7 items-center justify-center rounded-lg text-white/40 transition-colors hover:bg-white/10 hover:text-white/80"
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 5v14M5 12h14" />
-          </svg>
+          <Plus size={18} />
         </button>
       </div>
 
@@ -156,9 +155,9 @@ function AddTaskModal({
           <h2 className="text-lg font-semibold text-white">Add Task</h2>
           <button
             onClick={handleClose}
-            className="text-white/40 hover:text-white/80 transition-colors text-xl leading-none"
+            className="text-white/40 hover:text-white/80 transition-colors"
           >
-            &times;
+            <X size={18} />
           </button>
         </div>
 
@@ -298,9 +297,9 @@ function TaskDetailModal({
           <h2 className="text-lg font-semibold text-white">Task Details</h2>
           <button
             onClick={handleClose}
-            className="text-white/40 hover:text-white/80 transition-colors text-xl leading-none"
+            className="text-white/40 hover:text-white/80 transition-colors"
           >
-            &times;
+            <X size={18} />
           </button>
         </div>
 

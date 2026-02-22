@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import { GlassCard } from "@/components/ui/GlassCard"
 import { MEAL_TYPE_LABELS } from "@/lib/nutrition"
 import { getToday } from "@/lib/utils"
+import { Notebook } from "lucide-react"
 import type { MealLog } from "@/lib/types"
 
 interface MealLogsProps {
@@ -128,7 +129,7 @@ export function MealLogs({ refreshKey }: MealLogsProps) {
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-base font-semibold text-white/90 flex items-center gap-2">
-          <span className="text-cosmic-light">◈</span>
+          <Notebook size={14} className="text-cosmic-light" />
           Today&apos;s Log
         </h3>
         {!loading && logs.length > 0 && (

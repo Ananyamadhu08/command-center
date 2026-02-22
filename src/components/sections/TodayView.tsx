@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react"
 import { motion } from "framer-motion"
+import { Cloud, Dumbbell, BookOpen, CheckCircle, UtensilsCrossed, ArrowRight } from "lucide-react"
 import { GlassCard } from "@/components/ui/GlassCard"
 import { BriefCard, PendingBriefCard } from "@/components/briefs/BriefCard"
 import { MealPlanCard } from "@/components/meals/MealPlanCard"
@@ -179,7 +180,7 @@ export function TodayView({ onNavigate }: TodayViewProps) {
           {/* Weather */}
           <GlassCard hover={false} className="h-full text-center py-4">
             <span className="text-2xl block mb-1">
-              {weather ? (WEATHER_ICONS[weather.icon] ?? "\u2601\uFE0F") : "\u2601\uFE0F"}
+              {weather ? (WEATHER_ICONS[weather.icon] ?? <Cloud size={24} className="mx-auto text-white/60" />) : <Cloud size={24} className="mx-auto text-white/60" />}
             </span>
             <p className="text-lg font-semibold text-white/90">
               {weather ? `${weather.temp}\u00B0` : "--\u00B0"}
@@ -191,7 +192,7 @@ export function TodayView({ onNavigate }: TodayViewProps) {
 
           {/* Exercise */}
           <GlassCard hover={false} className="h-full text-center py-4">
-            <span className="text-2xl block mb-1">{"\uD83C\uDFCB\uFE0F"}</span>
+            <Dumbbell size={24} className="mx-auto mb-1 text-electric-light" />
             <p className="text-lg font-semibold text-white/90">
               {exerciseMinutes > 0 ? `${exerciseMinutes}` : "0"} min
             </p>
@@ -202,7 +203,7 @@ export function TodayView({ onNavigate }: TodayViewProps) {
 
           {/* Reading */}
           <GlassCard hover={false} className="h-full text-center py-4">
-            <span className="text-2xl block mb-1">{"\uD83D\uDCDA"}</span>
+            <BookOpen size={24} className="mx-auto mb-1 text-cosmic-light" />
             <p className="text-lg font-semibold text-white/90">
               {pagesRead > 0 ? `${pagesRead}` : "0"} pages
             </p>
@@ -213,7 +214,7 @@ export function TodayView({ onNavigate }: TodayViewProps) {
 
           {/* Habits */}
           <GlassCard hover={false} className="h-full text-center py-4">
-            <span className="text-2xl block mb-1">{"\u2705"}</span>
+            <CheckCircle size={24} className="mx-auto mb-1 text-emerald-400" />
             <p className="text-lg font-semibold text-white/90">
               {completedHabits}/{habits.length}
             </p>
@@ -224,7 +225,7 @@ export function TodayView({ onNavigate }: TodayViewProps) {
 
           {/* Meals */}
           <GlassCard hover={false} className="h-full text-center py-4">
-            <span className="text-2xl block mb-1">{"\uD83C\uDF7D\uFE0F"}</span>
+            <UtensilsCrossed size={24} className="mx-auto mb-1 text-amber-light" />
             <p className="text-lg font-semibold text-white/90">
               {mealLogs.length}/7
             </p>
@@ -243,7 +244,7 @@ export function TodayView({ onNavigate }: TodayViewProps) {
             onClick={() => onNavigate("briefs")}
             className="text-[10px] text-cosmic-light/50 hover:text-cosmic-light transition-colors"
           >
-            View all {"\u2192"}
+            View all <ArrowRight size={10} className="inline ml-0.5" />
           </button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -266,7 +267,7 @@ export function TodayView({ onNavigate }: TodayViewProps) {
             onClick={() => onNavigate("habits")}
             className="text-[10px] text-cosmic-light/50 hover:text-cosmic-light transition-colors"
           >
-            Details {"\u2192"}
+            Details <ArrowRight size={10} className="inline ml-0.5" />
           </button>
         </div>
         <HabitTracker habits={habits} todayLogs={habitLogs} onToggle={handleHabitToggle} />
@@ -280,7 +281,7 @@ export function TodayView({ onNavigate }: TodayViewProps) {
             onClick={() => onNavigate("meals")}
             className="text-[10px] text-cosmic-light/50 hover:text-cosmic-light transition-colors"
           >
-            Full plan {"\u2192"}
+            Full plan <ArrowRight size={10} className="inline ml-0.5" />
           </button>
         </div>
         <NutritionTips />

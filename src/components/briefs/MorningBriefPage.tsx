@@ -1,6 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { Sun, CloudSun, ChevronRight, Circle } from "lucide-react"
 import { GlassCard } from "@/components/ui/GlassCard"
 import type { Brief } from "@/lib/types"
 
@@ -37,7 +38,7 @@ export function MorningBriefPage({ brief }: MorningBriefPageProps) {
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
       <div className="flex items-center gap-3 mb-3">
-        <span className="text-2xl">☀</span>
+        <Sun size={24} className="text-cosmic-light" />
         <div>
           <h1 className="text-xl font-semibold text-white/90">{brief.title}</h1>
           <p className="text-xs font-mono text-white/30">
@@ -54,7 +55,7 @@ export function MorningBriefPage({ brief }: MorningBriefPageProps) {
       {weather && (
         <GlassCard glow="cosmic">
           <div className="flex items-center gap-3">
-            <span className="text-lg">🌤</span>
+            <CloudSun size={18} className="text-electric-light" />
             <div>
               <p className="text-[10px] font-mono text-white/30 uppercase tracking-wider">Weather</p>
               <p className="text-sm text-white/80">{weather}</p>
@@ -71,7 +72,7 @@ export function MorningBriefPage({ brief }: MorningBriefPageProps) {
           <ul className="space-y-2">
             {focuses.map((item, i) => (
               <li key={i} className="flex items-start gap-2 text-sm text-white/70">
-                <span className="text-electric-light/50 mt-0.5">▸</span>
+                <ChevronRight size={12} className="text-electric-light/50 mt-0.5 shrink-0" />
                 {item}
               </li>
             ))}
@@ -87,7 +88,7 @@ export function MorningBriefPage({ brief }: MorningBriefPageProps) {
           <ul className="space-y-2">
             {reminders.map((item, i) => (
               <li key={i} className="flex items-start gap-2 text-sm text-white/70">
-                <span className="text-cosmic-light/50 mt-0.5">◦</span>
+                <Circle size={8} className="text-cosmic-light/50 mt-1 shrink-0" />
                 {item}
               </li>
             ))}
