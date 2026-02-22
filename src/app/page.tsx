@@ -18,7 +18,7 @@ export default function Home() {
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
-    const sections: NavSection[] = ["projects", "briefs", "today", "habits", "meals", "analytics", "notes"]
+    const sections: NavSection[] = ["today", "projects", "briefs", "habits", "meals", "analytics", "notes"]
     const key = parseInt(e.key, 10)
     if (key >= 1 && key <= 7) {
       setActiveSection(sections[key - 1])
