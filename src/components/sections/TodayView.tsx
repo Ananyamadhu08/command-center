@@ -179,9 +179,13 @@ export function TodayView({ onNavigate }: TodayViewProps) {
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
           {/* Weather */}
           <GlassCard hover={false} className="h-full text-center py-4">
-            <span className="text-2xl block mb-1">
-              {weather ? (WEATHER_ICONS[weather.icon] ?? <Cloud size={24} className="mx-auto text-white/60" />) : <Cloud size={24} className="mx-auto text-white/60" />}
-            </span>
+            <div className="h-6 flex items-center justify-center mb-1">
+              {weather ? (
+                <span className="text-2xl leading-none">{WEATHER_ICONS[weather.icon] ?? <Cloud size={24} className="text-white/60" />}</span>
+              ) : (
+                <Cloud size={24} className="text-white/60" />
+              )}
+            </div>
             <p className="text-lg font-semibold text-white/90">
               {weather ? `${weather.temp}\u00B0` : "--\u00B0"}
             </p>
@@ -192,7 +196,9 @@ export function TodayView({ onNavigate }: TodayViewProps) {
 
           {/* Exercise */}
           <GlassCard hover={false} className="h-full text-center py-4">
-            <Dumbbell size={24} className="mx-auto mb-1 text-electric-light" />
+            <div className="h-6 flex items-center justify-center mb-1">
+              <Dumbbell size={24} className="text-electric-light" />
+            </div>
             <p className="text-lg font-semibold text-white/90">
               {exerciseMinutes > 0 ? `${exerciseMinutes}` : "0"} min
             </p>
@@ -203,7 +209,9 @@ export function TodayView({ onNavigate }: TodayViewProps) {
 
           {/* Reading */}
           <GlassCard hover={false} className="h-full text-center py-4">
-            <BookOpen size={24} className="mx-auto mb-1 text-cosmic-light" />
+            <div className="h-6 flex items-center justify-center mb-1">
+              <BookOpen size={24} className="text-cosmic-light" />
+            </div>
             <p className="text-lg font-semibold text-white/90">
               {pagesRead > 0 ? `${pagesRead}` : "0"} pages
             </p>
@@ -214,7 +222,9 @@ export function TodayView({ onNavigate }: TodayViewProps) {
 
           {/* Habits */}
           <GlassCard hover={false} className="h-full text-center py-4">
-            <CheckCircle size={24} className="mx-auto mb-1 text-emerald-400" />
+            <div className="h-6 flex items-center justify-center mb-1">
+              <CheckCircle size={24} className="text-emerald-400" />
+            </div>
             <p className="text-lg font-semibold text-white/90">
               {completedHabits}/{habits.length}
             </p>
@@ -225,7 +235,9 @@ export function TodayView({ onNavigate }: TodayViewProps) {
 
           {/* Meals */}
           <GlassCard hover={false} className="h-full text-center py-4">
-            <UtensilsCrossed size={24} className="mx-auto mb-1 text-amber-light" />
+            <div className="h-6 flex items-center justify-center mb-1">
+              <UtensilsCrossed size={24} className="text-amber-light" />
+            </div>
             <p className="text-lg font-semibold text-white/90">
               {mealLogs.length}/7
             </p>
