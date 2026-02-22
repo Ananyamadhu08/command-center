@@ -3,26 +3,26 @@ import { SAMPLE_GITHUB_STATS, SAMPLE_GITHUB_REPOS } from "@/lib/sample-data"
 
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN
 
-async function githubFetch(path: string) {
+async function githubFetch(path: string, cache: RequestCache = "default") {
   const res = await fetch(`https://api.github.com${path}`, {
     headers: {
       Authorization: `Bearer ${GITHUB_TOKEN}`,
       Accept: "application/vnd.github+json",
     },
-    next: { revalidate: 60 },
+    ...(cache === "no-store" ? { cache: "no-store" } : { next: { revalidate: 60 } }),
   })
-  if (!res.ok) throw new Error(`GitHub API error: ${res.status}`)
+  if (!res.ok) throw new Error(`GitHub API ${path}: ${res.status} ${res.statusText}`)
   return res.json()
 }
 
 async function fetchAllRepos() {
-  const all: { full_name: string; description: string }[] = []
+  const all: { full_name: string; description: string; stargazers_count: number }[] = []
   let page = 1
   while (true) {
     const batch = await githubFetch(`/user/repos?sort=updated&per_page=100&page=${page}&type=owner`)
     if (!Array.isArray(batch) || batch.length === 0) break
     for (const r of batch) {
-      all.push({ full_name: r.full_name, description: r.description ?? "" })
+      all.push({ full_name: r.full_name, description: r.description ?? "", stargazers_count: r.stargazers_count ?? 0 })
     }
     if (batch.length < 100) break
     page++
@@ -30,10 +30,71 @@ async function fetchAllRepos() {
   return all
 }
 
+function getLocalDateStr(): string {
+  const now = new Date()
+  const y = now.getFullYear()
+  const m = String(now.getMonth() + 1).padStart(2, "0")
+  const d = String(now.getDate()).padStart(2, "0")
+  return `${y}-${m}-${d}`
+}
+
+async function fetchOverview() {
+  const user = await githubFetch("/user", "no-store")
+  const login = user.login as string
+
+  const [events, repos] = await Promise.all([
+    githubFetch(`/users/${login}/events?per_page=100`, "no-store"),
+    fetchAllRepos(),
+  ])
+
+  const totalStars = repos.reduce((sum, r) => sum + r.stargazers_count, 0)
+
+  const todayLocal = getLocalDateStr()
+  let commitsToday = 0
+  let prsToday = 0
+  const reposContributed = new Set<string>()
+
+  for (const event of events) {
+    const eventUtc = new Date(event.created_at as string)
+    const eventLocal = `${eventUtc.getFullYear()}-${String(eventUtc.getMonth() + 1).padStart(2, "0")}-${String(eventUtc.getDate()).padStart(2, "0")}`
+    if (eventLocal !== todayLocal) continue
+
+    reposContributed.add(event.repo.name as string)
+
+    if (event.type === "PushEvent") {
+      commitsToday += (event.payload.size ?? 0) as number
+    } else if (event.type === "PullRequestEvent" && event.payload.action === "opened") {
+      prsToday++
+    }
+  }
+
+  return {
+    commits_today: commitsToday,
+    prs_today: prsToday,
+    repos_contributed_today: reposContributed.size,
+    total_repos: repos.length,
+    total_stars: totalStars,
+  }
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const action = searchParams.get("action")
   const repo = searchParams.get("repo")
+
+  if (action === "overview") {
+    const EMPTY_OVERVIEW = { commits_today: 0, prs_today: 0, repos_contributed_today: 0, total_repos: 0, total_stars: 0 }
+    if (!GITHUB_TOKEN) {
+      return NextResponse.json({ success: true, data: EMPTY_OVERVIEW })
+    }
+    try {
+      const data = await fetchOverview()
+      return NextResponse.json({ success: true, data })
+    } catch (error) {
+      console.error("[GitHub Overview]", error)
+      return NextResponse.json({ success: true, data: EMPTY_OVERVIEW })
+    }
+  }
 
   if (action === "repos") {
     if (!GITHUB_TOKEN) {

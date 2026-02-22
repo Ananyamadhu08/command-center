@@ -2,6 +2,7 @@
 
 import { GlowButton } from "@/components/ui/GlowButton"
 import { ProjectCard } from "./ProjectCard"
+import { GitHubOverviewStats } from "./GitHubOverviewStats"
 import type { Project, ProjectTask, ProjectStatus } from "@/lib/types"
 
 interface ProjectListViewProps {
@@ -27,6 +28,8 @@ export function ProjectListView({ projects, tasks, onSelectProject, onOpenAddMod
           + Add Project
         </GlowButton>
       </div>
+
+      <GitHubOverviewStats />
 
       {STATUS_ORDER.map((status) => {
         const group = projects.filter((p) => p.status === status)
