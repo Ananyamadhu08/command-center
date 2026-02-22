@@ -1,22 +1,20 @@
 import { NextResponse } from "next/server"
 import { getSupabase, isSupabaseConfigured } from "@/lib/supabase"
-import { SAMPLE_PROJECTS, SAMPLE_PROJECT_TASKS } from "@/lib/sample-data"
+import * as store from "@/lib/local-store"
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const projectId = searchParams.get("id")
-
   const allTasks = searchParams.get("tasks") === "all"
 
   if (!isSupabaseConfigured()) {
     if (allTasks) {
-      return NextResponse.json({ success: true, data: SAMPLE_PROJECT_TASKS })
+      return NextResponse.json({ success: true, data: store.getProjectTasks() })
     }
     if (projectId) {
-      const tasks = SAMPLE_PROJECT_TASKS.filter((t) => t.project_id === projectId)
-      return NextResponse.json({ success: true, data: tasks })
+      return NextResponse.json({ success: true, data: store.getProjectTasks(projectId) })
     }
-    return NextResponse.json({ success: true, data: SAMPLE_PROJECTS })
+    return NextResponse.json({ success: true, data: store.getProjects() })
   }
 
   const supabase = getSupabase()!
@@ -43,12 +41,6 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  if (!isSupabaseConfigured()) {
-    return NextResponse.json({ success: false, error: "Supabase not configured" }, { status: 503 })
-  }
-
-  const supabase = getSupabase()!
-
   let body: Record<string, unknown>
   try {
     body = await request.json()
@@ -56,16 +48,72 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false, error: "Invalid JSON body" }, { status: 400 })
   }
 
+  if (!isSupabaseConfigured()) {
+    // Delete task
+    if (body.delete_task_id) {
+      const deleted = store.deleteTask(body.delete_task_id as string)
+      if (!deleted) return NextResponse.json({ success: false, error: "Task not found" }, { status: 404 })
+      return NextResponse.json({ success: true })
+    }
+
+    // Update task
+    if (body.task_id) {
+      const updates: Record<string, unknown> = {}
+      if (body.status) updates.status = body.status
+      if (body.title) updates.title = body.title
+      if (body.description !== undefined) updates.description = body.description
+      if (Object.keys(updates).length === 0) {
+        return NextResponse.json({ success: false, error: "No updates provided" }, { status: 400 })
+      }
+      const updated = store.updateTask(body.task_id as string, updates)
+      if (!updated) return NextResponse.json({ success: false, error: "Task not found" }, { status: 404 })
+      return NextResponse.json({ success: true, data: updated })
+    }
+
+    // Create task
+    if (body.project_id && body.title) {
+      const insert: Record<string, unknown> = {
+        project_id: body.project_id,
+        title: body.title,
+      }
+      if (body.description) insert.description = body.description
+      if (body.status) insert.status = body.status
+      const created = store.createTask(insert)
+      return NextResponse.json({ success: true, data: created })
+    }
+
+    // Create project
+    if (body.name && body.repo) {
+      const created = store.createProject({
+        name: body.name,
+        repo: body.repo,
+        description: body.description ?? "",
+      })
+      return NextResponse.json({ success: true, data: created })
+    }
+
+    return NextResponse.json({ success: false, error: "Invalid request body" }, { status: 400 })
+  }
+
+  const supabase = getSupabase()!
+
   if (body.delete_task_id) {
     const { error } = await supabase.from("project_tasks").delete().eq("id", body.delete_task_id)
     if (error) return NextResponse.json({ success: false, error: error.message }, { status: 500 })
     return NextResponse.json({ success: true })
   }
 
-  if (body.task_id && body.status) {
+  if (body.task_id) {
+    const updates: Record<string, unknown> = {}
+    if (body.status) updates.status = body.status
+    if (body.title) updates.title = body.title
+    if (body.description !== undefined) updates.description = body.description
+    if (Object.keys(updates).length === 0) {
+      return NextResponse.json({ success: false, error: "No updates provided" }, { status: 400 })
+    }
     const { data, error } = await supabase
       .from("project_tasks")
-      .update({ status: body.status })
+      .update(updates)
       .eq("id", body.task_id)
       .select()
       .single()
@@ -74,9 +122,15 @@ export async function POST(request: Request) {
   }
 
   if (body.project_id && body.title) {
+    const insert: Record<string, unknown> = {
+      project_id: body.project_id,
+      title: body.title,
+    }
+    if (body.description) insert.description = body.description
+    if (body.status) insert.status = body.status
     const { data, error } = await supabase
       .from("project_tasks")
-      .insert({ project_id: body.project_id, title: body.title })
+      .insert(insert)
       .select()
       .single()
     if (error) return NextResponse.json({ success: false, error: error.message }, { status: 500 })

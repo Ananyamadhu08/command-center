@@ -2,6 +2,7 @@
 
 import { GlowButton } from "@/components/ui/GlowButton"
 import { ProjectTaskList } from "./ProjectTaskList"
+import { KanbanBoard } from "./KanbanBoard"
 import { GitHubStatsPanel } from "./GitHubStatsPanel"
 import { cn } from "@/lib/utils"
 import type { Project, ProjectTask, TaskStatus } from "@/lib/types"
@@ -10,8 +11,8 @@ interface ProjectDetailViewProps {
   project: Project
   tasks: ProjectTask[]
   onBack: () => void
-  onAddTask: (title: string) => void
-  onCycleStatus: (taskId: string, newStatus: TaskStatus) => void
+  onAddTask: (title: string, description: string, status: TaskStatus) => void
+  onUpdateTask: (taskId: string, updates: Partial<Pick<ProjectTask, "title" | "description" | "status">>) => void
   onDeleteTask: (taskId: string) => void
 }
 
@@ -26,7 +27,7 @@ export function ProjectDetailView({
   tasks,
   onBack,
   onAddTask,
-  onCycleStatus,
+  onUpdateTask,
   onDeleteTask,
 }: ProjectDetailViewProps) {
   return (
@@ -63,16 +64,21 @@ export function ProjectDetailView({
         <p className="text-sm text-white/40">{project.description}</p>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <ProjectTaskList
-          tasks={tasks}
-          projectId={project.id}
-          onAddTask={onAddTask}
-          onCycleStatus={onCycleStatus}
-          onDeleteTask={onDeleteTask}
-        />
-        <GitHubStatsPanel repo={project.repo} />
-      </div>
+      <GitHubStatsPanel repo={project.repo} />
+
+      <ProjectTaskList
+        tasks={tasks}
+        projectId={project.id}
+        onAddTask={onAddTask}
+        onUpdateTask={onUpdateTask}
+        onDeleteTask={onDeleteTask}
+      />
+
+      <KanbanBoard
+        tasks={tasks}
+        projectId={project.id}
+        onUpdateTask={onUpdateTask}
+      />
     </div>
   )
 }

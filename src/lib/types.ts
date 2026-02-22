@@ -150,7 +150,26 @@ export interface Note {
 export type NavSection = "today" | "briefs" | "meals" | "habits" | "analytics" | "notes" | "projects"
 
 export type ProjectStatus = "active" | "paused" | "archived"
-export type TaskStatus = "todo" | "in_progress" | "done"
+export type TaskStatus = "backlog" | "todo" | "in_progress" | "in_review" | "done"
+
+export const TASK_STATUSES: TaskStatus[] = [
+  "backlog",
+  "todo",
+  "in_progress",
+  "in_review",
+  "done",
+]
+
+export const TASK_STATUS_CONFIG: Record<
+  TaskStatus,
+  { label: string; color: string; className: string }
+> = {
+  backlog: { label: "Backlog", color: "#6b7280", className: "bg-white/10 text-white/40 border-white/10" },
+  todo: { label: "To Do", color: "#a78bfa", className: "bg-cosmic/20 text-cosmic-light border-cosmic/30" },
+  in_progress: { label: "In Progress", color: "#60a5fa", className: "bg-electric/20 text-electric-light border-electric/30" },
+  in_review: { label: "In Review", color: "#fbbf24", className: "bg-amber/20 text-amber-light border-amber/30" },
+  done: { label: "Done", color: "#34d399", className: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30" },
+}
 
 export interface Project {
   id: string
@@ -165,6 +184,7 @@ export interface ProjectTask {
   id: string
   project_id: string
   title: string
+  description?: string
   status: TaskStatus
   created_at: string
 }

@@ -71,14 +71,15 @@ export function ProjectsView() {
     }
   }
 
-  async function handleAddTask(title: string) {
+  async function handleAddTask(title: string, description: string, status: TaskStatus) {
     if (!selectedProjectId) return
 
     const optimistic: ProjectTask = {
       id: `temp-${Date.now()}`,
       project_id: selectedProjectId,
       title,
-      status: "todo",
+      description: description || undefined,
+      status,
       created_at: "",
     }
     setTasks((prev) => [...prev, optimistic])
@@ -87,7 +88,7 @@ export function ProjectsView() {
       const res = await fetch("/api/projects", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ project_id: selectedProjectId, title }),
+        body: JSON.stringify({ project_id: selectedProjectId, title, description: description || undefined, status }),
       })
       const data = await res.json()
       if (data.success && data.data) {
@@ -98,14 +99,17 @@ export function ProjectsView() {
     }
   }
 
-  async function handleCycleStatus(taskId: string, newStatus: TaskStatus) {
-    setTasks((prev) => prev.map((t) => (t.id === taskId ? { ...t, status: newStatus } : t)))
+  async function handleUpdateTask(
+    taskId: string,
+    updates: Partial<Pick<ProjectTask, "title" | "description" | "status">>
+  ) {
+    setTasks((prev) => prev.map((t) => (t.id === taskId ? { ...t, ...updates } : t)))
 
     try {
       await fetch("/api/projects", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ task_id: taskId, status: newStatus }),
+        body: JSON.stringify({ task_id: taskId, ...updates }),
       })
     } catch {
       // optimistic update remains
@@ -136,7 +140,7 @@ export function ProjectsView() {
           tasks={tasks}
           onBack={() => setSelectedProjectId(null)}
           onAddTask={handleAddTask}
-          onCycleStatus={handleCycleStatus}
+          onUpdateTask={handleUpdateTask}
           onDeleteTask={handleDeleteTask}
         />
       ) : (
