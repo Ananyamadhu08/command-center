@@ -109,7 +109,7 @@ export function EveningBriefPage({ brief }: EveningBriefPageProps) {
               <ul className="space-y-2">
                 {parsed.completed.map((item, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-white/70">
-                    <span className="text-emerald-400/60 mt-0.5">✓</span>
+                    <span className="text-cosmic-light/60 mt-0.5">✓</span>
                     {item}
                   </li>
                 ))}

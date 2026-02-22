@@ -148,9 +148,8 @@ export function HabitTracker({ habits, todayLogs, onToggle, onCreate, onUpdate, 
                       ? "border-cosmic/50 bg-cosmic/20"
                       : "border-white/15 group-hover:border-white/30"
                   }`}
-                  style={done ? { borderColor: `${habit.color}66`, backgroundColor: `${habit.color}22` } : {}}
                 >
-                  {done && <span className="text-[9px]" style={{ color: habit.color }}>✓</span>}
+                  {done && <span className="text-[9px] text-cosmic-light">✓</span>}
                 </div>
                 <span className="text-sm mr-1">{habit.icon}</span>
                 <span
