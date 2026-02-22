@@ -8,6 +8,10 @@ import type {
   Note,
   TechBriefContent,
   EveningBriefContent,
+  Project,
+  ProjectTask,
+  GitHubRepoStats,
+  GitHubRepoOption,
 } from "./types"
 function localDate(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`
@@ -455,4 +459,94 @@ export const SAMPLE_NOTES: Note[] = [
   { id: "n1", content: "Remember to set up OpenClaw webhook after deploying to Vercel", created_at: new Date().toISOString() },
   { id: "n2", content: "Meal prep idea: make a big batch of dal on Sunday for the week", created_at: new Date(Date.now() - 3600000).toISOString() },
   { id: "n3", content: "Look into adding Spotify integration for focus music tracking", created_at: new Date(Date.now() - 7200000).toISOString() },
+]
+
+export const SAMPLE_PROJECTS: Project[] = [
+  { id: "p1", name: "Command Center", repo: "Ananyamadhu08/command-center", description: "Personal dashboard for tracking habits, meals, and daily briefs", status: "active", created_at: "" },
+  { id: "p2", name: "Greyamp Redesign", repo: "Ananyamadhu08/greyamp-redesign", description: "Redesign of the Greyamp consulting website with modern UI", status: "active", created_at: "" },
+  { id: "p3", name: "Task App", repo: "Ananyamadhu08/task-app", description: "Minimalist task management app with Supabase backend", status: "paused", created_at: "" },
+  { id: "p4", name: "Pixel Lab", repo: "Ananyamadhu08/pixel-lab", description: "Creative coding experiments and generative art playground", status: "archived", created_at: "" },
+]
+
+export const SAMPLE_PROJECT_TASKS: ProjectTask[] = [
+  { id: "pt1", project_id: "p1", title: "Add projects section", status: "in_progress", created_at: "" },
+  { id: "pt2", project_id: "p1", title: "Set up Supabase tables", status: "done", created_at: "" },
+  { id: "pt3", project_id: "p1", title: "Implement analytics charts", status: "todo", created_at: "" },
+  { id: "pt4", project_id: "p1", title: "Add dark mode toggle", status: "todo", created_at: "" },
+  { id: "pt5", project_id: "p2", title: "Design new homepage hero", status: "done", created_at: "" },
+  { id: "pt6", project_id: "p2", title: "Build services page", status: "in_progress", created_at: "" },
+  { id: "pt7", project_id: "p2", title: "Add contact form with validation", status: "todo", created_at: "" },
+  { id: "pt8", project_id: "p2", title: "SEO optimization pass", status: "todo", created_at: "" },
+  { id: "pt9", project_id: "p3", title: "Design task board UI", status: "done", created_at: "" },
+  { id: "pt10", project_id: "p3", title: "Implement drag-and-drop", status: "in_progress", created_at: "" },
+  { id: "pt11", project_id: "p3", title: "Add notifications", status: "todo", created_at: "" },
+  { id: "pt12", project_id: "p4", title: "Set up canvas renderer", status: "done", created_at: "" },
+  { id: "pt13", project_id: "p4", title: "Add noise algorithms", status: "done", created_at: "" },
+  { id: "pt14", project_id: "p4", title: "Create gallery page", status: "done", created_at: "" },
+]
+
+export const SAMPLE_GITHUB_STATS: Record<string, GitHubRepoStats> = {
+  "Ananyamadhu08/command-center": {
+    open_prs: [
+      { number: 12, title: "feat: add projects section", state: "open", author: "Ananyamadhu08", updated_at: daysAgo(0) },
+      { number: 11, title: "fix: habit streak calculation", state: "open", author: "Ananyamadhu08", updated_at: daysAgo(1) },
+    ],
+    branches: [
+      { name: "main" },
+      { name: "feat/projects" },
+      { name: "fix/habit-streaks" },
+      { name: "refactor/api-routes" },
+    ],
+    recent_commits: [
+      { sha: "a1b2c3d", message: "feat: add GitHub stats panel", author: "Ananyamadhu08", date: daysAgo(0) },
+      { sha: "e4f5g6h", message: "refactor: extract sample data", author: "Ananyamadhu08", date: daysAgo(1) },
+      { sha: "i7j8k9l", message: "fix: meal log date filtering", author: "Ananyamadhu08", date: daysAgo(2) },
+    ],
+    stars: 4,
+  },
+  "Ananyamadhu08/greyamp-redesign": {
+    open_prs: [
+      { number: 5, title: "feat: new services page layout", state: "open", author: "Ananyamadhu08", updated_at: daysAgo(2) },
+    ],
+    branches: [
+      { name: "main" },
+      { name: "feat/services-page" },
+      { name: "design/homepage" },
+    ],
+    recent_commits: [
+      { sha: "m1n2o3p", message: "style: update color palette", author: "Ananyamadhu08", date: daysAgo(1) },
+      { sha: "q4r5s6t", message: "feat: responsive navbar", author: "Ananyamadhu08", date: daysAgo(3) },
+    ],
+    stars: 2,
+  },
+  "Ananyamadhu08/task-app": {
+    open_prs: [],
+    branches: [
+      { name: "main" },
+      { name: "feat/drag-drop" },
+    ],
+    recent_commits: [
+      { sha: "u7v8w9x", message: "feat: basic task CRUD", author: "Ananyamadhu08", date: daysAgo(5) },
+    ],
+    stars: 1,
+  },
+  "Ananyamadhu08/pixel-lab": {
+    open_prs: [],
+    branches: [
+      { name: "main" },
+    ],
+    recent_commits: [
+      { sha: "y1z2a3b", message: "feat: add perlin noise", author: "Ananyamadhu08", date: daysAgo(10) },
+    ],
+    stars: 3,
+  },
+}
+
+export const SAMPLE_GITHUB_REPOS: GitHubRepoOption[] = [
+  { full_name: "Ananyamadhu08/command-center", description: "Personal dashboard for tracking habits, meals, and daily briefs" },
+  { full_name: "Ananyamadhu08/greyamp-redesign", description: "Redesign of the Greyamp consulting website" },
+  { full_name: "Ananyamadhu08/task-app", description: "Minimalist task management app" },
+  { full_name: "Ananyamadhu08/pixel-lab", description: "Creative coding experiments" },
+  { full_name: "Ananyamadhu08/dotfiles", description: "Personal dotfiles and config" },
+  { full_name: "Ananyamadhu08/blog", description: "Personal blog built with Next.js" },
 ]

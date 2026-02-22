@@ -147,4 +147,55 @@ export interface Note {
   created_at: string
 }
 
-export type NavSection = "today" | "briefs" | "meals" | "habits" | "analytics" | "notes"
+export type NavSection = "today" | "briefs" | "meals" | "habits" | "analytics" | "notes" | "projects"
+
+export type ProjectStatus = "active" | "paused" | "archived"
+export type TaskStatus = "todo" | "in_progress" | "done"
+
+export interface Project {
+  id: string
+  name: string
+  repo: string
+  description: string
+  status: ProjectStatus
+  created_at: string
+}
+
+export interface ProjectTask {
+  id: string
+  project_id: string
+  title: string
+  status: TaskStatus
+  created_at: string
+}
+
+export interface GitHubPR {
+  number: number
+  title: string
+  state: "open" | "closed" | "merged"
+  author: string
+  updated_at: string
+}
+
+export interface GitHubBranch {
+  name: string
+}
+
+export interface GitHubCommit {
+  sha: string
+  message: string
+  author: string
+  date: string
+}
+
+export interface GitHubRepoStats {
+  open_prs: GitHubPR[]
+  branches: GitHubBranch[]
+  recent_commits: GitHubCommit[]
+  stars: number
+}
+
+export interface GitHubRepoOption {
+  full_name: string
+  description: string
+}

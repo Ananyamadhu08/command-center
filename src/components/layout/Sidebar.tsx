@@ -15,6 +15,7 @@ const NAV_ITEMS: { id: NavSection; label: string; icon: string; shortcut: string
   { id: "habits", label: "Habits", icon: "△", shortcut: "4" },
   { id: "analytics", label: "Analytics", icon: "◎", shortcut: "5" },
   { id: "notes", label: "Notes", icon: "□", shortcut: "6" },
+  { id: "projects", label: "Projects", icon: "◫", shortcut: "7" },
 ]
 
 export function Sidebar({ active, onChange }: SidebarProps) {

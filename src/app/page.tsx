@@ -10,6 +10,7 @@ import { MealsView } from "@/components/sections/MealsView"
 import { HabitsView } from "@/components/sections/HabitsView"
 import { AnalyticsView } from "@/components/sections/AnalyticsView"
 import { NotesView } from "@/components/sections/NotesView"
+import { ProjectsView } from "@/components/sections/ProjectsView"
 import type { NavSection } from "@/lib/types"
 
 export default function Home() {
@@ -17,9 +18,9 @@ export default function Home() {
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
-    const sections: NavSection[] = ["today", "briefs", "meals", "habits", "analytics", "notes"]
+    const sections: NavSection[] = ["today", "briefs", "meals", "habits", "analytics", "notes", "projects"]
     const key = parseInt(e.key, 10)
-    if (key >= 1 && key <= 6) {
+    if (key >= 1 && key <= 7) {
       setActiveSection(sections[key - 1])
     }
   }, [])
@@ -43,6 +44,7 @@ export default function Home() {
         {activeSection === "habits" && <HabitsView />}
         {activeSection === "analytics" && <AnalyticsView />}
         {activeSection === "notes" && <NotesView />}
+        {activeSection === "projects" && <ProjectsView />}
       </main>
     </div>
   )

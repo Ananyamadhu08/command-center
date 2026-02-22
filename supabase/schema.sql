@@ -90,3 +90,27 @@ create table if not exists notes (
 );
 
 create index idx_notes_created on notes (created_at desc);
+
+-- Projects
+create table if not exists projects (
+  id uuid default gen_random_uuid() primary key,
+  name text not null,
+  repo text not null unique,
+  description text default '',
+  status text not null default 'active' check (status in ('active', 'paused', 'archived')),
+  created_at timestamptz default now()
+);
+
+create index idx_projects_status on projects (status);
+
+-- Project Tasks
+create table if not exists project_tasks (
+  id uuid default gen_random_uuid() primary key,
+  project_id uuid not null references projects (id) on delete cascade,
+  title text not null,
+  status text not null default 'todo' check (status in ('todo', 'in_progress', 'done')),
+  created_at timestamptz default now()
+);
+
+create index idx_project_tasks_project on project_tasks (project_id);
+create index idx_project_tasks_status on project_tasks (project_id, status);
