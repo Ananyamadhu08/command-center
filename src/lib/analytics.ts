@@ -9,6 +9,9 @@ import type {
   AnalyticsReading,
   AnalyticsMeals,
   AnalyticsData,
+  WeekComparison,
+  WeeklyGoals,
+  HabitDailyGrid,
 } from "./types"
 
 function daysAgoDate(n: number): string {
@@ -153,6 +156,92 @@ export function computeOverallStatus(
   return { on_track, off_track }
 }
 
+export function computeWeeklyScore(
+  exercise: AnalyticsExercise,
+  habits: AnalyticsHabits,
+  reading: AnalyticsReading,
+  meals: AnalyticsMeals,
+): number {
+  const exercisePts = Math.min(exercise.active_days_7d / 5, 1) * 30
+  const habitsPts = Math.min(habits.completion_rate_7d / 100, 1) * 30
+  const readingPts = Math.min(reading.pages_7d / 100, 1) * 20
+  const mealsPts = Math.min(meals.tracked_days_7d / 7, 1) * 20
+  return Math.round(exercisePts + habitsPts + readingPts + mealsPts)
+}
+
+export function computeWeekComparison(
+  exerciseLogs: ExerciseLog[],
+  habits: Habit[],
+  habitLogs: HabitLog[],
+  readingLogs: ReadingLog[],
+  mealLogs: MealLog[],
+): WeekComparison {
+  const thisWeekDates = new Set(Array.from({ length: 7 }, (_, i) => daysAgoDate(i)))
+  const lastWeekDates = new Set(Array.from({ length: 7 }, (_, i) => daysAgoDate(i + 7)))
+
+  const exerciseThisWeek = exerciseLogs
+    .filter((l) => thisWeekDates.has(l.date))
+    .reduce((sum, l) => sum + l.duration_minutes, 0)
+  const exerciseLastWeek = exerciseLogs
+    .filter((l) => lastWeekDates.has(l.date))
+    .reduce((sum, l) => sum + l.duration_minutes, 0)
+
+  const totalHabits = Math.max(habits.length, 1)
+  const habitsThisWeek = habitLogs.filter((l) => thisWeekDates.has(l.date) && l.completed).length
+  const habitsLastWeek = habitLogs.filter((l) => lastWeekDates.has(l.date) && l.completed).length
+  const habitCompThisWeek = Math.round((habitsThisWeek / (totalHabits * 7)) * 100)
+  const habitCompLastWeek = Math.round((habitsLastWeek / (totalHabits * 7)) * 100)
+
+  const readingThisWeek = readingLogs
+    .filter((l) => thisWeekDates.has(l.date))
+    .reduce((sum, l) => sum + l.pages_read, 0)
+  const readingLastWeek = readingLogs
+    .filter((l) => lastWeekDates.has(l.date))
+    .reduce((sum, l) => sum + l.pages_read, 0)
+
+  const mealsThisWeek = new Set(mealLogs.filter((l) => thisWeekDates.has(l.date)).map((l) => l.date)).size
+  const mealsLastWeek = new Set(mealLogs.filter((l) => lastWeekDates.has(l.date)).map((l) => l.date)).size
+
+  return {
+    exercise_minutes: { this_week: exerciseThisWeek, last_week: exerciseLastWeek },
+    habit_completion: { this_week: habitCompThisWeek, last_week: habitCompLastWeek },
+    reading_pages: { this_week: readingThisWeek, last_week: readingLastWeek },
+    meals_tracked: { this_week: mealsThisWeek, last_week: mealsLastWeek },
+  }
+}
+
+export function computeWeeklyGoals(
+  exercise: AnalyticsExercise,
+  habits: AnalyticsHabits,
+  reading: AnalyticsReading,
+  meals: AnalyticsMeals,
+): WeeklyGoals {
+  return {
+    exercise_minutes: { current: exercise.total_minutes_7d, target: 150 },
+    reading_pages: { current: reading.pages_7d, target: 100 },
+    habit_completion: { current: habits.completion_rate_7d, target: 80 },
+    meals_tracked: { current: meals.tracked_days_7d, target: 7 },
+  }
+}
+
+export function computeHabitGrid(habits: Habit[], habitLogs: HabitLog[]): HabitDailyGrid[] {
+  const days14 = last14Days().reverse()
+
+  return habits.map((habit) => {
+    const logDates = new Set(
+      habitLogs
+        .filter((l) => l.habit_id === habit.id && l.completed)
+        .map((l) => l.date),
+    )
+    return {
+      name: habit.name,
+      icon: habit.icon,
+      color: habit.color,
+      days: days14.map((date) => ({ date, completed: logDates.has(date) })),
+    }
+  })
+}
+
 export function computeAnalytics(
   exerciseLogs: ExerciseLog[],
   habits: Habit[],
@@ -165,6 +254,10 @@ export function computeAnalytics(
   const reading = computeReadingStats(readingLogs)
   const meals = computeMealStats(mealLogs)
   const overall = computeOverallStatus(exercise, habitsStats, reading, meals)
+  const weekly_score = computeWeeklyScore(exercise, habitsStats, reading, meals)
+  const week_comparison = computeWeekComparison(exerciseLogs, habits, habitLogs, readingLogs, mealLogs)
+  const weekly_goals = computeWeeklyGoals(exercise, habitsStats, reading, meals)
+  const habit_grid = computeHabitGrid(habits, habitLogs)
 
-  return { exercise, habits: habitsStats, reading, meals, overall }
+  return { exercise, habits: habitsStats, reading, meals, overall, weekly_score, week_comparison, weekly_goals, habit_grid }
 }

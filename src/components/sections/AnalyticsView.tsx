@@ -3,10 +3,27 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { GlassCard } from "@/components/ui/GlassCard"
-import { CheckCircle, AlertTriangle } from "lucide-react"
 import { StatCard } from "@/components/analytics/StatCard"
-import { BarChart } from "@/components/analytics/BarChart"
-import type { AnalyticsData } from "@/lib/types"
+import { VerticalBarChart } from "@/components/analytics/VerticalBarChart"
+import { WeeklyScoreCard } from "@/components/analytics/WeeklyScoreCard"
+import { HabitDotGrid } from "@/components/analytics/HabitDotGrid"
+import { WeekComparisonCard } from "@/components/analytics/WeekComparisonCard"
+import { GoalsProgress } from "@/components/analytics/GoalsProgress"
+import type { AnalyticsData, WeekComparison, WeeklyGoals } from "@/lib/types"
+
+const DEFAULT_COMPARISON: WeekComparison = {
+  exercise_minutes: { this_week: 0, last_week: 0 },
+  habit_completion: { this_week: 0, last_week: 0 },
+  reading_pages: { this_week: 0, last_week: 0 },
+  meals_tracked: { this_week: 0, last_week: 0 },
+}
+
+const DEFAULT_GOALS: WeeklyGoals = {
+  exercise_minutes: { current: 0, target: 150 },
+  reading_pages: { current: 0, target: 100 },
+  habit_completion: { current: 0, target: 80 },
+  meals_tracked: { current: 0, target: 7 },
+}
 
 const stagger = {
   hidden: { opacity: 0 },
@@ -21,6 +38,22 @@ const item = {
 function formatShortDate(dateStr: string): string {
   const d = new Date(dateStr + "T00:00:00")
   return d.toLocaleDateString("en-IN", { day: "numeric", month: "short" })
+}
+
+function formatDelta(thisWeek: number, lastWeek: number, unit: string): string {
+  if (lastWeek === 0) return `+${thisWeek}${unit}`
+  const diff = thisWeek - lastWeek
+  const sign = diff >= 0 ? "+" : ""
+  return `${sign}${diff}${unit}`
+}
+
+function getDateRange(): string {
+  const end = new Date()
+  const start = new Date()
+  start.setDate(start.getDate() - 6)
+  const fmt = (d: Date) =>
+    d.toLocaleDateString("en-IN", { day: "numeric", month: "short" })
+  return `${fmt(start)} — ${fmt(end)}`
 }
 
 export function AnalyticsView() {
@@ -44,152 +77,135 @@ export function AnalyticsView() {
   const exerciseChartData = data.exercise.daily_breakdown.map((d) => ({
     label: formatShortDate(d.date),
     value: d.minutes,
+    date: d.date,
   }))
 
   const readingChartData = data.reading.daily_breakdown.map((d) => ({
     label: formatShortDate(d.date),
     value: d.pages,
+    date: d.date,
   }))
 
-  const typeEntries = Object.entries(data.exercise.type_breakdown).sort(([, a], [, b]) => b - a)
+  const score = data.weekly_score ?? 0
+  const comp = data.week_comparison ?? DEFAULT_COMPARISON
+  const goals = data.weekly_goals ?? DEFAULT_GOALS
+  const habitGrid = data.habit_grid ?? []
 
   const exerciseTrend: "up" | "down" | "neutral" =
-    data.exercise.total_minutes_7d > data.exercise.total_minutes_14d / 2 ? "up" : "down"
+    comp.exercise_minutes.this_week > comp.exercise_minutes.last_week
+      ? "up"
+      : comp.exercise_minutes.this_week < comp.exercise_minutes.last_week
+        ? "down"
+        : "neutral"
 
   const readingTrend: "up" | "down" | "neutral" =
-    data.reading.pages_7d > data.reading.pages_14d / 2 ? "up" : "down"
+    comp.reading_pages.this_week > comp.reading_pages.last_week
+      ? "up"
+      : comp.reading_pages.this_week < comp.reading_pages.last_week
+        ? "down"
+        : "neutral"
+
+  const habitTrend: "up" | "down" | "neutral" =
+    comp.habit_completion.this_week > comp.habit_completion.last_week
+      ? "up"
+      : comp.habit_completion.this_week < comp.habit_completion.last_week
+        ? "down"
+        : "neutral"
+
+  const mealTrend: "up" | "down" | "neutral" =
+    comp.meals_tracked.this_week > comp.meals_tracked.last_week
+      ? "up"
+      : comp.meals_tracked.this_week < comp.meals_tracked.last_week
+        ? "down"
+        : "neutral"
 
   return (
     <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-6">
+      {/* Hero: Weekly Score */}
       <motion.div variants={item}>
-        <h2 className="text-lg font-semibold text-white/80 mb-2">Analytics</h2>
-        <p className="text-xs text-white/30 font-mono">Last 7 days overview</p>
+        <WeeklyScoreCard score={score} dateRange={getDateRange()} />
       </motion.div>
 
+      {/* Stat Cards */}
       <motion.div variants={item} className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <StatCard
           label="Exercise"
-          value={`${data.exercise.total_minutes_7d}`}
+          value={`${data.exercise.total_minutes_7d}m`}
           subtitle={`${data.exercise.active_days_7d}/7 active days`}
           trend={exerciseTrend}
-          glow="cosmic"
+          glow="electric"
+          delta={formatDelta(comp.exercise_minutes.this_week, comp.exercise_minutes.last_week, "m")}
         />
         <StatCard
           label="Habits"
           value={`${data.habits.completion_rate_7d}%`}
           subtitle={`Best: ${data.habits.best_streak}`}
+          trend={habitTrend}
           glow="cosmic"
+          delta={formatDelta(comp.habit_completion.this_week, comp.habit_completion.last_week, "%")}
         />
         <StatCard
           label="Reading"
-          value={`${data.reading.pages_7d}`}
-          subtitle={`pages · ${data.reading.current_book}`}
+          value={`${data.reading.pages_7d}pg`}
+          subtitle={data.reading.current_book}
           trend={readingTrend}
-          glow="cosmic"
+          glow="amber"
+          delta={formatDelta(comp.reading_pages.this_week, comp.reading_pages.last_week, "pg")}
         />
         <StatCard
           label="Meals"
           value={`${data.meals.tracked_days_7d}/7`}
           subtitle={`${data.meals.total_logged} entries`}
+          trend={mealTrend}
+          delta={formatDelta(comp.meals_tracked.this_week, comp.meals_tracked.last_week, "d")}
         />
       </motion.div>
 
+      {/* Vertical Bar Charts: Exercise + Reading side by side */}
       <motion.div variants={item} className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <GlassCard glow="cosmic">
+        <GlassCard glow="electric">
           <h3 className="text-xs font-mono text-electric-light/60 uppercase tracking-wider mb-4">
             Exercise — 14 Day Trend
           </h3>
-          <BarChart data={exerciseChartData} color="bg-electric/60" unit="m" />
-          {typeEntries.length > 0 && (
-            <div className="mt-4 pt-3 border-t border-white/5">
-              <p className="text-[10px] font-mono text-white/20 uppercase tracking-wider mb-2">
-                This Week by Type
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {typeEntries.map(([type, mins]) => (
-                  <span key={type} className="text-[10px] px-2 py-1 rounded-md bg-white/5 text-white/50">
-                    {type.replace(/_/g, " ")} · {mins}m
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
+          <VerticalBarChart
+            data={exerciseChartData}
+            color="#3b82f6"
+            colorLight="#60a5fa"
+            unit="m"
+          />
         </GlassCard>
 
-        <GlassCard glow="cosmic">
+        <GlassCard glow="amber">
           <h3 className="text-xs font-mono text-amber-light/60 uppercase tracking-wider mb-4">
             Reading — 14 Day Trend
           </h3>
-          <BarChart data={readingChartData} color="bg-amber/60" unit="p" />
+          <VerticalBarChart
+            data={readingChartData}
+            color="#f59e0b"
+            colorLight="#fbbf24"
+            unit="p"
+          />
         </GlassCard>
       </motion.div>
 
-      {data.habits.per_habit.length > 0 && (
+      {/* Habit Dot Grid */}
+      {habitGrid.length > 0 && (
         <motion.div variants={item}>
           <GlassCard glow="cosmic">
             <h3 className="text-xs font-mono text-cosmic-light/60 uppercase tracking-wider mb-4">
-              Habit Completion (7 days)
+              Habit Completion — 14 Days
             </h3>
-            <div className="space-y-2.5">
-              {data.habits.per_habit.map((h) => (
-                <div key={h.name} className="flex items-center gap-3">
-                  <span className="text-sm w-6 text-center">{h.icon}</span>
-                  <span className="text-xs text-white/60 flex-1">{h.name}</span>
-                  <div className="w-24 h-2 bg-white/5 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-cosmic/60 rounded-full transition-all duration-500"
-                      style={{ width: `${h.rate}%` }}
-                    />
-                  </div>
-                  <span className="text-[10px] font-mono text-white/40 w-8 text-right">{h.rate}%</span>
-                </div>
-              ))}
-            </div>
+            <HabitDotGrid habits={habitGrid} />
           </GlassCard>
         </motion.div>
       )}
 
-      <motion.div variants={item}>
-        <GlassCard>
-          <h3 className="text-xs font-mono text-white/30 uppercase tracking-wider mb-4">Status Overview</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <p className="text-[10px] font-mono text-emerald-400/60 uppercase tracking-wider mb-2">
-                On Track
-              </p>
-              {data.overall.on_track.length > 0 ? (
-                <ul className="space-y-1.5">
-                  {data.overall.on_track.map((item, i) => (
-                    <li key={i} className="flex items-start gap-2 text-xs text-white/60">
-                      <CheckCircle size={12} className="text-emerald-400/60 mt-0.5 shrink-0" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-xs text-white/20">No items on track</p>
-              )}
-            </div>
-            <div>
-              <p className="text-[10px] font-mono text-red-400/60 uppercase tracking-wider mb-2">
-                Needs Attention
-              </p>
-              {data.overall.off_track.length > 0 ? (
-                <ul className="space-y-1.5">
-                  {data.overall.off_track.map((item, i) => (
-                    <li key={i} className="flex items-start gap-2 text-xs text-white/60">
-                      <AlertTriangle size={12} className="text-red-400/60 mt-0.5 shrink-0" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-xs text-emerald-400/40">Everything on track!</p>
-              )}
-            </div>
-          </div>
-        </GlassCard>
+      {/* Week Comparison + Goals side by side */}
+      <motion.div variants={item} className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <WeekComparisonCard comparison={comp} />
+        <GoalsProgress goals={goals} />
       </motion.div>
+
     </motion.div>
   )
 }

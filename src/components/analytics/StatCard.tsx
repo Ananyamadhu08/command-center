@@ -9,6 +9,7 @@ interface StatCardProps {
   subtitle?: string
   trend?: "up" | "down" | "neutral"
   glow?: "cosmic" | "electric" | "amber" | "none"
+  delta?: string
 }
 
 const TREND_CONFIG: Record<string, { icon: typeof TrendingUp; className: string }> = {
@@ -17,7 +18,13 @@ const TREND_CONFIG: Record<string, { icon: typeof TrendingUp; className: string 
   neutral: { icon: Minus, className: "text-white/30" },
 }
 
-export function StatCard({ label, value, subtitle, trend, glow = "none" }: StatCardProps) {
+const DELTA_COLORS: Record<string, string> = {
+  up: "text-emerald-400",
+  down: "text-red-400",
+  neutral: "text-white/20",
+}
+
+export function StatCard({ label, value, subtitle, trend, glow = "none", delta }: StatCardProps) {
   return (
     <GlassCard glow={glow}>
       <div className="text-center space-y-1">
@@ -31,6 +38,11 @@ export function StatCard({ label, value, subtitle, trend, glow = "none" }: StatC
           })()}
         </div>
         {subtitle && <p className="text-[10px] text-white/30">{subtitle}</p>}
+        {delta && (
+          <p className={`text-[10px] font-mono mt-1 ${DELTA_COLORS[trend ?? "neutral"]}`}>
+            {delta} vs last week
+          </p>
+        )}
       </div>
     </GlassCard>
   )

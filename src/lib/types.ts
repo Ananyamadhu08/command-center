@@ -73,12 +73,37 @@ export interface AnalyticsMeals {
   total_logged: number
 }
 
+export interface WeekComparison {
+  exercise_minutes: { this_week: number; last_week: number }
+  habit_completion: { this_week: number; last_week: number }
+  reading_pages: { this_week: number; last_week: number }
+  meals_tracked: { this_week: number; last_week: number }
+}
+
+export interface WeeklyGoals {
+  exercise_minutes: { current: number; target: number }
+  reading_pages: { current: number; target: number }
+  habit_completion: { current: number; target: number }
+  meals_tracked: { current: number; target: number }
+}
+
+export interface HabitDailyGrid {
+  name: string
+  icon: string
+  color: string
+  days: { date: string; completed: boolean }[]
+}
+
 export interface AnalyticsData {
   exercise: AnalyticsExercise
   habits: AnalyticsHabits
   reading: AnalyticsReading
   meals: AnalyticsMeals
   overall: { on_track: string[]; off_track: string[] }
+  weekly_score: number
+  week_comparison: WeekComparison
+  weekly_goals: WeeklyGoals
+  habit_grid: HabitDailyGrid[]
 }
 
 export interface MealPlan {
