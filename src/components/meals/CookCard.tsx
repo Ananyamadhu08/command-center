@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { ClipboardList } from "lucide-react"
 import { GlassCard } from "@/components/ui/GlassCard"
 import { GlowButton } from "@/components/ui/GlowButton"
 import { generateCookInstructions } from "@/lib/nutrition"
@@ -28,7 +29,7 @@ export function CookCard({ plan }: CookCardProps) {
     <GlassCard glow="cosmic">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <span className="text-cosmic-light text-sm">📋</span>
+          <ClipboardList size={14} className="text-cosmic-light" />
           <h3 className="text-base font-semibold text-white/90">Cook&apos;s Card</h3>
         </div>
         <GlowButton variant="cosmic" size="sm" onClick={handleCopy}>

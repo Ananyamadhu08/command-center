@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { Pencil } from "lucide-react"
 import { GlassCard } from "@/components/ui/GlassCard"
 import { GlowButton } from "@/components/ui/GlowButton"
 import { TextArea } from "@/components/ui/Input"
@@ -28,7 +29,7 @@ export function MealLogger({ onLog }: MealLoggerProps) {
   return (
     <GlassCard glow="cosmic">
       <h3 className="text-base font-semibold text-white/90 mb-4 flex items-center gap-2">
-        <span className="text-cosmic-light">✏</span>
+        <Pencil size={14} className="text-cosmic-light" />
         Log a Meal
       </h3>
       <div className="space-y-3">
