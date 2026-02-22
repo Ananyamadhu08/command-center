@@ -16,13 +16,13 @@ async function githubFetch(path: string, cache: RequestCache = "default") {
 }
 
 async function fetchAllRepos() {
-  const all: { full_name: string; description: string; stargazers_count: number }[] = []
+  const all: { full_name: string; description: string }[] = []
   let page = 1
   while (true) {
     const batch = await githubFetch(`/user/repos?sort=updated&per_page=100&page=${page}&type=owner`)
     if (!Array.isArray(batch) || batch.length === 0) break
     for (const r of batch) {
-      all.push({ full_name: r.full_name, description: r.description ?? "", stargazers_count: r.stargazers_count ?? 0 })
+      all.push({ full_name: r.full_name, description: r.description ?? "" })
     }
     if (batch.length < 100) break
     page++
@@ -47,10 +47,7 @@ async function fetchOverview() {
     fetchAllRepos(),
   ])
 
-  const totalStars = repos.reduce((sum, r) => sum + r.stargazers_count, 0)
-
   const todayLocal = getLocalDateStr()
-  let commitsToday = 0
   let prsToday = 0
   const reposContributed = new Set<string>()
 
@@ -61,19 +58,32 @@ async function fetchOverview() {
 
     reposContributed.add(event.repo.name as string)
 
-    if (event.type === "PushEvent") {
-      commitsToday += (event.payload.size ?? 0) as number
-    } else if (event.type === "PullRequestEvent" && event.payload.action === "opened") {
+    if (event.type === "PullRequestEvent" && event.payload.action === "opened") {
       prsToday++
     }
   }
+
+  const todayISO = new Date(todayLocal + "T00:00:00").toISOString()
+  const commitCounts = await Promise.all(
+    Array.from(reposContributed).map(async (repoName) => {
+      try {
+        const commits = await githubFetch(
+          `/repos/${repoName}/commits?author=${login}&since=${todayISO}&per_page=100`,
+          "no-store"
+        )
+        return Array.isArray(commits) ? commits.length : 0
+      } catch {
+        return 0
+      }
+    })
+  )
+  const commitsToday = commitCounts.reduce((sum, n) => sum + n, 0)
 
   return {
     commits_today: commitsToday,
     prs_today: prsToday,
     repos_contributed_today: reposContributed.size,
     total_repos: repos.length,
-    total_stars: totalStars,
   }
 }
 
@@ -83,7 +93,7 @@ export async function GET(request: Request) {
   const repo = searchParams.get("repo")
 
   if (action === "overview") {
-    const EMPTY_OVERVIEW = { commits_today: 0, prs_today: 0, repos_contributed_today: 0, total_repos: 0, total_stars: 0 }
+    const EMPTY_OVERVIEW = { commits_today: 0, prs_today: 0, repos_contributed_today: 0, total_repos: 0 }
     if (!GITHUB_TOKEN) {
       return NextResponse.json({ success: true, data: EMPTY_OVERVIEW })
     }

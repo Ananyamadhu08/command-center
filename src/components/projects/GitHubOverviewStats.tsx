@@ -20,8 +20,8 @@ export function GitHubOverviewStats() {
 
   if (loading) {
     return (
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-        {Array.from({ length: 5 }).map((_, i) => (
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {Array.from({ length: 4 }).map((_, i) => (
           <div key={i} className="h-20 rounded-xl bg-white/5 animate-pulse" />
         ))}
       </div>
@@ -31,11 +31,10 @@ export function GitHubOverviewStats() {
   if (!data) return null
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
       <StatCard label="Commits Today" value={data.commits_today} glow="cosmic" />
       <StatCard label="PRs Today" value={data.prs_today} glow="electric" />
       <StatCard label="Active Repos" value={data.repos_contributed_today} subtitle="contributed today" glow="amber" />
-      <StatCard label="Total Stars" value={data.total_stars} subtitle="across all repos" glow="cosmic" />
       <StatCard label="Total Repos" value={data.total_repos} />
     </div>
   )

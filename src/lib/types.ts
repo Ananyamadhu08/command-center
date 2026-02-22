@@ -225,5 +225,4 @@ export interface GitHubOverview {
   prs_today: number
   repos_contributed_today: number
   total_repos: number
-  total_stars: number
 }
