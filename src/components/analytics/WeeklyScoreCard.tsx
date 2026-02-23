@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { GlassCard } from "@/components/ui/GlassCard"
+import { resolveColor } from "@/lib/colors"
 
 interface WeeklyScoreCardProps {
   score: number
@@ -9,10 +10,10 @@ interface WeeklyScoreCardProps {
 }
 
 function getScoreColor(score: number): string {
-  if (score >= 80) return "#10b981"
-  if (score >= 60) return "#3b82f6"
-  if (score >= 40) return "#f59e0b"
-  return "#ef4444"
+  if (score >= 80) return resolveColor("emerald").hex
+  if (score >= 60) return resolveColor("blue").hex
+  if (score >= 40) return resolveColor("amber").hex
+  return resolveColor("red").hex
 }
 
 export function WeeklyScoreCard({ score, dateRange }: WeeklyScoreCardProps) {

@@ -9,7 +9,10 @@ import { WeeklyScoreCard } from "@/components/analytics/WeeklyScoreCard"
 import { HabitDotGrid } from "@/components/analytics/HabitDotGrid"
 import { WeekComparisonCard } from "@/components/analytics/WeekComparisonCard"
 import { GoalsProgress } from "@/components/analytics/GoalsProgress"
+import { fetchApi } from "@/lib/api"
+import { staggerContainer, staggerItem } from "@/lib/animations"
 import type { AnalyticsData, WeekComparison, WeeklyGoals } from "@/lib/types"
+import { resolveColor } from "@/lib/colors"
 
 const DEFAULT_COMPARISON: WeekComparison = {
   exercise_minutes: { this_week: 0, last_week: 0 },
@@ -23,16 +26,6 @@ const DEFAULT_GOALS: WeeklyGoals = {
   reading_pages: { current: 0, target: 100 },
   habit_completion: { current: 0, target: 80 },
   meals_tracked: { current: 0, target: 7 },
-}
-
-const stagger = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.08 } },
-}
-
-const item = {
-  hidden: { opacity: 0, y: 16 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
 }
 
 function formatShortDate(dateStr: string): string {
@@ -53,17 +46,22 @@ function getDateRange(): string {
   start.setDate(start.getDate() - 6)
   const fmt = (d: Date) =>
     d.toLocaleDateString("en-IN", { day: "numeric", month: "short" })
-  return `${fmt(start)} — ${fmt(end)}`
+  return `${fmt(start)} \u2014 ${fmt(end)}`
+}
+
+function getTrend(thisWeek: number, lastWeek: number): "up" | "down" | "neutral" {
+  if (thisWeek > lastWeek) return "up"
+  if (thisWeek < lastWeek) return "down"
+  return "neutral"
 }
 
 export function AnalyticsView() {
   const [data, setData] = useState<AnalyticsData | null>(null)
 
   useEffect(() => {
-    fetch("/api/analytics")
-      .then((r) => r.json())
-      .then((r) => { if (r.success) setData(r.data) })
-      .catch(() => {})
+    fetchApi<AnalyticsData>("/api/analytics").then((result) => {
+      if (result) setData(result)
+    })
   }, [])
 
   if (!data) {
@@ -91,48 +89,18 @@ export function AnalyticsView() {
   const goals = data.weekly_goals ?? DEFAULT_GOALS
   const habitGrid = data.habit_grid ?? []
 
-  const exerciseTrend: "up" | "down" | "neutral" =
-    comp.exercise_minutes.this_week > comp.exercise_minutes.last_week
-      ? "up"
-      : comp.exercise_minutes.this_week < comp.exercise_minutes.last_week
-        ? "down"
-        : "neutral"
-
-  const readingTrend: "up" | "down" | "neutral" =
-    comp.reading_pages.this_week > comp.reading_pages.last_week
-      ? "up"
-      : comp.reading_pages.this_week < comp.reading_pages.last_week
-        ? "down"
-        : "neutral"
-
-  const habitTrend: "up" | "down" | "neutral" =
-    comp.habit_completion.this_week > comp.habit_completion.last_week
-      ? "up"
-      : comp.habit_completion.this_week < comp.habit_completion.last_week
-        ? "down"
-        : "neutral"
-
-  const mealTrend: "up" | "down" | "neutral" =
-    comp.meals_tracked.this_week > comp.meals_tracked.last_week
-      ? "up"
-      : comp.meals_tracked.this_week < comp.meals_tracked.last_week
-        ? "down"
-        : "neutral"
-
   return (
-    <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-6">
-      {/* Hero: Weekly Score */}
-      <motion.div variants={item}>
+    <motion.div variants={staggerContainer} initial="hidden" animate="show" className="space-y-6">
+      <motion.div variants={staggerItem}>
         <WeeklyScoreCard score={score} dateRange={getDateRange()} />
       </motion.div>
 
-      {/* Stat Cards */}
-      <motion.div variants={item} className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <motion.div variants={staggerItem} className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <StatCard
           label="Exercise"
           value={`${data.exercise.total_minutes_7d}m`}
           subtitle={`${data.exercise.active_days_7d}/7 active days`}
-          trend={exerciseTrend}
+          trend={getTrend(comp.exercise_minutes.this_week, comp.exercise_minutes.last_week)}
           glow="electric"
           delta={formatDelta(comp.exercise_minutes.this_week, comp.exercise_minutes.last_week, "m")}
         />
@@ -140,7 +108,7 @@ export function AnalyticsView() {
           label="Habits"
           value={`${data.habits.completion_rate_7d}%`}
           subtitle={`Best: ${data.habits.best_streak}`}
-          trend={habitTrend}
+          trend={getTrend(comp.habit_completion.this_week, comp.habit_completion.last_week)}
           glow="cosmic"
           delta={formatDelta(comp.habit_completion.this_week, comp.habit_completion.last_week, "%")}
         />
@@ -148,7 +116,7 @@ export function AnalyticsView() {
           label="Reading"
           value={`${data.reading.pages_7d}pg`}
           subtitle={data.reading.current_book}
-          trend={readingTrend}
+          trend={getTrend(comp.reading_pages.this_week, comp.reading_pages.last_week)}
           glow="amber"
           delta={formatDelta(comp.reading_pages.this_week, comp.reading_pages.last_week, "pg")}
         />
@@ -156,41 +124,29 @@ export function AnalyticsView() {
           label="Meals"
           value={`${data.meals.tracked_days_7d}/7`}
           subtitle={`${data.meals.total_logged} entries`}
-          trend={mealTrend}
+          trend={getTrend(comp.meals_tracked.this_week, comp.meals_tracked.last_week)}
           delta={formatDelta(comp.meals_tracked.this_week, comp.meals_tracked.last_week, "d")}
         />
       </motion.div>
 
-      {/* Vertical Bar Charts: Exercise + Reading side by side */}
-      <motion.div variants={item} className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <motion.div variants={staggerItem} className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <GlassCard glow="electric">
           <h3 className="text-xs font-mono text-electric-light/60 uppercase tracking-wider mb-4">
             Exercise — 14 Day Trend
           </h3>
-          <VerticalBarChart
-            data={exerciseChartData}
-            color="#3b82f6"
-            colorLight="#60a5fa"
-            unit="m"
-          />
+          <VerticalBarChart data={exerciseChartData} color={resolveColor("blue").hex} colorLight={resolveColor("blue").hexLight} unit="m" />
         </GlassCard>
 
         <GlassCard glow="amber">
           <h3 className="text-xs font-mono text-amber-light/60 uppercase tracking-wider mb-4">
             Reading — 14 Day Trend
           </h3>
-          <VerticalBarChart
-            data={readingChartData}
-            color="#f59e0b"
-            colorLight="#fbbf24"
-            unit="p"
-          />
+          <VerticalBarChart data={readingChartData} color={resolveColor("amber").hex} colorLight={resolveColor("amber").hexLight} unit="p" />
         </GlassCard>
       </motion.div>
 
-      {/* Habit Dot Grid */}
       {habitGrid.length > 0 && (
-        <motion.div variants={item}>
+        <motion.div variants={staggerItem}>
           <GlassCard glow="cosmic">
             <h3 className="text-xs font-mono text-cosmic-light/60 uppercase tracking-wider mb-4">
               Habit Completion — 14 Days
@@ -200,12 +156,10 @@ export function AnalyticsView() {
         </motion.div>
       )}
 
-      {/* Week Comparison + Goals side by side */}
-      <motion.div variants={item} className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <motion.div variants={staggerItem} className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <WeekComparisonCard comparison={comp} />
         <GoalsProgress goals={goals} />
       </motion.div>
-
     </motion.div>
   )
 }

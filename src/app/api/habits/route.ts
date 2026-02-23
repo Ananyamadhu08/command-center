@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server"
 import { getSupabase, isSupabaseConfigured } from "@/lib/supabase"
 import { SAMPLE_HABITS, SAMPLE_HABIT_LOGS } from "@/lib/sample-data"
+import { COLORS, DEFAULT_COLOR } from "@/lib/colors"
+
+const VALID_COLORS: Set<string> = new Set(COLORS.map((c) => c.name))
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -37,7 +40,13 @@ export async function POST(request: Request) {
   }
 
   const supabase = getSupabase()!
-  const body = await request.json()
+
+  let body: Record<string, unknown>
+  try {
+    body = await request.json()
+  } catch {
+    return NextResponse.json({ success: false, error: "Invalid JSON body" }, { status: 400 })
+  }
 
   if (body.habit_id !== undefined) {
     const { data, error } = await supabase
@@ -60,7 +69,7 @@ export async function POST(request: Request) {
       .insert({
         name: body.name,
         icon: body.icon ?? "🎯",
-        color: body.color ?? "#8b5cf6",
+        color: typeof body.color === "string" && VALID_COLORS.has(body.color) ? body.color : (DEFAULT_COLOR as string),
       })
       .select()
       .single()

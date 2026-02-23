@@ -9,12 +9,12 @@ insert into briefs (type, title, content, date) values
 
 -- Sample habits
 insert into habits (name, icon, color) values
-  ('Morning Stretch', '🌅', '#3b82f6'),
-  ('Read 20 Pages', '📚', '#8b5cf6'),
-  ('8 Glasses Water', '💧', '#06b6d4'),
-  ('No Social Media before 12', '📵', '#f59e0b'),
-  ('Journal Entry', '✍️', '#10b981'),
-  ('Meditate 10 min', '🧘', '#ec4899');
+  ('Morning Stretch', '🌅', 'blue'),
+  ('Read 20 Pages', '📚', 'violet'),
+  ('8 Glasses Water', '💧', 'cyan'),
+  ('No Social Media before 12', '📵', 'amber'),
+  ('Journal Entry', '✍️', 'emerald'),
+  ('Meditate 10 min', '🧘', 'pink');
 
 -- Sample habit logs (mark some as done for today)
 insert into habit_logs (habit_id, date, completed)

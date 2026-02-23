@@ -1,6 +1,7 @@
 "use client"
 
 import type { HabitDailyGrid } from "@/lib/types"
+import { resolveColor } from "@/lib/colors"
 
 interface HabitDotGridProps {
   habits: HabitDailyGrid[]
@@ -15,6 +16,8 @@ export function HabitDotGrid({ habits }: HabitDotGridProps) {
         const completed = habit.days.filter((d) => d.completed).length
         const rate = Math.round((completed / habit.days.length) * 100)
 
+        const habitHex = resolveColor(habit.color).hex
+
         return (
           <div key={habit.name} className="flex items-center gap-3">
             <span className="text-lg w-8 text-center shrink-0">{habit.icon}</span>
@@ -25,8 +28,8 @@ export function HabitDotGrid({ habits }: HabitDotGridProps) {
                   key={day.date}
                   className="flex-1 aspect-square rounded-md transition-all"
                   style={{
-                    backgroundColor: day.completed ? habit.color : "rgba(255,255,255,0.04)",
-                    boxShadow: day.completed ? `0 0 10px ${habit.color}44` : "none",
+                    backgroundColor: day.completed ? habitHex : "rgba(255,255,255,0.04)",
+                    boxShadow: day.completed ? `0 0 10px ${habitHex}44` : "none",
                   }}
                 />
               ))}

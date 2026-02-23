@@ -363,12 +363,12 @@ Quote of the day: "The secret of getting ahead is getting started." - Mark Twain
 ]
 
 export const SAMPLE_HABITS: Habit[] = [
-  { id: "h1", name: "Morning Stretch", icon: "🌅", color: "#3b82f6", created_at: "" },
-  { id: "h2", name: "Read 20 Pages", icon: "📚", color: "#8b5cf6", created_at: "" },
-  { id: "h3", name: "8 Glasses Water", icon: "💧", color: "#06b6d4", created_at: "" },
-  { id: "h4", name: "No Social Media before 12", icon: "📵", color: "#f59e0b", created_at: "" },
-  { id: "h5", name: "Journal Entry", icon: "✍️", color: "#10b981", created_at: "" },
-  { id: "h6", name: "Meditate 10 min", icon: "🧘", color: "#ec4899", created_at: "" },
+  { id: "h1", name: "Morning Stretch", icon: "🌅", color: "blue", created_at: "" },
+  { id: "h2", name: "Read 20 Pages", icon: "📚", color: "violet", created_at: "" },
+  { id: "h3", name: "8 Glasses Water", icon: "💧", color: "cyan", created_at: "" },
+  { id: "h4", name: "No Social Media before 12", icon: "📵", color: "amber", created_at: "" },
+  { id: "h5", name: "Journal Entry", icon: "✍️", color: "emerald", created_at: "" },
+  { id: "h6", name: "Meditate 10 min", icon: "🧘", color: "pink", created_at: "" },
 ]
 
 export const SAMPLE_HABIT_LOGS: HabitLog[] = [

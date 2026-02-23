@@ -8,12 +8,13 @@ import { getToday } from "@/lib/utils"
 import { calculateStreak, getLast7Days } from "@/lib/streaks"
 import { Activity } from "lucide-react"
 import type { ExerciseLog as ExerciseLogType } from "@/lib/types"
+import { resolveColor } from "@/lib/colors"
 
 const EXERCISE_TYPES = [
-  { id: "morning_stretch", label: "Morning Stretch", icon: "🌅", color: "#93c5fd" },
-  { id: "gym", label: "Gym", icon: "💪", color: "#3b82f6" },
-  { id: "walk", label: "Walk", icon: "🚶", color: "#10b981" },
-  { id: "yoga", label: "Yoga", icon: "🧘", color: "#f59e0b" },
+  { id: "morning_stretch", label: "Morning Stretch", icon: "🌅", color: "sky" },
+  { id: "gym", label: "Gym", icon: "💪", color: "blue" },
+  { id: "walk", label: "Walk", icon: "🚶", color: "emerald" },
+  { id: "yoga", label: "Yoga", icon: "🧘", color: "amber" },
 ] as const
 
 interface ExerciseLogProps {
@@ -54,7 +55,7 @@ export function ExerciseLog({ onLog, todayLogs, allLogs = [] }: ExerciseLogProps
       const typeMap = byDate.get(d.date)
       const segments = EXERCISE_TYPES.map((t) => ({
         type: t.id,
-        color: t.color,
+        hex: resolveColor(t.color).hex,
         minutes: typeMap?.get(t.id) ?? 0,
       })).filter((s) => s.minutes > 0)
       const total = segments.reduce((s, seg) => s + seg.minutes, 0)
@@ -151,10 +152,10 @@ export function ExerciseLog({ onLog, todayLogs, allLogs = [] }: ExerciseLogProps
                       key={seg.type}
                       className="w-full transition-all"
                       style={{
-                        backgroundColor: seg.color,
+                        backgroundColor: seg.hex,
                         height: `${(seg.minutes / maxMinutes) * 100}%`,
                         minHeight: seg.minutes > 0 ? "4px" : "0",
-                        boxShadow: isSelected ? `0 0 14px ${seg.color}55` : `0 0 8px ${seg.color}22`,
+                        boxShadow: isSelected ? `0 0 14px ${seg.hex}55` : `0 0 8px ${seg.hex}22`,
                       }}
                     />
                   ))
@@ -188,7 +189,7 @@ export function ExerciseLog({ onLog, todayLogs, allLogs = [] }: ExerciseLogProps
                     )}
                   </div>
                   <div className="flex items-center gap-1.5 flex-shrink-0">
-                    <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: typeInfo?.color }} />
+                    <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: typeInfo ? resolveColor(typeInfo.color).hex : undefined }} />
                     <span className="text-xs font-mono text-white/50 tabular-nums">{log.duration_minutes}m</span>
                   </div>
                 </div>

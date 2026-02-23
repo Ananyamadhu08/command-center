@@ -3,6 +3,7 @@
 import { GlassCard } from "@/components/ui/GlassCard"
 import { Check } from "lucide-react"
 import type { WeeklyGoals } from "@/lib/types"
+import { resolveColor } from "@/lib/colors"
 
 interface GoalsProgressProps {
   goals: WeeklyGoals
@@ -19,10 +20,10 @@ interface GoalRow {
 
 export function GoalsProgress({ goals }: GoalsProgressProps) {
   const rows: GoalRow[] = [
-    { label: "Exercise", icon: "🏃", current: goals.exercise_minutes.current, target: goals.exercise_minutes.target, unit: "min", color: "#3b82f6" },
-    { label: "Reading", icon: "📖", current: goals.reading_pages.current, target: goals.reading_pages.target, unit: "pg", color: "#f59e0b" },
-    { label: "Habits", icon: "🎯", current: goals.habit_completion.current, target: goals.habit_completion.target, unit: "%", color: "#8b5cf6" },
-    { label: "Meals", icon: "🍽️", current: goals.meals_tracked.current, target: goals.meals_tracked.target, unit: "d", color: "#10b981" },
+    { label: "Exercise", icon: "🏃", current: goals.exercise_minutes.current, target: goals.exercise_minutes.target, unit: "min", color: resolveColor("blue").hex },
+    { label: "Reading", icon: "📖", current: goals.reading_pages.current, target: goals.reading_pages.target, unit: "pg", color: resolveColor("amber").hex },
+    { label: "Habits", icon: "🎯", current: goals.habit_completion.current, target: goals.habit_completion.target, unit: "%", color: resolveColor("violet").hex },
+    { label: "Meals", icon: "🍽️", current: goals.meals_tracked.current, target: goals.meals_tracked.target, unit: "d", color: resolveColor("emerald").hex },
   ]
 
   return (

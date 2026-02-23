@@ -1,6 +1,7 @@
 "use client"
 
 import { GlassCard } from "@/components/ui/GlassCard"
+import { resolveColor, DEFAULT_COLOR } from "@/lib/colors"
 
 interface StreakCalendarProps {
   title: string
@@ -8,7 +9,8 @@ interface StreakCalendarProps {
   color?: string
 }
 
-export function StreakCalendar({ title, dates, color = "#8b5cf6" }: StreakCalendarProps) {
+export function StreakCalendar({ title, dates, color = DEFAULT_COLOR }: StreakCalendarProps) {
+  const resolved = resolveColor(color)
   const today = new Date()
   const days: { date: string; active: boolean; label: string }[] = []
 
@@ -30,7 +32,7 @@ export function StreakCalendar({ title, dates, color = "#8b5cf6" }: StreakCalend
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-base font-semibold text-white/90">{title}</h3>
         {currentStreak > 0 && (
-          <span className="text-[10px] font-mono" style={{ color: `${color}aa` }}>
+          <span className="text-[10px] font-mono" style={{ color: `${resolved.hex}aa` }}>
             {currentStreak} day streak
           </span>
         )}
@@ -41,8 +43,8 @@ export function StreakCalendar({ title, dates, color = "#8b5cf6" }: StreakCalend
             key={day.date}
             className="w-3 h-3 rounded-full transition-all"
             style={{
-              backgroundColor: day.active ? color : "rgba(255,255,255,0.06)",
-              boxShadow: day.active ? `0 0 6px ${color}44` : "none",
+              backgroundColor: day.active ? resolved.hex : "rgba(255,255,255,0.06)",
+              boxShadow: day.active ? `0 0 6px ${resolved.hex}44` : "none",
             }}
             title={`${day.label}${day.active ? " - completed" : ""}`}
           />

@@ -5,6 +5,7 @@ import { Activity, BookOpen, Target } from "lucide-react"
 import { GlassCard } from "@/components/ui/GlassCard"
 import { calculateStreak, getLast7Days, getLast30Days } from "@/lib/streaks"
 import type { ExerciseLog, ReadingLog, Habit, HabitLog } from "@/lib/types"
+import { resolveColor } from "@/lib/colors"
 
 interface WeeklyActivityProps {
   exerciseLogs: ExerciseLog[]
@@ -174,8 +175,8 @@ export function WeeklyActivity({ exerciseLogs, readingLogs, habitLogs, habits }:
         streak={exerciseStreak}
         secondaryLabel="This week"
         secondaryValue={`${weeklyMinutes} min`}
-        color="#3b82f6"
-        colorLight="#60a5fa"
+        color={resolveColor("blue").hex}
+        colorLight={resolveColor("blue").hexLight}
         glowClass="cosmic"
         days={days}
         activeDates={exerciseDates}
@@ -186,8 +187,8 @@ export function WeeklyActivity({ exerciseLogs, readingLogs, habitLogs, habits }:
         streak={readingStreak}
         secondaryLabel="This week"
         secondaryValue={`${weeklyPages} pg`}
-        color="#8b5cf6"
-        colorLight="#a78bfa"
+        color={resolveColor("violet").hex}
+        colorLight={resolveColor("violet").hexLight}
         glowClass="cosmic"
         days={days}
         activeDates={readingDates}
@@ -198,8 +199,8 @@ export function WeeklyActivity({ exerciseLogs, readingLogs, habitLogs, habits }:
         streak={habitStreak}
         secondaryLabel="Avg completion (7d)"
         secondaryValue={`${habitAvg}%`}
-        color="#f59e0b"
-        colorLight="#fbbf24"
+        color={resolveColor("amber").hex}
+        colorLight={resolveColor("amber").hexLight}
         glowClass="cosmic"
         days={days}
         activeDates={habitActiveDates}

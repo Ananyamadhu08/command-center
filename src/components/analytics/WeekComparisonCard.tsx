@@ -2,6 +2,7 @@
 
 import { GlassCard } from "@/components/ui/GlassCard"
 import type { WeekComparison } from "@/lib/types"
+import { resolveColor } from "@/lib/colors"
 
 interface WeekComparisonCardProps {
   comparison: WeekComparison
@@ -48,10 +49,10 @@ function DeltaBadge({ thisWeek, lastWeek }: { thisWeek: number; lastWeek: number
 
 export function WeekComparisonCard({ comparison }: WeekComparisonCardProps) {
   const rows: RowData[] = [
-    { label: "Exercise", icon: "🏃", thisWeek: comparison.exercise_minutes.this_week, lastWeek: comparison.exercise_minutes.last_week, unit: "min", color: "#3b82f6" },
-    { label: "Habits", icon: "🎯", thisWeek: comparison.habit_completion.this_week, lastWeek: comparison.habit_completion.last_week, unit: "%", color: "#8b5cf6" },
-    { label: "Reading", icon: "📖", thisWeek: comparison.reading_pages.this_week, lastWeek: comparison.reading_pages.last_week, unit: "pg", color: "#f59e0b" },
-    { label: "Meals", icon: "🍽️", thisWeek: comparison.meals_tracked.this_week, lastWeek: comparison.meals_tracked.last_week, unit: "d", color: "#10b981" },
+    { label: "Exercise", icon: "🏃", thisWeek: comparison.exercise_minutes.this_week, lastWeek: comparison.exercise_minutes.last_week, unit: "min", color: resolveColor("blue").hex },
+    { label: "Habits", icon: "🎯", thisWeek: comparison.habit_completion.this_week, lastWeek: comparison.habit_completion.last_week, unit: "%", color: resolveColor("violet").hex },
+    { label: "Reading", icon: "📖", thisWeek: comparison.reading_pages.this_week, lastWeek: comparison.reading_pages.last_week, unit: "pg", color: resolveColor("amber").hex },
+    { label: "Meals", icon: "🍽️", thisWeek: comparison.meals_tracked.this_week, lastWeek: comparison.meals_tracked.last_week, unit: "d", color: resolveColor("emerald").hex },
   ]
 
   return (

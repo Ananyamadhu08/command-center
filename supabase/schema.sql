@@ -65,7 +65,7 @@ create table if not exists habits (
   id uuid default gen_random_uuid() primary key,
   name text not null,
   icon text not null default '◉',
-  color text not null default '#8b5cf6',
+  color text not null default 'violet',
   created_at timestamptz default now()
 );
 

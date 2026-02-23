@@ -9,9 +9,8 @@ import { calculateStreak, getLast7Days } from "@/lib/streaks"
 import { CheckCircle, Pencil, Plus, Check } from "lucide-react"
 import type { Habit, HabitLog } from "@/lib/types"
 import { getToday } from "@/lib/utils"
-
-const ICON_OPTIONS = ["📖", "💪", "🧘", "💧", "🎯", "✍️", "🧠", "🌅", "💤", "🥗", "🏃", "🎵"]
-const COLOR_OPTIONS = ["#8b5cf6", "#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#ec4899", "#06b6d4", "#84cc16"]
+import { COLORS, DEFAULT_COLOR, resolveColor } from "@/lib/colors"
+import { ICON_CATEGORIES, DEFAULT_ICON } from "@/lib/icons"
 
 interface HabitTrackerProps {
   habits: Habit[]
@@ -34,8 +33,8 @@ export function HabitTracker({ habits, todayLogs, onToggle, onCreate, onUpdate, 
   const [showCreate, setShowCreate] = useState(false)
   const [showManage, setShowManage] = useState(false)
   const [newName, setNewName] = useState("")
-  const [newIcon, setNewIcon] = useState(ICON_OPTIONS[0])
-  const [newColor, setNewColor] = useState(COLOR_OPTIONS[0])
+  const [newIcon, setNewIcon] = useState(DEFAULT_ICON)
+  const [newColor, setNewColor] = useState(DEFAULT_COLOR)
 
   // Editing state for manage modal
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -70,8 +69,8 @@ export function HabitTracker({ habits, todayLogs, onToggle, onCreate, onUpdate, 
     if (!newName.trim() || !onCreate) return
     onCreate({ name: newName.trim(), icon: newIcon, color: newColor })
     setNewName("")
-    setNewIcon(ICON_OPTIONS[0])
-    setNewColor(COLOR_OPTIONS[0])
+    setNewIcon(DEFAULT_ICON)
+    setNewColor(DEFAULT_COLOR)
     setShowCreate(false)
   }
 
@@ -181,6 +180,7 @@ export function HabitTracker({ habits, todayLogs, onToggle, onCreate, onUpdate, 
               ))}
               {habits.map((habit) => {
                 const habitDates = completionGrid.get(habit.id)
+                const habitHex = resolveColor(habit.color).hex
                 return (
                   <div key={habit.id} className="contents">
                     <div className="text-xs leading-none flex items-center justify-center">{habit.icon}</div>
@@ -191,8 +191,8 @@ export function HabitTracker({ habits, todayLogs, onToggle, onCreate, onUpdate, 
                           <div
                             className="w-3.5 h-3.5 rounded-[3px] transition-colors"
                             style={{
-                              backgroundColor: completed ? habit.color : "rgba(255,255,255,0.04)",
-                              boxShadow: completed ? `0 0 6px ${habit.color}44` : "none",
+                              backgroundColor: completed ? habitHex : "rgba(255,255,255,0.04)",
+                              boxShadow: completed ? `0 0 6px ${habitHex}44` : "none",
                             }}
                           />
                         </div>
@@ -213,19 +213,26 @@ export function HabitTracker({ habits, todayLogs, onToggle, onCreate, onUpdate, 
 
           <div>
             <p className="text-[11px] text-white/30 uppercase tracking-wider mb-2">Icon</p>
-            <div className="flex flex-wrap gap-2">
-              {ICON_OPTIONS.map((icon) => (
-                <button
-                  key={icon}
-                  onClick={() => setNewIcon(icon)}
-                  className={`w-9 h-9 rounded-lg border flex items-center justify-center text-base transition-all ${
-                    newIcon === icon
-                      ? "border-cosmic/50 bg-cosmic/15"
-                      : "border-white/10 hover:border-white/20"
-                  }`}
-                >
-                  {icon}
-                </button>
+            <div className="space-y-2">
+              {ICON_CATEGORIES.map((cat) => (
+                <div key={cat.label}>
+                  <p className="text-[9px] text-white/15 uppercase tracking-wider mb-1">{cat.label}</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {cat.icons.map((icon) => (
+                      <button
+                        key={icon}
+                        onClick={() => setNewIcon(icon)}
+                        className={`w-9 h-9 rounded-lg border flex items-center justify-center text-base transition-all ${
+                          newIcon === icon
+                            ? "border-cosmic/50 bg-cosmic/15"
+                            : "border-white/10 hover:border-white/20"
+                        }`}
+                      >
+                        {icon}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           </div>
@@ -233,14 +240,15 @@ export function HabitTracker({ habits, todayLogs, onToggle, onCreate, onUpdate, 
           <div>
             <p className="text-[11px] text-white/30 uppercase tracking-wider mb-2">Color</p>
             <div className="flex flex-wrap gap-2">
-              {COLOR_OPTIONS.map((color) => (
+              {COLORS.map((c) => (
                 <button
-                  key={color}
-                  onClick={() => setNewColor(color)}
+                  key={c.name}
+                  onClick={() => setNewColor(c.name)}
                   className={`w-8 h-8 rounded-lg border-2 transition-all ${
-                    newColor === color ? "border-white/50 scale-110" : "border-transparent"
+                    newColor === c.name ? "border-white/50 scale-110" : "border-transparent"
                   }`}
-                  style={{ backgroundColor: color }}
+                  style={{ backgroundColor: c.hex }}
+                  title={c.label}
                 />
               ))}
             </div>
@@ -269,19 +277,26 @@ export function HabitTracker({ habits, todayLogs, onToggle, onCreate, onUpdate, 
 
                   <div>
                     <p className="text-[10px] text-white/30 uppercase tracking-wider mb-1.5">Icon</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {ICON_OPTIONS.map((icon) => (
-                        <button
-                          key={icon}
-                          onClick={() => setEditIcon(icon)}
-                          className={`w-8 h-8 rounded-lg border flex items-center justify-center text-sm transition-all ${
-                            editIcon === icon
-                              ? "border-cosmic/50 bg-cosmic/15"
-                              : "border-white/10 hover:border-white/20"
-                          }`}
-                        >
-                          {icon}
-                        </button>
+                    <div className="space-y-2">
+                      {ICON_CATEGORIES.map((cat) => (
+                        <div key={cat.label}>
+                          <p className="text-[9px] text-white/15 uppercase tracking-wider mb-1">{cat.label}</p>
+                          <div className="flex flex-wrap gap-1">
+                            {cat.icons.map((icon) => (
+                              <button
+                                key={icon}
+                                onClick={() => setEditIcon(icon)}
+                                className={`w-8 h-8 rounded-lg border flex items-center justify-center text-sm transition-all ${
+                                  editIcon === icon
+                                    ? "border-cosmic/50 bg-cosmic/15"
+                                    : "border-white/10 hover:border-white/20"
+                                }`}
+                              >
+                                {icon}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
                       ))}
                     </div>
                   </div>
@@ -289,14 +304,15 @@ export function HabitTracker({ habits, todayLogs, onToggle, onCreate, onUpdate, 
                   <div>
                     <p className="text-[10px] text-white/30 uppercase tracking-wider mb-1.5">Color</p>
                     <div className="flex flex-wrap gap-1.5">
-                      {COLOR_OPTIONS.map((color) => (
+                      {COLORS.map((c) => (
                         <button
-                          key={color}
-                          onClick={() => setEditColor(color)}
+                          key={c.name}
+                          onClick={() => setEditColor(c.name)}
                           className={`w-7 h-7 rounded-lg border-2 transition-all ${
-                            editColor === color ? "border-white/50 scale-110" : "border-transparent"
+                            editColor === c.name ? "border-white/50 scale-110" : "border-transparent"
                           }`}
-                          style={{ backgroundColor: color }}
+                          style={{ backgroundColor: c.hex }}
+                          title={c.label}
                         />
                       ))}
                     </div>
@@ -320,7 +336,7 @@ export function HabitTracker({ habits, todayLogs, onToggle, onCreate, onUpdate, 
                 <div className="flex-1 min-w-0">
                   <p className="text-sm text-white/80">{habit.name}</p>
                 </div>
-                <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: habit.color }} />
+                <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: resolveColor(habit.color).hex }} />
                 <button
                   onClick={() => startEditing(habit)}
                   className="text-[10px] px-2 py-1 rounded-lg border border-white/[0.08] text-white/30 hover:text-white/60 hover:border-white/20 transition-all"
