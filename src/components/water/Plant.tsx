@@ -120,14 +120,6 @@ export function Plant({ state, size = "lg" }: PlantProps) {
 
       {/* === TERRACOTTA POT === */}
 
-      {/* Ground shadow */}
-      <ellipse cx={90} cy={173} rx={38} ry={3} fill="rgba(0,0,0,0.08)" />
-
-      {/* Saucer plate */}
-      <ellipse cx={90} cy={168} rx={46} ry={5} fill="#a47848" />
-      <ellipse cx={90} cy={167} rx={46} ry={5} fill="#d0a478" />
-      <ellipse cx={90} cy={167} rx={40} ry={4} fill="#5a3820" />
-
       {/* LAYER 1: Full pot background (rim + body) with shadow */}
       <path
         d="M54 124 L54 140 Q56 142, 58 142 L64 165 Q90 169, 116 165 L122 142 Q124 142, 126 140 L126 124 Z"
