@@ -44,15 +44,18 @@ export function Plant({ state, size = "lg" }: PlantProps) {
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
       <defs>
-        {/* Pot gradient */}
-        <linearGradient id="potGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#c4805a" />
-          <stop offset="40%" stopColor="#a0603a" />
-          <stop offset="100%" stopColor="#7a4428" />
+        {/* Pot gradient — warm peach-salmon terracotta, left-to-right for 3D */}
+        <linearGradient id="potGrad" x1="0" y1="0" x2="1" y2="0.1">
+          <stop offset="0%" stopColor="#daac7e" />
+          <stop offset="35%" stopColor="#d09e6e" />
+          <stop offset="65%" stopColor="#c49060" />
+          <stop offset="100%" stopColor="#b48254" />
         </linearGradient>
-        <linearGradient id="potRimGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#d4906a" />
-          <stop offset="100%" stopColor="#a0603a" />
+        {/* Rim top surface — slightly lighter, catches overhead light */}
+        <linearGradient id="rimTopGrad" x1="0" y1="0" x2="1" y2="0.2">
+          <stop offset="0%" stopColor="#e4b890" />
+          <stop offset="50%" stopColor="#daac82" />
+          <stop offset="100%" stopColor="#d0a076" />
         </linearGradient>
 
         {/* Soil gradient */}
@@ -89,7 +92,7 @@ export function Plant({ state, size = "lg" }: PlantProps) {
         </filter>
 
         {/* Soft shadow for pot */}
-        <filter id="potShadow" x="-10%" y="-5%" width="120%" height="130%">
+        <filter id="potShadow" x="-50%" y="-50%" width="200%" height="200%">
           <feDropShadow dx="0" dy="3" stdDeviation="4" floodColor="#000" floodOpacity="0.3" />
         </filter>
 
@@ -103,7 +106,7 @@ export function Plant({ state, size = "lg" }: PlantProps) {
       {isAlive && (
         <motion.ellipse
           cx={90}
-          cy={152}
+          cy={172}
           rx={40}
           ry={6}
           fill={isThriving ? "rgba(50,200,80,0.08)" : "rgba(50,180,70,0.05)"}
@@ -115,32 +118,60 @@ export function Plant({ state, size = "lg" }: PlantProps) {
         />
       )}
 
-      {/* Pot shadow */}
-      <ellipse cx={90} cy={158} rx={28} ry={4} fill="rgba(0,0,0,0.2)" />
+      {/* === TERRACOTTA POT === */}
 
-      {/* Pot body */}
+      {/* Ground shadow */}
+      <ellipse cx={90} cy={174} rx={36} ry={3} fill="rgba(0,0,0,0.08)" />
+
+      {/* Saucer plate */}
+      <ellipse cx={90} cy={170} rx={44} ry={4.5} fill="#b48660" />
+      <ellipse cx={90} cy={169} rx={44} ry={4.5} fill="#d0a478" />
+      <ellipse cx={90} cy={169} rx={38} ry={3.5} fill="#c49468" />
+
+      {/* Pot — single continuous shape: straight-sided rim band + tapered body */}
       <path
-        d="M60 132 L65 156 Q90 164 115 156 L120 132 Z"
+        d="M56 125 L56 135 L76 166 Q90 171, 104 166 L124 135 L124 125 Z"
         fill="url(#potGrad)"
         filter="url(#potShadow)"
       />
-      {/* Pot highlight */}
+
+      {/* Subtle rim-body junction shadow (rim's overhang casts a thin shadow) */}
       <path
-        d="M68 134 L71 152 Q82 155 90 154"
-        stroke="rgba(255,255,255,0.12)"
-        strokeWidth={2}
+        d="M57 135 Q90 137.5, 123 135"
+        stroke="rgba(80,45,20,0.18)"
+        strokeWidth={0.8}
+        fill="none"
+      />
+
+      {/* Body left highlight for 3D roundness */}
+      <path
+        d="M60 137 L77 164"
+        stroke="rgba(255,255,255,0.07)"
+        strokeWidth={2.5}
         strokeLinecap="round"
         fill="none"
       />
-      {/* Pot rim */}
-      <rect x="56" y="128" width="68" height="7" rx="3.5" fill="url(#potRimGrad)" />
-      <rect x="56" y="128" width="68" height="2" rx="1" fill="rgba(255,255,255,0.1)" />
 
-      {/* Soil */}
-      <ellipse cx={90} cy={133} rx={29} ry={5} fill="url(#soilGrad)" />
-      {/* Soil texture dots */}
-      {[70, 78, 85, 95, 102, 110].map((x, i) => (
-        <circle key={i} cx={x} cy={133 + (i % 2 ? -1 : 1)} r={1} fill="rgba(80,55,35,0.6)" />
+      {/* Rim top surface — catches overhead light */}
+      <ellipse cx={90} cy={125} rx={34} ry={5} fill="url(#rimTopGrad)" />
+
+      {/* Rim inner edge */}
+      <ellipse cx={90} cy={127} rx={30} ry={4} fill="#be9468" />
+
+      {/* Rim highlight arc */}
+      <path
+        d="M58 124 Q90 119.5, 122 124"
+        stroke="rgba(255,255,255,0.12)"
+        strokeWidth={0.8}
+        strokeLinecap="round"
+        fill="none"
+      />
+
+      {/* Soil inside pot */}
+      <ellipse cx={90} cy={133} rx={28} ry={4.5} fill="url(#soilGrad)" />
+      {/* Soil texture */}
+      {[72, 80, 87, 94, 101, 108].map((x, i) => (
+        <circle key={i} cx={x} cy={133 + (i % 2 ? -1 : 0.5)} r={0.8} fill="rgba(80,55,35,0.5)" />
       ))}
 
       {/* Main plant group with sway */}
