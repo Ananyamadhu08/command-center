@@ -72,9 +72,17 @@ export function WaterPlantCard() {
           <Droplets size={14} className="text-sky-400" />
           <h3 className="text-base font-semibold text-white/90">Water Plant</h3>
         </div>
-        <span className="text-[10px] font-mono text-white/30">
-          {glasses}/{TARGET} glasses
-        </span>
+        <div className="flex items-center gap-3">
+          <span className="text-[10px] font-mono text-white/30">
+            {glasses}/{TARGET} glasses
+          </span>
+          <GlowButton variant="ghost" size="sm" onClick={addGlass}>
+            <span className="flex items-center gap-1.5">
+              <Plus size={14} />
+              Add a glass
+            </span>
+          </GlowButton>
+        </div>
       </div>
 
       {/* Plant on top */}
@@ -118,13 +126,6 @@ export function WaterPlantCard() {
 
         </div>
 
-        {/* Add glass button */}
-        <GlowButton variant="ghost" size="sm" onClick={addGlass}>
-          <span className="flex items-center gap-1.5">
-            <Plus size={14} />
-            Add a glass
-          </span>
-        </GlowButton>
       </div>
     </GlassCard>
   )
