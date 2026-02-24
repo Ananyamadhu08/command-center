@@ -124,62 +124,57 @@ export function Plant({ state, size = "lg" }: PlantProps) {
       <ellipse cx={90} cy={173} rx={38} ry={3} fill="rgba(0,0,0,0.08)" />
 
       {/* Saucer plate */}
-      <ellipse cx={90} cy={169} rx={46} ry={5} fill="#b48660" />
-      <ellipse cx={90} cy={168} rx={46} ry={5} fill="#d0a478" />
-      <ellipse cx={90} cy={168} rx={40} ry={4} fill="#c49468" />
+      <ellipse cx={90} cy={168} rx={46} ry={5} fill="#a47848" />
+      <ellipse cx={90} cy={167} rx={46} ry={5} fill="#d0a478" />
+      <ellipse cx={90} cy={167} rx={40} ry={4} fill="#5a3820" />
 
-      {/* Pot — single shape with rim overhang: rim is WIDER than body */}
-      {/* Rim: x=54-126 (w=72), Body top: x=62-118 (w=56), Body bottom: x=74-106 (w=32) */}
+      {/* LAYER 1: Full pot background (rim + body) with shadow */}
       <path
-        d="M54 122 L54 134 Q57 137, 62 137 L74 164 Q90 169, 106 164 L118 137 Q123 137, 126 134 L126 122 Z"
+        d="M54 124 L54 140 Q56 142, 58 142 L64 165 Q90 169, 116 165 L122 142 Q124 142, 126 140 L126 124 Z"
         fill="url(#potGrad)"
         filter="url(#potShadow)"
       />
 
-      {/* Rim front face lighter overlay — rim catches more direct light */}
+
+      {/* LAYER 4: Rim front face ON TOP of soil — creates "soil inside pot" illusion */}
+      {/* Compound path with evenodd: outer rim band + inner elliptical opening cutout */}
       <path
-        d="M54 122 L54 134 Q90 136, 126 134 L126 122 Z"
-        fill="rgba(255,255,255,0.08)"
+        fillRule="evenodd"
+        d="M54 124 L54 140 Q90 142, 126 140 L126 124 Z M60 129 A30 6 0 0 0 120 129 A30 6 0 0 0 60 129 Z"
+        fill="url(#potGrad)"
       />
 
-      {/* Rim-body junction shadow — emphasizes the overhang */}
+      {/* Rim front face lighter overlay (below opening only) */}
       <path
-        d="M58 135 Q90 138, 122 135"
+        d="M54 132 Q90 136, 126 132 L126 140 Q90 142, 54 140 Z"
+        fill="rgba(255,255,255,0.06)"
+      />
+
+      {/* Rim-body junction shadow */}
+      <path
+        d="M56 141 Q90 143, 124 141"
         stroke="rgba(50,30,10,0.3)"
-        strokeWidth={1}
+        strokeWidth={1.2}
         fill="none"
       />
 
-      {/* Body left highlight for 3D roundness */}
-      <path
-        d="M66 139 L75 162"
-        stroke="rgba(255,255,255,0.07)"
-        strokeWidth={2.5}
-        strokeLinecap="round"
-        fill="none"
-      />
+      {/* Body left highlight */}
+      <path d="M60 143 L65 163" stroke="rgba(255,255,255,0.06)" strokeWidth={2.5} strokeLinecap="round" fill="none" />
 
-      {/* Rim top surface — catches overhead light */}
-      <ellipse cx={90} cy={122} rx={36} ry={5.5} fill="url(#rimTopGrad)" />
+      {/* LAYER 5: Rim top surface — lightest, on top of everything */}
+      <ellipse cx={90} cy={124} rx={36} ry={5.5} fill="url(#rimTopGrad)" />
 
-      {/* Rim inner edge — darker, shows depth */}
-      <ellipse cx={90} cy={124} rx={31} ry={4.5} fill="#b88a5c" />
+      {/* Rim inner edge ring */}
+      <ellipse cx={90} cy={126.5} rx={32} ry={4} fill="#a07848" />
 
       {/* Rim highlight arc */}
       <path
-        d="M56 121 Q90 116, 124 121"
+        d="M56 123 Q90 118, 124 123"
         stroke="rgba(255,255,255,0.12)"
         strokeWidth={0.8}
         strokeLinecap="round"
         fill="none"
       />
-
-      {/* Soil inside pot */}
-      <ellipse cx={90} cy={133} rx={28} ry={4.5} fill="url(#soilGrad)" />
-      {/* Soil texture */}
-      {[72, 80, 87, 94, 101, 108].map((x, i) => (
-        <circle key={i} cx={x} cy={133 + (i % 2 ? -1 : 0.5)} r={0.8} fill="rgba(80,55,35,0.5)" />
-      ))}
 
       {/* Main plant group with sway */}
       <motion.g
