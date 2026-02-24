@@ -117,7 +117,7 @@ export function WaterPlantCard() {
         <div className="w-full space-y-1.5">
           <div className="h-2 bg-white/5 rounded-full overflow-hidden">
             <motion.div
-              className="h-full rounded-full bg-gradient-to-r from-sky-500/70 to-sky-400/90"
+              className="h-full rounded-full bg-gradient-to-r from-blue-500 to-green-500"
               initial={{ width: 0 }}
               animate={{ width: `${progress * 100}%` }}
               transition={{ duration: 0.6, ease: "easeOut" }}
