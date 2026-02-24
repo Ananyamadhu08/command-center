@@ -121,31 +121,38 @@ export function Plant({ state, size = "lg" }: PlantProps) {
       {/* === TERRACOTTA POT === */}
 
       {/* Ground shadow */}
-      <ellipse cx={90} cy={174} rx={36} ry={3} fill="rgba(0,0,0,0.08)" />
+      <ellipse cx={90} cy={173} rx={38} ry={3} fill="rgba(0,0,0,0.08)" />
 
       {/* Saucer plate */}
-      <ellipse cx={90} cy={170} rx={44} ry={4.5} fill="#b48660" />
-      <ellipse cx={90} cy={169} rx={44} ry={4.5} fill="#d0a478" />
-      <ellipse cx={90} cy={169} rx={38} ry={3.5} fill="#c49468" />
+      <ellipse cx={90} cy={169} rx={46} ry={5} fill="#b48660" />
+      <ellipse cx={90} cy={168} rx={46} ry={5} fill="#d0a478" />
+      <ellipse cx={90} cy={168} rx={40} ry={4} fill="#c49468" />
 
-      {/* Pot — single continuous shape: straight-sided rim band + tapered body */}
+      {/* Pot — single shape with rim overhang: rim is WIDER than body */}
+      {/* Rim: x=54-126 (w=72), Body top: x=62-118 (w=56), Body bottom: x=74-106 (w=32) */}
       <path
-        d="M56 125 L56 135 L76 166 Q90 171, 104 166 L124 135 L124 125 Z"
+        d="M54 122 L54 134 Q57 137, 62 137 L74 164 Q90 169, 106 164 L118 137 Q123 137, 126 134 L126 122 Z"
         fill="url(#potGrad)"
         filter="url(#potShadow)"
       />
 
-      {/* Subtle rim-body junction shadow (rim's overhang casts a thin shadow) */}
+      {/* Rim front face lighter overlay — rim catches more direct light */}
       <path
-        d="M57 135 Q90 137.5, 123 135"
-        stroke="rgba(80,45,20,0.18)"
-        strokeWidth={0.8}
+        d="M54 122 L54 134 Q90 136, 126 134 L126 122 Z"
+        fill="rgba(255,255,255,0.08)"
+      />
+
+      {/* Rim-body junction shadow — emphasizes the overhang */}
+      <path
+        d="M58 135 Q90 138, 122 135"
+        stroke="rgba(50,30,10,0.3)"
+        strokeWidth={1}
         fill="none"
       />
 
       {/* Body left highlight for 3D roundness */}
       <path
-        d="M60 137 L77 164"
+        d="M66 139 L75 162"
         stroke="rgba(255,255,255,0.07)"
         strokeWidth={2.5}
         strokeLinecap="round"
@@ -153,14 +160,14 @@ export function Plant({ state, size = "lg" }: PlantProps) {
       />
 
       {/* Rim top surface — catches overhead light */}
-      <ellipse cx={90} cy={125} rx={34} ry={5} fill="url(#rimTopGrad)" />
+      <ellipse cx={90} cy={122} rx={36} ry={5.5} fill="url(#rimTopGrad)" />
 
-      {/* Rim inner edge */}
-      <ellipse cx={90} cy={127} rx={30} ry={4} fill="#be9468" />
+      {/* Rim inner edge — darker, shows depth */}
+      <ellipse cx={90} cy={124} rx={31} ry={4.5} fill="#b88a5c" />
 
       {/* Rim highlight arc */}
       <path
-        d="M58 124 Q90 119.5, 122 124"
+        d="M56 121 Q90 116, 124 121"
         stroke="rgba(255,255,255,0.12)"
         strokeWidth={0.8}
         strokeLinecap="round"
