@@ -2,12 +2,13 @@
 
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { Cloud, Dumbbell, BookOpen, CheckCircle, UtensilsCrossed, ArrowRight } from "lucide-react"
+import { Cloud, Dumbbell, BookOpen, CheckCircle, ArrowRight } from "lucide-react"
 import { GlassCard } from "@/components/ui/GlassCard"
 import { BriefCard, PendingBriefCard } from "@/components/briefs/BriefCard"
 import { MealPlanCard } from "@/components/meals/MealPlanCard"
 import { NutritionTips } from "@/components/meals/NutritionTips"
 import { HabitTracker } from "@/components/habits/HabitTracker"
+import { WaterPlantMini } from "@/components/water/WaterPlantMini"
 import { getTodaysMealPlan } from "@/lib/nutrition"
 import { staggerContainer, staggerItem } from "@/lib/animations"
 import { useTodayData, type WeatherData } from "@/hooks/use-today-data"
@@ -101,7 +102,7 @@ export function TodayView() {
       {/* Today's Overview */}
       <motion.div variants={staggerItem}>
         <h2 className="text-lg font-semibold text-white/80 mb-4">Today&apos;s Overview</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
           <WeatherCard weather={weather} />
           <StatCard
             icon={<Dumbbell size={24} className="text-electric-light" />}
@@ -119,10 +120,11 @@ export function TodayView() {
             label="Habits done"
           />
           <StatCard
-            icon={<UtensilsCrossed size={24} className="text-amber-light" />}
+            icon={<span className="text-2xl leading-none">🍽</span>}
             value={`${mealLogs.length}/7`}
             label="Meals tracked"
           />
+          <WaterPlantMini />
         </div>
       </motion.div>
 

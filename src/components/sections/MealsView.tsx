@@ -4,13 +4,19 @@ import { useState } from "react"
 import { motion } from "framer-motion"
 import { MealPlanCard } from "@/components/meals/MealPlanCard"
 import { CookCard } from "@/components/meals/CookCard"
+import { TomorrowPrepCard } from "@/components/meals/TomorrowPrepCard"
 import { MealLogger } from "@/components/meals/MealLogger"
 import { MealLogs } from "@/components/meals/MealLogs"
 import { NutritionTips } from "@/components/meals/NutritionTips"
-import { getTodaysMealPlan } from "@/lib/nutrition"
+import { WaterPlantCard } from "@/components/water/WaterPlantCard"
+import { getTodaysMealPlan, getTomorrowsMealPlan } from "@/lib/nutrition"
+
+const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
 export function MealsView() {
   const mealPlan = getTodaysMealPlan()
+  const tomorrowPlan = getTomorrowsMealPlan()
+  const tomorrowLabel = DAY_NAMES[(new Date().getDay() + 1) % 7]
   const [logSuccess, setLogSuccess] = useState(false)
   const [refreshKey, setRefreshKey] = useState(0)
 
@@ -46,6 +52,9 @@ export function MealsView() {
         </motion.div>
       )}
 
+      {/* Water Plant — tap to water */}
+      <WaterPlantCard />
+
       {/* Log a Meal — primary action */}
       <MealLogger onLog={handleLogMeal} />
 
@@ -59,7 +68,10 @@ export function MealsView() {
       <MealPlanCard plan={mealPlan} />
 
       {/* Cook's Tasks — flat checklist for the cook */}
-      <CookCard plan={mealPlan} />
+      <CookCard plan={mealPlan} tomorrowPlan={tomorrowPlan} />
+
+      {/* Prep for Tomorrow — overnight soaking, stocking, etc. */}
+      <TomorrowPrepCard tomorrowPlan={tomorrowPlan} tomorrowLabel={tomorrowLabel} />
     </motion.div>
   )
 }

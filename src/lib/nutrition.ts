@@ -1,5 +1,5 @@
 import type { MealPlanData } from "./types"
-import { extractCookTasks } from "./cook-tasks"
+import { extractCookTasks, extractTomorrowPrep } from "./cook-tasks"
 import { formatCookTasksForWhatsApp } from "./whatsapp-format"
 
 export const DAILY_ESSENTIALS = [
@@ -84,11 +84,19 @@ export function getTodaysMealPlan(): MealPlanData {
   return MEAL_TEMPLATES[dayIndex]
 }
 
+export function getTomorrowsMealPlan(): MealPlanData {
+  const tomorrowIndex = (new Date().getDay() + 1) % 7
+  return MEAL_TEMPLATES[tomorrowIndex]
+}
+
 export function generateCookInstructions(plan: MealPlanData): string {
   const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-  const dayLabel = dayNames[new Date().getDay()]
-  const tasks = extractCookTasks(plan)
-  return formatCookTasksForWhatsApp(tasks, dayLabel)
+  const todayIdx = new Date().getDay()
+  const tomorrowIdx = (todayIdx + 1) % 7
+  const todayTasks = extractCookTasks(plan)
+  const tomorrowPlan = MEAL_TEMPLATES[tomorrowIdx]
+  const tomorrowPrep = extractTomorrowPrep(tomorrowPlan)
+  return formatCookTasksForWhatsApp(todayTasks, dayNames[todayIdx], tomorrowPrep, dayNames[tomorrowIdx])
 }
 
 export const MEAL_TYPE_OPTIONS = [

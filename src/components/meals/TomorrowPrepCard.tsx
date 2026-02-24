@@ -2,23 +2,22 @@
 
 import { useState, useMemo } from "react"
 import { motion } from "framer-motion"
-import { Check, ChefHat, MessageCircle } from "lucide-react"
+import { Check, Package } from "lucide-react"
 import { GlassCard } from "@/components/ui/GlassCard"
-import { GlowButton } from "@/components/ui/GlowButton"
-import { extractCookTasks, extractTomorrowPrep } from "@/lib/cook-tasks"
-import { formatCookTasksForWhatsApp } from "@/lib/whatsapp-format"
+import { extractTomorrowPrep } from "@/lib/cook-tasks"
 import type { MealPlanData } from "@/lib/types"
+import { EmptyState } from "@/components/ui/EmptyState"
 
-interface CookCardProps {
-  plan: MealPlanData
+interface TomorrowPrepCardProps {
   tomorrowPlan: MealPlanData
+  tomorrowLabel: string
 }
 
-export function CookCard({ plan, tomorrowPlan }: CookCardProps) {
-  const tasks = useMemo(() => extractCookTasks(plan), [plan])
-  const tomorrowPrep = useMemo(() => extractTomorrowPrep(tomorrowPlan), [tomorrowPlan])
+export function TomorrowPrepCard({ tomorrowPlan, tomorrowLabel }: TomorrowPrepCardProps) {
+  const tasks = useMemo(() => extractTomorrowPrep(tomorrowPlan), [tomorrowPlan])
   const [checked, setChecked] = useState<Set<string>>(new Set())
-  const [copied, setCopied] = useState(false)
+
+  if (tasks.length === 0) return null
 
   const progress = tasks.length > 0 ? checked.size / tasks.length : 0
 
@@ -34,46 +33,24 @@ export function CookCard({ plan, tomorrowPlan }: CookCardProps) {
     })
   }
 
-  async function handleCopyWhatsApp() {
-    try {
-      const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-      const todayIdx = new Date().getDay()
-      const tomorrowIdx = (todayIdx + 1) % 7
-      const message = formatCookTasksForWhatsApp(
-        tasks,
-        dayNames[todayIdx],
-        tomorrowPrep,
-        dayNames[tomorrowIdx],
-      )
-      await navigator.clipboard.writeText(message)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    } catch {
-      // Clipboard API may not be available
-    }
-  }
-
   return (
-    <GlassCard glow="cosmic">
+    <GlassCard glow="amber">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <ChefHat size={14} className="text-cosmic-light" />
-          <h3 className="text-base font-semibold text-white/90">Cook&apos;s Tasks</h3>
+          <Package size={14} className="text-amber-light" />
+          <h3 className="text-base font-semibold text-white/90">Prep for Tomorrow</h3>
           <span className="text-[10px] font-mono text-white/30">
-            {checked.size}/{tasks.length}
+            {tomorrowLabel}
           </span>
         </div>
-        <GlowButton variant="cosmic" size="sm" onClick={handleCopyWhatsApp}>
-          <span className="flex items-center gap-1.5">
-            <MessageCircle size={12} />
-            {copied ? "Copied!" : "WhatsApp"}
-          </span>
-        </GlowButton>
+        <span className="text-[10px] font-mono text-white/30">
+          {checked.size}/{tasks.length}
+        </span>
       </div>
 
       <div className="h-1 bg-white/5 rounded-full mb-4 overflow-hidden">
         <motion.div
-          className="h-full bg-gradient-to-r from-cosmic to-cosmic-light rounded-full"
+          className="h-full bg-gradient-to-r from-amber to-amber-light rounded-full"
           initial={{ width: 0 }}
           animate={{ width: `${progress * 100}%` }}
           transition={{ duration: 0.5 }}
@@ -93,7 +70,7 @@ export function CookCard({ plan, tomorrowPlan }: CookCardProps) {
             <div
               className={`w-4 h-4 rounded-md border flex-shrink-0 flex items-center justify-center transition-all ${
                 checked.has(task.id)
-                  ? "border-cosmic/50 bg-cosmic/20 text-cosmic-light"
+                  ? "border-amber/50 bg-amber/20 text-amber-light"
                   : "border-white/15 group-hover:border-white/30"
               }`}
             >

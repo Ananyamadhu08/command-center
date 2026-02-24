@@ -1,37 +1,53 @@
 import type { CookTask } from "./types"
 
-export function formatCookTasksForWhatsApp(tasks: CookTask[], dayLabel: string): string {
-  if (tasks.length === 0) {
-    return `📋 *Cook's Tasks* (${dayLabel})\n\nNo tasks for today.`
+export function formatCookTasksForWhatsApp(
+  todayTasks: CookTask[],
+  dayLabel: string,
+  tomorrowPrep?: CookTask[],
+  tomorrowDayLabel?: string,
+): string {
+  const lines: string[] = []
+
+  // Today's tasks
+  if (todayTasks.length === 0) {
+    lines.push(`📋 *Cook's Tasks — ${dayLabel}*`, "", "No tasks for today.")
+  } else {
+    const cookingTasks = todayTasks.filter((t) => t.category === "cooking")
+    const prepTasks = todayTasks.filter((t) => t.category === "prep")
+
+    lines.push(`📋 *Cook's Tasks — ${dayLabel}*`, "")
+
+    if (cookingTasks.length > 0) {
+      lines.push("🔥 *Cooking*")
+      for (const task of cookingTasks) {
+        const qty = task.quantity ? ` (${task.quantity})` : ""
+        lines.push(`☐ ${task.description}${qty}`)
+      }
+      lines.push("")
+    }
+
+    if (prepTasks.length > 0) {
+      lines.push("🔪 *Prep*")
+      for (const task of prepTasks) {
+        const qty = task.quantity ? ` (${task.quantity})` : ""
+        lines.push(`☐ ${task.description}${qty}`)
+      }
+      lines.push("")
+    }
   }
 
-  const cookingTasks = tasks.filter((t) => t.category === "cooking")
-  const prepTasks = tasks.filter((t) => t.category === "prep")
-
-  const lines: string[] = [
-    `📋 *Cook's Tasks — ${dayLabel}*`,
-    "",
-  ]
-
-  if (cookingTasks.length > 0) {
-    lines.push("🔥 *Cooking*")
-    for (const task of cookingTasks) {
+  // Tomorrow's prep
+  if (tomorrowPrep && tomorrowPrep.length > 0 && tomorrowDayLabel) {
+    lines.push(`📦 *Prep for Tomorrow (${tomorrowDayLabel})*`)
+    for (const task of tomorrowPrep) {
       const qty = task.quantity ? ` (${task.quantity})` : ""
       lines.push(`☐ ${task.description}${qty}`)
     }
     lines.push("")
   }
 
-  if (prepTasks.length > 0) {
-    lines.push("🔪 *Prep*")
-    for (const task of prepTasks) {
-      const qty = task.quantity ? ` (${task.quantity})` : ""
-      lines.push(`☐ ${task.description}${qty}`)
-    }
-    lines.push("")
-  }
-
-  lines.push(`Total: ${tasks.length} tasks`)
+  const total = todayTasks.length + (tomorrowPrep?.length ?? 0)
+  lines.push(`Total: ${total} tasks`)
 
   return lines.join("\n")
 }

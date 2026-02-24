@@ -1,14 +1,11 @@
 import type { MealPlanData, CookTask } from "./types"
 
+/** Things the user handles themselves — no cooking/prep needed */
 const USER_HANDLED_PATTERNS = [
-  /soaked almonds/i, /\bwalnuts\b/i, /\bbanana\b/i, /\bapple\b/i,
-  /\bpapaya\b/i, /\borange\b/i, /\bguava\b/i, /\bpomegranate\b/i,
-  /\bpear\b/i, /\bwatermelon\b/i, /\bmango\b/i, /green tea/i,
+  /soaked almonds/i, /\bwalnuts\b/i, /green tea/i,
   /haldi doodh/i, /turmeric milk/i, /warm water/i, /warm milk/i,
-  /\bmakhana\b/i, /roasted chana/i, /\bpeanuts\b/i, /\bcashews\b/i,
-  /\bpistachios\b/i, /nimbu pani/i, /\bfruit chaat\b/i,
-  /peanut butter/i, /roasted foxnuts/i, /handful of/i, /a few/i,
-  /sprout chaat/i, /sprout salad/i, /\balmonds\b/i,
+  /\bmakhana\b/i, /roasted chana/i, /roasted foxnuts/i,
+  /nimbu pani/i, /peanut butter/i,
 ]
 
 interface CookRule {
@@ -20,18 +17,25 @@ interface CookRule {
 }
 
 const COOK_RULES: CookRule[] = [
-  // Cooking — rice & grains
-  { pattern: /jeera rice/i, task: "Make jeera rice", quantity: "2 cups basmati", emoji: "🍚", category: "cooking" },
-  { pattern: /\brice\b(?!.*jeera)/i, task: "Make plain rice", quantity: "2 cups basmati", emoji: "🍚", category: "cooking" },
+  // Cooking — breakfast items
+  { pattern: /egg bhurji/i, task: "Make egg bhurji", quantity: "2 eggs", emoji: "🍳", category: "cooking" },
+  { pattern: /masala omelette/i, task: "Make masala omelette", quantity: "2 eggs", emoji: "🍳", category: "cooking" },
+  { pattern: /egg omelette/i, task: "Make egg omelette", quantity: "2 eggs", emoji: "🍳", category: "cooking" },
+  { pattern: /fried eggs/i, task: "Make fried eggs", quantity: "2 eggs", emoji: "🍳", category: "cooking" },
   { pattern: /\bpoha\b/i, task: "Make poha", quantity: "with peanuts", emoji: "🍚", category: "cooking" },
   { pattern: /\bupma\b/i, task: "Make upma", emoji: "🍚", category: "cooking" },
   { pattern: /\bdosa\b/i, task: "Make dosas", emoji: "🥞", category: "cooking" },
-
-  // Cooking — rotis & breads
-  { pattern: /\broti\b/i, task: "Make rotis", quantity: "4-6", emoji: "🫓", category: "cooking" },
+  { pattern: /besan chilla/i, task: "Make besan chilla", quantity: "2-3", emoji: "🥞", category: "cooking" },
   { pattern: /stuffed paratha/i, task: "Make stuffed parathas", quantity: "2-3", emoji: "🫓", category: "cooking" },
   { pattern: /\bparatha\b(?!.*stuffed)/i, task: "Make parathas", quantity: "2-3", emoji: "🫓", category: "cooking" },
-  { pattern: /besan chilla/i, task: "Make besan chilla", quantity: "2-3", emoji: "🥞", category: "cooking" },
+  { pattern: /whole wheat toast/i, task: "Make toast", emoji: "🍞", category: "cooking" },
+
+  // Cooking — rice & grains
+  { pattern: /jeera rice/i, task: "Make jeera rice", quantity: "2 cups basmati", emoji: "🍚", category: "cooking" },
+  { pattern: /\brice\b(?!.*jeera)/i, task: "Make plain rice", quantity: "2 cups basmati", emoji: "🍚", category: "cooking" },
+
+  // Cooking — rotis
+  { pattern: /\broti\b/i, task: "Make rotis", quantity: "4-6", emoji: "🫓", category: "cooking" },
 
   // Cooking — dals
   { pattern: /dal tadka/i, task: "Make dal tadka", quantity: "1 cup toor dal", emoji: "🫘", category: "cooking" },
@@ -42,7 +46,7 @@ const COOK_RULES: CookRule[] = [
   { pattern: /moong dal/i, task: "Make moong dal", quantity: "1 cup", emoji: "🫘", category: "cooking" },
   { pattern: /masoor dal/i, task: "Make masoor dal", quantity: "1 cup", emoji: "🫘", category: "cooking" },
   { pattern: /chana dal/i, task: "Make chana dal", quantity: "1 cup", emoji: "🫘", category: "cooking" },
-  { pattern: /\brajma\b/i, task: "Make rajma", quantity: "1 cup, soak overnight", emoji: "🫘", category: "cooking" },
+  { pattern: /\brajma\b/i, task: "Make rajma", quantity: "1 cup", emoji: "🫘", category: "cooking" },
   { pattern: /\bsamb[ah]r\b/i, task: "Make sambhar", quantity: "with vegetables", emoji: "🫘", category: "cooking" },
 
   // Cooking — proteins
@@ -72,7 +76,7 @@ const COOK_RULES: CookRule[] = [
   // Cooking — chutneys
   { pattern: /coconut chutney/i, task: "Make coconut chutney", emoji: "🥥", category: "cooking" },
 
-  // Prep tasks
+  // Prep tasks — things cook can do and store
   { pattern: /cucumber raita/i, task: "Make cucumber raita", quantity: "1 cup dahi + cucumber", emoji: "🥒", category: "prep" },
   { pattern: /\braita\b(?!.*cucumber)/i, task: "Make raita", quantity: "1 cup dahi", emoji: "🥒", category: "prep" },
   { pattern: /\bsalad\b/i, task: "Chop salad vegetables", quantity: "cucumber, onion, tomato, lemon", emoji: "🥗", category: "prep" },
@@ -80,6 +84,7 @@ const COOK_RULES: CookRule[] = [
   { pattern: /\bbuttermilk\b/i, task: "Make buttermilk", quantity: "2 glasses", emoji: "🥛", category: "prep" },
   { pattern: /\blassi\b/i, task: "Make lassi", quantity: "2 glasses", emoji: "🥛", category: "prep" },
   { pattern: /banana milkshake/i, task: "Make banana milkshake", emoji: "🥛", category: "prep" },
+  { pattern: /\bfruit|banana|apple|papaya|orange|guava|pomegranate|pear|watermelon/i, task: "Cut fruits and store in fridge", emoji: "🍎", category: "prep" },
 ]
 
 export function extractCookTasks(plan: MealPlanData): CookTask[] {
@@ -103,6 +108,44 @@ export function extractCookTasks(plan: MealPlanData): CookTask[] {
     tasks.push({
       id,
       category: rule.category,
+      description: rule.task,
+      quantity: rule.quantity,
+      emoji: rule.emoji,
+    })
+  }
+
+  return tasks
+}
+
+/** Items that need overnight soaking or advance prep for tomorrow */
+const OVERNIGHT_PREP_RULES: CookRule[] = [
+  { pattern: /\brajma\b/i, task: "Soak rajma overnight", quantity: "1 cup", emoji: "🫘", category: "prep" },
+  { pattern: /dal makhani/i, task: "Soak urad dal overnight", quantity: "1 cup", emoji: "🫘", category: "prep" },
+  { pattern: /chana dal/i, task: "Soak chana dal", quantity: "1 cup, 4-5 hours", emoji: "🫘", category: "prep" },
+  { pattern: /chicken|grilled chicken|chicken tikka|chicken curry|chicken keema/i, task: "Ensure chicken is available", quantity: "500g, order/defrost if needed", emoji: "🍗", category: "prep" },
+  { pattern: /mutton/i, task: "Ensure mutton is available", quantity: "500g, order/defrost if needed", emoji: "🥩", category: "prep" },
+  { pattern: /fish/i, task: "Ensure fish is available", quantity: "order/defrost if needed", emoji: "🐟", category: "prep" },
+  { pattern: /paneer/i, task: "Ensure paneer is available", quantity: "200g, check stock", emoji: "🧀", category: "prep" },
+  { pattern: /\bdosa\b/i, task: "Prepare dosa batter", quantity: "soak rice + urad dal", emoji: "🥞", category: "prep" },
+  { pattern: /sprout/i, task: "Sprout moong/chana", quantity: "soak today, sprouts ready tomorrow", emoji: "🌱", category: "prep" },
+]
+
+/** Extract prep tasks needed TODAY for TOMORROW's meal plan */
+export function extractTomorrowPrep(tomorrowPlan: MealPlanData): CookTask[] {
+  const allText = Object.values(tomorrowPlan).join(" + ")
+
+  const seen = new Set<string>()
+  const tasks: CookTask[] = []
+  let idx = 0
+
+  for (const rule of OVERNIGHT_PREP_RULES) {
+    if (!rule.pattern.test(allText)) continue
+    if (seen.has(rule.task)) continue
+    seen.add(rule.task)
+
+    tasks.push({
+      id: `tomorrow-${idx++}`,
+      category: "prep",
       description: rule.task,
       quantity: rule.quantity,
       emoji: rule.emoji,
