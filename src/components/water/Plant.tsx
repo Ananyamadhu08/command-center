@@ -173,11 +173,11 @@ export function Plant({ state, size = "lg" }: PlantProps) {
       <motion.g
         animate={sway > 0 ? { rotate: [-sway, sway, -sway] } : {}}
         transition={sway > 0 ? { duration: 3 + Math.random(), repeat: Infinity, ease: "easeInOut" } : {}}
-        style={{ transformOrigin: "90px 133px" }}
+        style={{ transformOrigin: "90px 127px" }}
       >
         {/* Stem — organic curve */}
         <motion.path
-          d={`M90 133 Q${isDead ? "90" : "87"} ${133 - stemHeight * 0.5} 90 ${133 - stemHeight}`}
+          d={`M90 127 Q${isDead ? "90" : "87"} ${127 - stemHeight * 0.5} 90 ${127 - stemHeight}`}
           stroke="url(#stemGrad)"
           strokeWidth={isDead ? 2.5 : 3.5}
           strokeLinecap="round"
@@ -190,7 +190,7 @@ export function Plant({ state, size = "lg" }: PlantProps) {
         {/* Secondary stem (healthy+) */}
         {isAlive && (
           <motion.path
-            d={`M90 ${133 - stemHeight * 0.4} Q95 ${133 - stemHeight * 0.6} 98 ${133 - stemHeight * 0.8}`}
+            d={`M90 ${127 - stemHeight * 0.4} Q95 ${127 - stemHeight * 0.6} 98 ${127 - stemHeight * 0.8}`}
             stroke="url(#stemGrad)"
             strokeWidth={2}
             strokeLinecap="round"
@@ -210,10 +210,10 @@ export function Plant({ state, size = "lg" }: PlantProps) {
         >
           {/* Main left leaf */}
           <motion.path
-            d={`M90 ${133 - stemHeight + 8} 
-                C${75 - leafSize * 5} ${133 - stemHeight - 5}, 
-                 ${55 - leafSize * 8} ${133 - stemHeight + 2}, 
-                 ${60 - leafSize * 5} ${133 - stemHeight + (isDead ? 18 : isWilted ? 14 : 8)}`}
+            d={`M90 ${127 - stemHeight + 8} 
+                C${75 - leafSize * 5} ${127 - stemHeight - 5}, 
+                 ${55 - leafSize * 8} ${127 - stemHeight + 2}, 
+                 ${60 - leafSize * 5} ${127 - stemHeight + (isDead ? 18 : isWilted ? 14 : 8)}`}
             fill="url(#leafGrad1)"
             stroke={isDead ? "none" : `hsla(${110 + saturation * 20}, ${40 + saturation * 30}%, ${35 + saturation * 15}%, 0.5)`}
             strokeWidth={0.5}
@@ -221,7 +221,7 @@ export function Plant({ state, size = "lg" }: PlantProps) {
           {/* Leaf vein */}
           {!isDead && (
             <path
-              d={`M88 ${133 - stemHeight + 9} Q${70 - leafSize * 3} ${133 - stemHeight + 2} ${64 - leafSize * 3} ${133 - stemHeight + (isWilted ? 13 : 8)}`}
+              d={`M88 ${127 - stemHeight + 9} Q${70 - leafSize * 3} ${127 - stemHeight + 2} ${64 - leafSize * 3} ${127 - stemHeight + (isWilted ? 13 : 8)}`}
               stroke={`hsla(${120 + saturation * 15}, ${30 + saturation * 30}%, ${40 + saturation * 20}%, 0.3)`}
               strokeWidth={0.7}
               fill="none"
@@ -231,16 +231,16 @@ export function Plant({ state, size = "lg" }: PlantProps) {
           {/* Lower left leaf (dry+) */}
           {(isDry || isHealthy || isThriving) && (
             <motion.path
-              d={`M90 ${133 - stemHeight * 0.5 + 4} 
-                  C${72} ${133 - stemHeight * 0.5 - 2}, 
-                   ${60} ${133 - stemHeight * 0.5 + 6}, 
-                   ${65} ${133 - stemHeight * 0.5 + 12}`}
+              d={`M90 ${127 - stemHeight * 0.5 + 4} 
+                  C${72} ${127 - stemHeight * 0.5 - 2}, 
+                   ${60} ${127 - stemHeight * 0.5 + 6}, 
+                   ${65} ${127 - stemHeight * 0.5 + 12}`}
               fill="url(#leafGrad2)"
               opacity={0.7 * leafSize}
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.5, delay: 0.6 }}
-              style={{ transformOrigin: `90px ${133 - stemHeight * 0.5 + 4}px` }}
+              style={{ transformOrigin: `90px ${127 - stemHeight * 0.5 + 4}px` }}
             />
           )}
         </motion.g>
@@ -254,10 +254,10 @@ export function Plant({ state, size = "lg" }: PlantProps) {
         >
           {/* Main right leaf */}
           <motion.path
-            d={`M90 ${133 - stemHeight + 4} 
-                C${105 + leafSize * 5} ${133 - stemHeight - 10}, 
-                 ${125 + leafSize * 8} ${133 - stemHeight - 2}, 
-                 ${120 + leafSize * 5} ${133 - stemHeight + (isDead ? 16 : isWilted ? 12 : 5)}`}
+            d={`M90 ${127 - stemHeight + 4} 
+                C${105 + leafSize * 5} ${127 - stemHeight - 10}, 
+                 ${125 + leafSize * 8} ${127 - stemHeight - 2}, 
+                 ${120 + leafSize * 5} ${127 - stemHeight + (isDead ? 16 : isWilted ? 12 : 5)}`}
             fill="url(#leafGrad2)"
             stroke={isDead ? "none" : `hsla(${110 + saturation * 20}, ${40 + saturation * 30}%, ${35 + saturation * 15}%, 0.5)`}
             strokeWidth={0.5}
@@ -265,7 +265,7 @@ export function Plant({ state, size = "lg" }: PlantProps) {
           {/* Leaf vein */}
           {!isDead && (
             <path
-              d={`M92 ${133 - stemHeight + 5} Q${110 + leafSize * 3} ${133 - stemHeight - 3} ${118 + leafSize * 3} ${133 - stemHeight + (isWilted ? 11 : 5)}`}
+              d={`M92 ${127 - stemHeight + 5} Q${110 + leafSize * 3} ${127 - stemHeight - 3} ${118 + leafSize * 3} ${127 - stemHeight + (isWilted ? 11 : 5)}`}
               stroke={`hsla(${120 + saturation * 15}, ${30 + saturation * 30}%, ${40 + saturation * 20}%, 0.3)`}
               strokeWidth={0.7}
               fill="none"
@@ -275,16 +275,16 @@ export function Plant({ state, size = "lg" }: PlantProps) {
           {/* Lower right leaf (dry+) */}
           {(isDry || isHealthy || isThriving) && (
             <motion.path
-              d={`M90 ${133 - stemHeight * 0.6 + 2} 
-                  C${108} ${133 - stemHeight * 0.6 - 6}, 
-                   ${122} ${133 - stemHeight * 0.6 + 2}, 
-                   ${116} ${133 - stemHeight * 0.6 + 10}`}
+              d={`M90 ${127 - stemHeight * 0.6 + 2} 
+                  C${108} ${127 - stemHeight * 0.6 - 6}, 
+                   ${122} ${127 - stemHeight * 0.6 + 2}, 
+                   ${116} ${127 - stemHeight * 0.6 + 10}`}
               fill="url(#leafGrad1)"
               opacity={0.7 * leafSize}
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.5, delay: 0.7 }}
-              style={{ transformOrigin: `90px ${133 - stemHeight * 0.6 + 2}px` }}
+              style={{ transformOrigin: `90px ${127 - stemHeight * 0.6 + 2}px` }}
             />
           )}
         </motion.g>
@@ -292,25 +292,25 @@ export function Plant({ state, size = "lg" }: PlantProps) {
         {/* Top crown leaf (healthy+) */}
         {isAlive && (
           <motion.path
-            d={`M90 ${133 - stemHeight} 
-                C85 ${133 - stemHeight - 15}, 
-                 80 ${133 - stemHeight - 20}, 
-                 84 ${133 - stemHeight - 22}
-                C88 ${133 - stemHeight - 18},
-                 90 ${133 - stemHeight - 16},
-                 90 ${133 - stemHeight}
-                C90 ${133 - stemHeight - 16},
-                 92 ${133 - stemHeight - 18},
-                 96 ${133 - stemHeight - 22}
-                C100 ${133 - stemHeight - 20},
-                 95 ${133 - stemHeight - 15},
-                 90 ${133 - stemHeight}`}
+            d={`M90 ${127 - stemHeight} 
+                C85 ${127 - stemHeight - 15}, 
+                 80 ${127 - stemHeight - 20}, 
+                 84 ${127 - stemHeight - 22}
+                C88 ${127 - stemHeight - 18},
+                 90 ${127 - stemHeight - 16},
+                 90 ${127 - stemHeight}
+                C90 ${127 - stemHeight - 16},
+                 92 ${127 - stemHeight - 18},
+                 96 ${127 - stemHeight - 22}
+                C100 ${127 - stemHeight - 20},
+                 95 ${127 - stemHeight - 15},
+                 90 ${127 - stemHeight}`}
             fill="url(#leafGrad1)"
             filter="url(#leafGlow)"
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 0.9 }}
             transition={{ duration: 0.6, delay: 0.5, type: "spring" }}
-            style={{ transformOrigin: `90px ${133 - stemHeight}px` }}
+            style={{ transformOrigin: `90px ${127 - stemHeight}px` }}
           />
         )}
 
@@ -320,13 +320,13 @@ export function Plant({ state, size = "lg" }: PlantProps) {
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.7, type: "spring", bounce: 0.4 }}
-            style={{ transformOrigin: `90px ${133 - stemHeight - 24}px` }}
+            style={{ transformOrigin: `90px ${127 - stemHeight - 24}px` }}
           >
             {/* Flower petals — layered for depth */}
             {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => {
               const rad = (angle * Math.PI) / 180
               const px = 90 + Math.cos(rad) * 9
-              const py = 133 - stemHeight - 24 + Math.sin(rad) * 9
+              const py = 127 - stemHeight - 24 + Math.sin(rad) * 9
               return (
                 <motion.ellipse
                   key={angle}
@@ -354,7 +354,7 @@ export function Plant({ state, size = "lg" }: PlantProps) {
             {[30, 90, 150, 210, 270, 330].map((angle, i) => {
               const rad = (angle * Math.PI) / 180
               const px = 90 + Math.cos(rad) * 5
-              const py = 133 - stemHeight - 24 + Math.sin(rad) * 5
+              const py = 127 - stemHeight - 24 + Math.sin(rad) * 5
               return (
                 <ellipse
                   key={`inner-${angle}`}
@@ -369,9 +369,9 @@ export function Plant({ state, size = "lg" }: PlantProps) {
               )
             })}
             {/* Center */}
-            <circle cx={90} cy={133 - stemHeight - 24} r={4} fill="#fbbf24" />
-            <circle cx={90} cy={133 - stemHeight - 24} r={2.5} fill="#f59e0b" />
-            <circle cx={89} cy={133 - stemHeight - 25} r={1} fill="rgba(255,255,255,0.4)" />
+            <circle cx={90} cy={127 - stemHeight - 24} r={4} fill="#fbbf24" />
+            <circle cx={90} cy={127 - stemHeight - 24} r={2.5} fill="#f59e0b" />
+            <circle cx={89} cy={127 - stemHeight - 25} r={1} fill="rgba(255,255,255,0.4)" />
           </motion.g>
         )}
 
@@ -380,7 +380,7 @@ export function Plant({ state, size = "lg" }: PlantProps) {
           <>
             <motion.circle
               cx={75}
-              cy={133 - stemHeight + 5}
+              cy={127 - stemHeight + 5}
               r={1.8}
               fill="rgba(150,220,255,0.5)"
               animate={{
@@ -391,7 +391,7 @@ export function Plant({ state, size = "lg" }: PlantProps) {
             />
             <motion.circle
               cx={108}
-              cy={133 - stemHeight + 2}
+              cy={127 - stemHeight + 2}
               r={1.5}
               fill="rgba(150,220,255,0.4)"
               animate={{
