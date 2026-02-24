@@ -114,8 +114,8 @@ export function WaterPlantCard() {
         </div>
 
         {/* Progress bar */}
-        <div className="w-full space-y-1.5">
-          <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+        <div className="w-full px-2 py-3">
+          <div className="h-3.5 bg-white/5 rounded-full overflow-hidden">
             <motion.div
               className="h-full rounded-full bg-gradient-to-r from-blue-500 to-green-500"
               initial={{ width: 0 }}
