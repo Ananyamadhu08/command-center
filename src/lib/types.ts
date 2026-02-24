@@ -124,6 +124,14 @@ export interface MealPlanData {
   before_bed: string
 }
 
+export interface CookTask {
+  id: string
+  category: "cooking" | "prep"
+  description: string
+  quantity?: string
+  emoji: string
+}
+
 export interface MealLog {
   id: string
   date: string

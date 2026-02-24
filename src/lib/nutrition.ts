@@ -1,4 +1,6 @@
 import type { MealPlanData } from "./types"
+import { extractCookTasks } from "./cook-tasks"
+import { formatCookTasksForWhatsApp } from "./whatsapp-format"
 
 export const DAILY_ESSENTIALS = [
   { item: "5 soaked almonds + 2 walnuts", icon: "🥜", time: "Early morning" },
@@ -14,7 +16,7 @@ export const DAILY_ESSENTIALS = [
 export const MEAL_TEMPLATES: MealPlanData[] = [
   {
     early_morning: "Warm water with lemon + 5 soaked almonds + 2 walnuts",
-    breakfast: "Egg bhurji (2 eggs) with whole wheat toast + banana + chai",
+    breakfast: "Egg bhurji (2 eggs) with whole wheat toast + banana",
     mid_morning_snack: "Apple + green tea",
     lunch: "Jeera rice + dal tadka + chicken curry + cucumber raita + salad",
     evening_snack: "Makhana (roasted foxnuts) + green tea",
@@ -23,7 +25,7 @@ export const MEAL_TEMPLATES: MealPlanData[] = [
   },
   {
     early_morning: "Warm water + 5 soaked almonds + 2 walnuts",
-    breakfast: "Masala omelette (2 eggs) with paratha + banana + coffee",
+    breakfast: "Masala omelette (2 eggs) with paratha + banana",
     mid_morning_snack: "Papaya slices + handful of peanuts",
     lunch: "Rice + sambhar + fish fry + beans poriyal + dahi",
     evening_snack: "Sprout chaat + nimbu pani",
@@ -32,7 +34,7 @@ export const MEAL_TEMPLATES: MealPlanData[] = [
   },
   {
     early_morning: "Warm water with honey + 5 soaked almonds + 2 walnuts",
-    breakfast: "Poha with peanuts + boiled eggs (2) + banana + chai",
+    breakfast: "Poha with peanuts + boiled eggs (2) + banana",
     mid_morning_snack: "Orange + walnuts",
     lunch: "Roti + rajma + chicken keema + bhindi fry + buttermilk",
     evening_snack: "Roasted chana + green tea",
@@ -44,13 +46,13 @@ export const MEAL_TEMPLATES: MealPlanData[] = [
     breakfast: "Upma + egg bhurji (2 eggs) + banana milkshake",
     mid_morning_snack: "Guava + a few cashews",
     lunch: "Rice + dal fry + mutton curry + cabbage sabzi + raita",
-    evening_snack: "Makhana + masala chai",
+    evening_snack: "Makhana + green tea",
     dinner: "2 roti + paneer bhurji + palak dal + cucumber salad",
     before_bed: "Warm milk with cardamom",
   },
   {
     early_morning: "Warm water with lemon + 5 soaked almonds + 2 walnuts",
-    breakfast: "Dosa + coconut chutney + boiled eggs (2) + banana + filter coffee",
+    breakfast: "Dosa + coconut chutney + boiled eggs (2) + banana",
     mid_morning_snack: "Pomegranate + almonds",
     lunch: "Jeera rice + chana dal + grilled chicken + lauki sabzi + dahi",
     evening_snack: "Fruit chaat + green tea",
@@ -59,10 +61,10 @@ export const MEAL_TEMPLATES: MealPlanData[] = [
   },
   {
     early_morning: "Warm water + 5 soaked almonds + 2 walnuts",
-    breakfast: "Besan chilla (2) + fried eggs (2) + banana + chai",
+    breakfast: "Besan chilla (2) + fried eggs (2) + banana",
     mid_morning_snack: "Pear + peanut butter on toast",
     lunch: "Rice + sambar + fish curry + beans thoran + buttermilk",
-    evening_snack: "Roasted makhana + nimbu pani",
+    evening_snack: "Roasted makhana + green tea",
     dinner: "2 roti + mushroom matar + toor dal + mixed salad",
     before_bed: "Warm milk with turmeric and honey",
   },
@@ -71,7 +73,7 @@ export const MEAL_TEMPLATES: MealPlanData[] = [
     breakfast: "Stuffed paratha + egg omelette (2 eggs) + banana + lassi",
     mid_morning_snack: "Watermelon + a few pistachios",
     lunch: "Rice + dal makhani + chicken tikka + palak sabzi + raita",
-    evening_snack: "Sprout salad + masala chai",
+    evening_snack: "Sprout salad + green tea",
     dinner: "2 roti + baingan bharta + moong dal + onion salad",
     before_bed: "Haldi doodh",
   },
@@ -83,26 +85,10 @@ export function getTodaysMealPlan(): MealPlanData {
 }
 
 export function generateCookInstructions(plan: MealPlanData): string {
-  const lines = [
-    "TODAY'S MENU",
-    "═══════════════════════════════",
-    "",
-    `🌅 Early Morning: ${plan.early_morning}`,
-    `🍳 Breakfast (7 AM): ${plan.breakfast}`,
-    `🍏 Mid-Morning (10 AM): ${plan.mid_morning_snack}`,
-    `🍛 Lunch (12:30 PM): ${plan.lunch}`,
-    `☕ Evening (3:30 PM): ${plan.evening_snack}`,
-    `🌙 Dinner (7:30 PM): ${plan.dinner}`,
-    `😴 Before Bed (9:30 PM): ${plan.before_bed}`,
-    "",
-    "═══════════════════════════════",
-    "PREP NOTES",
-    "• Soak almonds overnight",
-    "• Keep fruits washed and ready",
-    "• Prep salad vegetables in morning",
-    "• Marinate protein 30 min before cooking",
-  ]
-  return lines.join("\n")
+  const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+  const dayLabel = dayNames[new Date().getDay()]
+  const tasks = extractCookTasks(plan)
+  return formatCookTasksForWhatsApp(tasks, dayLabel)
 }
 
 export const MEAL_TYPE_OPTIONS = [
