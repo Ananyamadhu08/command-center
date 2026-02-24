@@ -187,19 +187,7 @@ export function Plant({ state, size = "lg" }: PlantProps) {
           transition={{ duration: 0.8, ease: "easeOut" }}
         />
 
-        {/* Secondary stem (healthy+) */}
-        {isAlive && (
-          <motion.path
-            d={`M90 ${127 - stemHeight * 0.4} Q95 ${127 - stemHeight * 0.6} 98 ${127 - stemHeight * 0.8}`}
-            stroke="url(#stemGrad)"
-            strokeWidth={2}
-            strokeLinecap="round"
-            fill="none"
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 0.8 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          />
-        )}
+
 
         {/* Left leaf cluster */}
         <motion.g
