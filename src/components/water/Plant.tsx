@@ -122,7 +122,7 @@ export function Plant({ state, size = "lg" }: PlantProps) {
 
       {/* LAYER 1: Full pot background (rim + body) with shadow */}
       <path
-        d="M54 124 L54 140 Q56 142, 58 142 L64 165 Q90 169, 116 165 L122 142 Q124 142, 126 140 L126 124 Z"
+        d="M54 124 L54 140 Q56 142, 58 142 L64 175 Q90 179, 116 175 L122 142 Q124 142, 126 140 L126 124 Z"
         fill="url(#potGrad)"
         filter="url(#potShadow)"
       />
@@ -151,7 +151,7 @@ export function Plant({ state, size = "lg" }: PlantProps) {
       />
 
       {/* Body left highlight */}
-      <path d="M60 143 L65 163" stroke="rgba(255,255,255,0.06)" strokeWidth={2.5} strokeLinecap="round" fill="none" />
+      <path d="M60 143 L65 173" stroke="rgba(255,255,255,0.06)" strokeWidth={2.5} strokeLinecap="round" fill="none" />
 
       {/* LAYER 5: Rim top surface — lightest, on top of everything */}
       <ellipse cx={90} cy={124} rx={36} ry={5.5} fill="url(#rimTopGrad)" />
