@@ -115,6 +115,16 @@ export const MEAL_TYPE_OPTIONS = [
   "before_bed",
 ] as const
 
+export const MEAL_ICONS: Record<string, string> = {
+  early_morning: "\uD83C\uDF05",
+  breakfast: "\uD83C\uDF73",
+  mid_morning_snack: "\uD83C\uDF4F",
+  lunch: "\uD83C\uDF5B",
+  evening_snack: "\u2615",
+  dinner: "\uD83C\uDF19",
+  before_bed: "\uD83D\uDE34",
+}
+
 export const MEAL_TYPE_LABELS: Record<string, string> = {
   early_morning: "Early Morning",
   breakfast: "Breakfast",

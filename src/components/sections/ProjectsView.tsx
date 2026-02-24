@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import { ProjectListView } from "@/components/projects/ProjectListView"
 import { ProjectDetailView } from "@/components/projects/ProjectDetailView"
 import { AddProjectModal } from "@/components/projects/AddProjectModal"
+import { fetchApi, postApi } from "@/lib/api"
 import type { Project, ProjectTask, TaskStatus, GitHubRepoOption } from "@/lib/types"
 
 export function ProjectsView() {
@@ -14,30 +15,24 @@ export function ProjectsView() {
   const [showAddModal, setShowAddModal] = useState(false)
 
   useEffect(() => {
-    fetch("/api/projects")
-      .then((r) => r.json())
-      .then((r) => {
-        if (r.success) setProjects(r.data)
-      })
-    fetch("/api/projects?tasks=all")
-      .then((r) => r.json())
-      .then((r) => {
-        if (r.success) setTasks(r.data)
-      })
+    fetchApi<Project[]>("/api/projects").then((data) => {
+      if (data) setProjects(data)
+    })
+    fetchApi<ProjectTask[]>("/api/projects?tasks=all").then((data) => {
+      if (data) setTasks(data)
+    })
   }, [])
 
   useEffect(() => {
     if (!selectedProjectId) return
-    fetch(`/api/projects?id=${selectedProjectId}`)
-      .then((r) => r.json())
-      .then((r) => {
-        if (r.success) {
-          setTasks((prev) => {
-            const otherTasks = prev.filter((t) => t.project_id !== selectedProjectId)
-            return [...otherTasks, ...r.data]
-          })
-        }
-      })
+    fetchApi<ProjectTask[]>(`/api/projects?id=${selectedProjectId}`).then((data) => {
+      if (data) {
+        setTasks((prev) => {
+          const otherTasks = prev.filter((t) => t.project_id !== selectedProjectId)
+          return [...otherTasks, ...data]
+        })
+      }
+    })
   }, [selectedProjectId])
 
   async function handleAddProject(repo: GitHubRepoOption) {
@@ -54,20 +49,20 @@ export function ProjectsView() {
       status: "active",
       created_at: "",
     }
+    const previousProjects = projects
     setProjects((prev) => [...prev, optimistic])
 
     try {
-      const res = await fetch("/api/projects", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: formatted, repo: repo.full_name, description: repo.description }),
+      const data = await postApi<Project>("/api/projects", {
+        name: formatted,
+        repo: repo.full_name,
+        description: repo.description,
       })
-      const data = await res.json()
-      if (data.success && data.data) {
-        setProjects((prev) => prev.map((p) => (p.id === optimistic.id ? data.data : p)))
+      if (data) {
+        setProjects((prev) => prev.map((p) => (p.id === optimistic.id ? data : p)))
       }
     } catch {
-      // optimistic update remains
+      setProjects(previousProjects)
     }
   }
 
@@ -82,20 +77,21 @@ export function ProjectsView() {
       status,
       created_at: "",
     }
+    const previousTasks = tasks
     setTasks((prev) => [...prev, optimistic])
 
     try {
-      const res = await fetch("/api/projects", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ project_id: selectedProjectId, title, description: description || undefined, status }),
+      const data = await postApi<ProjectTask>("/api/projects", {
+        project_id: selectedProjectId,
+        title,
+        description: description || undefined,
+        status,
       })
-      const data = await res.json()
-      if (data.success && data.data) {
-        setTasks((prev) => prev.map((t) => (t.id === optimistic.id ? data.data : t)))
+      if (data) {
+        setTasks((prev) => prev.map((t) => (t.id === optimistic.id ? data : t)))
       }
     } catch {
-      // optimistic update remains
+      setTasks(previousTasks)
     }
   }
 
@@ -103,30 +99,34 @@ export function ProjectsView() {
     taskId: string,
     updates: Partial<Pick<ProjectTask, "title" | "description" | "status">>
   ) {
+    const previousTasks = tasks
     setTasks((prev) => prev.map((t) => (t.id === taskId ? { ...t, ...updates } : t)))
 
     try {
-      await fetch("/api/projects", {
+      const res = await fetch("/api/projects", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ task_id: taskId, ...updates }),
       })
+      if (!res.ok) throw new Error("Failed to update")
     } catch {
-      // optimistic update remains
+      setTasks(previousTasks)
     }
   }
 
   async function handleDeleteTask(taskId: string) {
+    const previousTasks = tasks
     setTasks((prev) => prev.filter((t) => t.id !== taskId))
 
     try {
-      await fetch("/api/projects", {
+      const res = await fetch("/api/projects", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ delete_task_id: taskId }),
       })
+      if (!res.ok) throw new Error("Failed to delete")
     } catch {
-      // optimistic update remains
+      setTasks(previousTasks)
     }
   }
 

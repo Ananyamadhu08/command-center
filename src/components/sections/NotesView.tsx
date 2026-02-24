@@ -5,17 +5,19 @@ import { motion } from "framer-motion"
 import { GlassCard } from "@/components/ui/GlassCard"
 import { GlowButton } from "@/components/ui/GlowButton"
 import { TextArea } from "@/components/ui/Input"
+import { fetchApi } from "@/lib/api"
+import { formatRelativeTime } from "@/lib/utils"
 import type { Note } from "@/lib/types"
+import { EmptyState } from "@/components/ui/EmptyState"
 
 export function NotesView() {
   const [notes, setNotes] = useState<Note[]>([])
   const [newNote, setNewNote] = useState("")
 
   useEffect(() => {
-    fetch("/api/notes")
-      .then((r) => r.json())
-      .then((r) => { if (r.success) setNotes(r.data) })
-      .catch(() => {})
+    fetchApi<Note[]>("/api/notes").then((data) => {
+      if (data) setNotes(data)
+    })
   }, [])
 
   async function handleAddNote() {
@@ -26,32 +28,20 @@ export function NotesView() {
       content: newNote.trim(),
       created_at: new Date().toISOString(),
     }
+    const previousNotes = notes
     setNotes((prev) => [tempNote, ...prev])
     setNewNote("")
 
     try {
-      await fetch("/api/notes", {
+      const res = await fetch("/api/notes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content: newNote.trim() }),
       })
+      if (!res.ok) throw new Error("Failed to save")
     } catch {
-      // Optimistic update remains
+      setNotes(previousNotes)
     }
-  }
-
-  function formatNoteTime(dateStr: string): string {
-    const date = new Date(dateStr)
-    const now = new Date()
-    const diffMs = now.getTime() - date.getTime()
-    const diffMins = Math.floor(diffMs / 60000)
-
-    if (diffMins < 1) return "just now"
-    if (diffMins < 60) return `${diffMins}m ago`
-    const diffHours = Math.floor(diffMins / 60)
-    if (diffHours < 24) return `${diffHours}h ago`
-    const diffDays = Math.floor(diffHours / 24)
-    return `${diffDays}d ago`
   }
 
   return (
@@ -86,16 +76,14 @@ export function NotesView() {
               {note.content}
             </p>
             <p className="text-[10px] text-white/20 font-mono mt-2">
-              {formatNoteTime(note.created_at)}
+              {formatRelativeTime(note.created_at)}
             </p>
           </GlassCard>
         ))}
       </div>
 
       {notes.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-sm text-white/20">No notes yet. Start capturing your thoughts.</p>
-        </div>
+        <EmptyState message="No notes yet" />
       )}
     </motion.div>
   )

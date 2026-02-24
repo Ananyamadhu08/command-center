@@ -3,23 +3,15 @@
 import { useState, useEffect, useMemo } from "react"
 import { motion } from "framer-motion"
 import { GlassCard } from "@/components/ui/GlassCard"
-import { MEAL_TYPE_LABELS } from "@/lib/nutrition"
+import { MEAL_TYPE_LABELS, MEAL_ICONS } from "@/lib/nutrition"
 import { getToday } from "@/lib/utils"
 import { Notebook } from "lucide-react"
 import type { MealLog } from "@/lib/types"
+import { EmptyState } from "@/components/ui/EmptyState"
+import { Loader } from "@/components/ui/Loader"
 
 interface MealLogsProps {
   refreshKey: number
-}
-
-const MEAL_ICONS: Record<string, string> = {
-  early_morning: "🌅",
-  breakfast: "🍳",
-  mid_morning_snack: "🍏",
-  lunch: "🍛",
-  evening_snack: "☕",
-  dinner: "🌙",
-  before_bed: "😴",
 }
 
 const BASE_CALORIES: Record<string, number> = {
@@ -144,20 +136,9 @@ export function MealLogs({ refreshKey }: MealLogsProps) {
       </div>
 
       {loading ? (
-        <div className="flex items-center gap-2 py-6 justify-center">
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 1.2, ease: "linear" }}
-            className="w-3.5 h-3.5 border border-cosmic/40 border-t-cosmic-light rounded-full"
-          />
-          <span className="text-xs text-white/30">Loading meals...</span>
-        </div>
+        <Loader label="Loading meals..." size="sm" />
       ) : logs.length === 0 ? (
-        <div className="py-8 text-center">
-          <span className="text-2xl opacity-30 block mb-2">🍽</span>
-          <p className="text-xs text-white/25">No meals logged today yet.</p>
-          <p className="text-[10px] text-white/15 mt-1">Log your first meal above to get started.</p>
-        </div>
+        <EmptyState message="No meals logged today" />
       ) : (
         <div className="space-y-4">
           {/* Calorie summary bar */}
@@ -190,7 +171,7 @@ export function MealLogs({ refreshKey }: MealLogsProps) {
           </div>
 
           {/* Column headers */}
-          <div className="grid grid-cols-[auto_1fr_auto_auto] gap-x-3 px-1 pb-2 border-b border-white/5">
+          <div className="grid grid-cols-[auto_1fr_auto] gap-x-3 px-1 pb-2 border-b border-white/5">
             <span className="text-[9px] font-mono uppercase tracking-widest text-white/20 w-20">
               Meal
             </span>
@@ -199,9 +180,6 @@ export function MealLogs({ refreshKey }: MealLogsProps) {
             </span>
             <span className="text-[9px] font-mono uppercase tracking-widest text-white/20 text-right w-14">
               Cal
-            </span>
-            <span className="text-[9px] font-mono uppercase tracking-widest text-white/20 text-right w-16">
-              Time
             </span>
           </div>
 
@@ -213,7 +191,7 @@ export function MealLogs({ refreshKey }: MealLogsProps) {
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05, duration: 0.3 }}
-                className="grid grid-cols-[auto_1fr_auto_auto] gap-x-3 items-center px-1 py-2 rounded-lg hover:bg-white/[0.02] transition-colors group"
+                className="grid grid-cols-[auto_1fr_auto] gap-x-3 items-center px-1 py-2 rounded-lg hover:bg-white/[0.02] transition-colors group"
               >
                 {/* Meal type badge */}
                 <div className="flex items-center gap-1.5 w-20">
@@ -231,26 +209,20 @@ export function MealLogs({ refreshKey }: MealLogsProps) {
                 </span>
 
                 {/* Calories */}
-                <span className="text-xs font-mono text-amber-light/60 text-right w-14 tabular-nums">
+                <span className="text-xs font-mono text-cosmic-light/60 text-right w-14 tabular-nums">
                   ~{calories}
-                </span>
-
-                {/* Time */}
-                <span className="text-[10px] font-mono text-white/20 text-right w-16">
-                  {time || "—"}
                 </span>
               </motion.div>
             ))}
           </div>
 
           {/* Footer summary */}
-          <div className="grid grid-cols-[auto_1fr_auto_auto] gap-x-3 items-center px-1 pt-2 border-t border-white/5">
+          <div className="grid grid-cols-[auto_1fr_auto] gap-x-3 items-center px-1 pt-2 border-t border-white/5">
             <span className="text-[10px] font-semibold text-white/40 w-20">Total</span>
             <span />
-            <span className="text-xs font-mono font-semibold text-amber-light/80 text-right w-14 tabular-nums">
+            <span className="text-xs font-mono font-semibold text-cosmic-light/80 text-right w-14 tabular-nums">
               ~{totalCalories}
             </span>
-            <span className="w-16" />
           </div>
         </div>
       )}

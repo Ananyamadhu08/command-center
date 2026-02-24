@@ -4,6 +4,8 @@ import { useState, useEffect } from "react"
 import { ChevronDown } from "lucide-react"
 import { GlassCard } from "@/components/ui/GlassCard"
 import type { GitHubRepoStats } from "@/lib/types"
+import { Loader } from "@/components/ui/Loader"
+import { ErrorState } from "@/components/ui/ErrorState"
 
 interface GitHubStatsPanelProps {
   repo: string
@@ -27,7 +29,7 @@ export function GitHubStatsPanel({ repo }: GitHubStatsPanelProps) {
   if (loading) {
     return (
       <GlassCard hover={false}>
-        <p className="text-xs text-white/40 text-center py-4">Loading GitHub stats...</p>
+        <Loader label="Loading stats..." size="sm" />
       </GlassCard>
     )
   }
@@ -35,7 +37,7 @@ export function GitHubStatsPanel({ repo }: GitHubStatsPanelProps) {
   if (!stats) {
     return (
       <GlassCard hover={false}>
-        <p className="text-xs text-white/40 text-center py-4">Could not load stats</p>
+        <ErrorState message="Could not load stats" />
       </GlassCard>
     )
   }

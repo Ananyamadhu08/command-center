@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { StatCard } from "@/components/analytics/StatCard"
 import type { GitHubOverview } from "@/lib/types"
+import { Loader } from "@/components/ui/Loader"
 
 export function GitHubOverviewStats() {
   const [data, setData] = useState<GitHubOverview | null>(null)
@@ -19,13 +20,7 @@ export function GitHubOverviewStats() {
   }, [])
 
   if (loading) {
-    return (
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-20 rounded-xl bg-white/5 animate-pulse" />
-        ))}
-      </div>
-    )
+    return <Loader />
   }
 
   if (!data) return null

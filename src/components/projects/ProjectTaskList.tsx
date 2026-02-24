@@ -6,6 +6,7 @@ import { Plus, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { TASK_STATUSES, TASK_STATUS_CONFIG } from "@/lib/types"
 import type { ProjectTask, TaskStatus } from "@/lib/types"
+import { EmptyState } from "@/components/ui/EmptyState"
 
 interface ProjectTaskListProps {
   tasks: ProjectTask[]
@@ -44,9 +45,7 @@ export function ProjectTaskList({
 
       {/* Empty state */}
       {projectTasks.length === 0 && (
-        <div className="flex items-center justify-center rounded-xl border border-dashed border-white/10 py-8">
-          <p className="text-xs text-white/30">No tasks allocated</p>
-        </div>
+        <EmptyState message="No tasks allocated" />
       )}
 
       {/* Task list */}

@@ -4,6 +4,8 @@ import { useState, useEffect } from "react"
 import { Modal } from "@/components/ui/Modal"
 import { GlowButton } from "@/components/ui/GlowButton"
 import type { GitHubRepoOption } from "@/lib/types"
+import { EmptyState } from "@/components/ui/EmptyState"
+import { Loader } from "@/components/ui/Loader"
 
 interface AddProjectModalProps {
   isOpen: boolean
@@ -47,10 +49,10 @@ export function AddProjectModal({ isOpen, onClose, onAdd, existingRepos }: AddPr
 
         <div className="max-h-64 overflow-y-auto space-y-1">
           {loading && (
-            <p className="text-xs text-white/40 text-center py-4">Loading repositories...</p>
+            <Loader label="Loading repositories..." size="sm" />
           )}
           {!loading && filtered.length === 0 && (
-            <p className="text-xs text-white/40 text-center py-4">No repositories found</p>
+            <EmptyState message="No repositories found" />
           )}
           {filtered.map((repo) => (
             <button

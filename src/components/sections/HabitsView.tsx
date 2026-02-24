@@ -6,6 +6,7 @@ import { HabitTracker } from "@/components/habits/HabitTracker"
 import { ExerciseLog } from "@/components/habits/ExerciseLog"
 import { ReadingTracker } from "@/components/habits/ReadingTracker"
 import { WeeklyActivity } from "@/components/habits/WeeklyActivity"
+import { fetchApi } from "@/lib/api"
 import { getToday } from "@/lib/utils"
 import type {
   Habit,
@@ -24,28 +25,22 @@ export function HabitsView() {
   const today = todayRef.current
 
   useEffect(() => {
-    fetch("/api/habits")
-      .then((r) => r.json())
-      .then((r) => { if (r.success) setHabits(r.data) })
-      .catch(() => {})
-
-    fetch("/api/habits?logs=true")
-      .then((r) => r.json())
-      .then((r) => { if (r.success) setHabitLogs(r.data) })
-      .catch(() => {})
-
-    fetch("/api/exercise")
-      .then((r) => r.json())
-      .then((r) => { if (r.success) setExerciseLogs(r.data) })
-      .catch(() => {})
-
-    fetch("/api/reading")
-      .then((r) => r.json())
-      .then((r) => { if (r.success) setReadingLogs(r.data) })
-      .catch(() => {})
+    fetchApi<Habit[]>("/api/habits").then((data) => {
+      if (data) setHabits(data)
+    })
+    fetchApi<HabitLog[]>("/api/habits?logs=true").then((data) => {
+      if (data) setHabitLogs(data)
+    })
+    fetchApi<ExerciseLogType[]>("/api/exercise").then((data) => {
+      if (data) setExerciseLogs(data)
+    })
+    fetchApi<ReadingLogType[]>("/api/reading").then((data) => {
+      if (data) setReadingLogs(data)
+    })
   }, [today])
 
   async function handleHabitToggle(habitId: string, completed: boolean) {
+    const previousLogs = habitLogs
     setHabitLogs((prev) => {
       const existing = prev.find((l) => l.habit_id === habitId && l.date === today)
       if (existing) {
@@ -59,13 +54,14 @@ export function HabitsView() {
       ]
     })
     try {
-      await fetch("/api/habits", {
+      const res = await fetch("/api/habits", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ habit_id: habitId, date: today, completed }),
       })
+      if (!res.ok) throw new Error("Failed to save")
     } catch {
-      // Optimistic update remains
+      setHabitLogs(previousLogs)
     }
   }
 
@@ -75,15 +71,17 @@ export function HabitsView() {
       ...habit,
       created_at: "",
     }
+    const previousHabits = habits
     setHabits((prev) => [...prev, newHabit])
     try {
-      await fetch("/api/habits", {
+      const res = await fetch("/api/habits", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(habit),
       })
+      if (!res.ok) throw new Error("Failed to save")
     } catch {
-      // Optimistic update remains
+      setHabits(previousHabits)
     }
   }
 
@@ -110,15 +108,17 @@ export function HabitsView() {
       type: entry.type as ExerciseLogType["type"],
       created_at: "",
     }
+    const previousLogs = exerciseLogs
     setExerciseLogs((prev) => [newLog, ...prev])
     try {
-      await fetch("/api/exercise", {
+      const res = await fetch("/api/exercise", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(entry),
       })
+      if (!res.ok) throw new Error("Failed to save")
     } catch {
-      // Optimistic update remains
+      setExerciseLogs(previousLogs)
     }
   }
 
@@ -133,15 +133,17 @@ export function HabitsView() {
       ...entry,
       created_at: "",
     }
+    const previousLogs = readingLogs
     setReadingLogs((prev) => [newLog, ...prev])
     try {
-      await fetch("/api/reading", {
+      const res = await fetch("/api/reading", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(entry),
       })
+      if (!res.ok) throw new Error("Failed to save")
     } catch {
-      // Optimistic update remains
+      setReadingLogs(previousLogs)
     }
   }
 
@@ -159,10 +161,8 @@ export function HabitsView() {
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
       <h2 className="text-lg font-semibold text-white/80">Habits & Tracking</h2>
 
-      {/* Row 1: Reading Tracker (full width) */}
       <ReadingTracker onLog={handleReadingLog} recentLogs={readingLogs} />
 
-      {/* Row 2: Daily Habits (full width) */}
       <HabitTracker
         habits={habits}
         todayLogs={todayHabitLogs}
@@ -173,14 +173,12 @@ export function HabitsView() {
         allLogs={habitLogs}
       />
 
-      {/* Row 3: Exercise Log (full width) */}
       <ExerciseLog
         onLog={handleExerciseLog}
         todayLogs={todayExercise}
         allLogs={exerciseLogs}
       />
 
-      {/* Row 3: Weekly Activity (full width) */}
       <WeeklyActivity
         exerciseLogs={exerciseLogs}
         readingLogs={readingLogs}

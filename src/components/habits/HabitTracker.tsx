@@ -11,6 +11,7 @@ import type { Habit, HabitLog } from "@/lib/types"
 import { getToday } from "@/lib/utils"
 import { COLORS, DEFAULT_COLOR, resolveColor } from "@/lib/colors"
 import { ICON_CATEGORIES, DEFAULT_ICON } from "@/lib/icons"
+import { EmptyState } from "@/components/ui/EmptyState"
 
 interface HabitTrackerProps {
   habits: Habit[]
@@ -356,7 +357,7 @@ export function HabitTracker({ habits, todayLogs, onToggle, onCreate, onUpdate, 
           })}
 
           {habits.length === 0 && (
-            <p className="text-sm text-white/30 py-4 text-center">No habits yet.</p>
+            <EmptyState message="No habits yet" />
           )}
         </div>
       </Modal>

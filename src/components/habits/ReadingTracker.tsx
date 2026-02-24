@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/Input"
 import { Modal } from "@/components/ui/Modal"
 import { BookOpen, Plus } from "lucide-react"
 import { getToday } from "@/lib/utils"
+import { EmptyState } from "@/components/ui/EmptyState"
+import { Loader } from "@/components/ui/Loader"
 
 interface Book {
   id: string
@@ -127,9 +129,7 @@ export function ReadingTracker({ onLog, recentLogs }: ReadingTrackerProps) {
   if (!loaded) {
     return (
       <GlassCard glow="cosmic">
-        <div className="h-20 flex items-center justify-center">
-          <span className="text-xs text-white/30">Loading...</span>
-        </div>
+        <Loader size="sm" />
       </GlassCard>
     )
   }
@@ -164,9 +164,7 @@ export function ReadingTracker({ onLog, recentLogs }: ReadingTrackerProps) {
         <div className="space-y-4">
           {/* Empty State */}
           {activeBooks.length === 0 && (
-            <div className="py-8 text-center">
-              <p className="text-xs text-white/25">No books yet. Add one to start tracking.</p>
-            </div>
+            <EmptyState message="No books added yet" />
           )}
 
           {/* Active Books */}
@@ -278,7 +276,7 @@ export function ReadingTracker({ onLog, recentLogs }: ReadingTrackerProps) {
       {/* Finished Books Modal */}
       <Modal isOpen={showFinished} onClose={() => setShowFinished(false)} title="Finished Books">
         {finishedBooks.length === 0 ? (
-          <p className="text-sm text-white/40">No finished books yet.</p>
+          <EmptyState message="No finished books" />
         ) : (
           <div className="space-y-3">
             {finishedBooks.map((book) => {

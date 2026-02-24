@@ -172,8 +172,6 @@ export interface Note {
   created_at: string
 }
 
-export type NavSection = "today" | "briefs" | "meals" | "habits" | "analytics" | "notes" | "projects"
-
 export type ProjectStatus = "active" | "paused" | "archived"
 export type TaskStatus = "backlog" | "todo" | "in_progress" | "in_review" | "done"
 

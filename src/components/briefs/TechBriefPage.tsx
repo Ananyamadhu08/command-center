@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Brain, AtSign, Globe, Cloud, Rocket, Package, Flag, Wrench, Smartphone, Lock, Zap, MessageCircle, ExternalLink } from "lucide-react"
 import { GlassCard } from "@/components/ui/GlassCard"
 import { Modal } from "@/components/ui/Modal"
+import { isSafeUrl } from "@/lib/api"
 import type { Brief, TechBriefContent, TechStory, TechCategory } from "@/lib/types"
 
 interface TechBriefPageProps {
@@ -360,7 +361,7 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
           <GlassCard hover={false}>
             <h3 className="text-xs font-mono text-white/25 uppercase tracking-wider mb-3">Quick Links</h3>
             <div className="flex flex-wrap gap-2">
-              {parsed.quick_links.map((link) => (
+              {parsed.quick_links.filter((link) => isSafeUrl(link.url)).map((link) => (
                 <a
                   key={link.label}
                   href={link.url}

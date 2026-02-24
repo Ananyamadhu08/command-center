@@ -5,7 +5,6 @@ import { SAMPLE_MEAL_LOGS } from "@/lib/sample-data"
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const date = searchParams.get("date")
-  const logOnly = searchParams.get("logs") === "true"
 
   if (!isSupabaseConfigured()) {
     let filtered = SAMPLE_MEAL_LOGS
@@ -15,15 +14,7 @@ export async function GET(request: Request) {
 
   const supabase = getSupabase()!
 
-  if (logOnly) {
-    let query = supabase.from("meal_logs").select("*").order("created_at", { ascending: false })
-    if (date) query = query.eq("date", date)
-    const { data, error } = await query
-    if (error) return NextResponse.json({ success: false, error: error.message }, { status: 500 })
-    return NextResponse.json({ success: true, data })
-  }
-
-  let query = supabase.from("meal_plans").select("*").order("date", { ascending: false }).limit(1)
+  let query = supabase.from("meal_logs").select("*").order("created_at", { ascending: false })
   if (date) query = query.eq("date", date)
   const { data, error } = await query
   if (error) return NextResponse.json({ success: false, error: error.message }, { status: 500 })

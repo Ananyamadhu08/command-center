@@ -13,6 +13,7 @@ import { fetchApi } from "@/lib/api"
 import { staggerContainer, staggerItem } from "@/lib/animations"
 import type { AnalyticsData, WeekComparison, WeeklyGoals } from "@/lib/types"
 import { resolveColor } from "@/lib/colors"
+import { Loader } from "@/components/ui/Loader"
 
 const DEFAULT_COMPARISON: WeekComparison = {
   exercise_minutes: { this_week: 0, last_week: 0 },
@@ -65,11 +66,7 @@ export function AnalyticsView() {
   }, [])
 
   if (!data) {
-    return (
-      <div className="flex items-center justify-center py-20">
-        <p className="text-sm text-white/20 font-mono animate-pulse">Computing analytics...</p>
-      </div>
-    )
+    return <Loader label="Computing analytics..." />
   }
 
   const exerciseChartData = data.exercise.daily_breakdown.map((d) => ({

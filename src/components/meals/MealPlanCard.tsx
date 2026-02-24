@@ -1,22 +1,12 @@
 "use client"
 
 import { GlassCard } from "@/components/ui/GlassCard"
-import { MEAL_TYPE_LABELS } from "@/lib/nutrition"
+import { MEAL_TYPE_LABELS, MEAL_ICONS } from "@/lib/nutrition"
 import { ClipboardList } from "lucide-react"
 import type { MealPlanData } from "@/lib/types"
 
 interface MealPlanCardProps {
   plan: MealPlanData
-}
-
-const MEAL_ICONS: Record<string, string> = {
-  early_morning: "🌅",
-  breakfast: "🍳",
-  mid_morning_snack: "🍏",
-  lunch: "🍛",
-  evening_snack: "☕",
-  dinner: "🌙",
-  before_bed: "😴",
 }
 
 export function MealPlanCard({ plan }: MealPlanCardProps) {

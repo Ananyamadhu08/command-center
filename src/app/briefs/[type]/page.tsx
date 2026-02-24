@@ -6,9 +6,29 @@ import { ArrowLeft } from "lucide-react"
 import { MorningBriefPage } from "@/components/briefs/MorningBriefPage"
 import { TechBriefPage } from "@/components/briefs/TechBriefPage"
 import { EveningBriefPage } from "@/components/briefs/EveningBriefPage"
+import { fetchApi } from "@/lib/api"
 import type { Brief, BriefType } from "@/lib/types"
+import { EmptyState } from "@/components/ui/EmptyState"
+import { Loader } from "@/components/ui/Loader"
 
 const VALID_TYPES: BriefType[] = ["morning_briefing", "tech_news", "evening_review"]
+
+const BRIEF_COMPONENTS: Record<BriefType, React.ComponentType<{ brief: Brief }>> = {
+  morning_briefing: MorningBriefPage,
+  tech_news: TechBriefPage,
+  evening_review: EveningBriefPage,
+}
+
+function BackLink() {
+  return (
+    <Link
+      href="/briefs"
+      className="inline-flex items-center gap-2 text-white/30 hover:text-white/60 text-sm transition-colors mb-8"
+    >
+      <ArrowLeft size={14} className="inline mr-1" /> Briefs
+    </Link>
+  )
+}
 
 export default function BriefTypePage({ params }: { params: Promise<{ type: string }> }) {
   const { type } = use(params)
@@ -23,63 +43,45 @@ export default function BriefTypePage({ params }: { params: Promise<{ type: stri
       return
     }
 
-    fetch(`/api/briefs?type=${type}`)
-      .then((r) => r.json())
-      .then((r) => {
-        if (r.success && r.data.length > 0) {
-          setBrief(r.data[0])
-        }
+    fetchApi<Brief[]>(`/api/briefs?type=${encodeURIComponent(type)}`)
+      .then((data) => {
+        if (data && data.length > 0) setBrief(data[0])
       })
-      .catch(() => {})
       .finally(() => setLoading(false))
   }, [type, isValid])
 
   if (!isValid) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <p className="text-white/40 text-sm mb-4">Brief type not found</p>
-          <Link href="/" className="text-cosmic-light/60 hover:text-cosmic-light text-sm transition-colors">
-            <ArrowLeft size={14} className="inline mr-1" /> Back to Command Center
-          </Link>
-        </div>
+      <div className="flex flex-col items-center justify-center py-20 gap-4">
+        <EmptyState message="Brief not found" />
+        <Link href="/briefs" className="text-cosmic-light/60 hover:text-cosmic-light text-sm transition-colors">
+          <ArrowLeft size={14} className="inline mr-1" /> Back to Briefs
+        </Link>
       </div>
     )
   }
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-white/20 text-sm font-mono animate-pulse">Loading brief...</div>
-      </div>
-    )
+    return <Loader label="Loading brief..." />
   }
 
   if (!brief) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <p className="text-white/40 text-sm mb-4">No brief available yet</p>
-          <Link href="/" className="text-cosmic-light/60 hover:text-cosmic-light text-sm transition-colors">
-            <ArrowLeft size={14} className="inline mr-1" /> Back to Command Center
-          </Link>
-        </div>
+      <div className="flex flex-col items-center justify-center py-20 gap-4">
+        <EmptyState message="No brief available" />
+        <Link href="/briefs" className="text-cosmic-light/60 hover:text-cosmic-light text-sm transition-colors">
+          <ArrowLeft size={14} className="inline mr-1" /> Back to Briefs
+        </Link>
       </div>
     )
   }
 
-  return (
-    <div className="max-w-4xl mx-auto px-6 py-8">
-      <Link
-        href="/"
-        className="inline-flex items-center gap-2 text-white/30 hover:text-white/60 text-sm transition-colors mb-8"
-      >
-        <ArrowLeft size={14} className="inline mr-1" /> Command Center
-      </Link>
+  const BriefComponent = BRIEF_COMPONENTS[type as BriefType]
 
-      {type === "morning_briefing" && <MorningBriefPage brief={brief} />}
-      {type === "tech_news" && <TechBriefPage brief={brief} />}
-      {type === "evening_review" && <EveningBriefPage brief={brief} />}
+  return (
+    <div>
+      <BackLink />
+      <BriefComponent brief={brief} />
     </div>
   )
 }

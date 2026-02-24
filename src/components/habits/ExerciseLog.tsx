@@ -9,6 +9,7 @@ import { calculateStreak, getLast7Days } from "@/lib/streaks"
 import { Activity } from "lucide-react"
 import type { ExerciseLog as ExerciseLogType } from "@/lib/types"
 import { resolveColor } from "@/lib/colors"
+import { EmptyState } from "@/components/ui/EmptyState"
 
 const EXERCISE_TYPES = [
   { id: "morning_stretch", label: "Morning Stretch", icon: "🌅", color: "sky" },
@@ -197,7 +198,7 @@ export function ExerciseLog({ onLog, todayLogs, allLogs = [] }: ExerciseLogProps
             })}
           </div>
         ) : (
-          <p className="text-[11px] text-white/15 py-2">No exercises logged</p>
+          <EmptyState message="No exercises logged" />
         )}
       </div>
 

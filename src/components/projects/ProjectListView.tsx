@@ -4,6 +4,7 @@ import { GlowButton } from "@/components/ui/GlowButton"
 import { ProjectCard } from "./ProjectCard"
 import { GitHubOverviewStats } from "./GitHubOverviewStats"
 import type { Project, ProjectTask, ProjectStatus } from "@/lib/types"
+import { EmptyState } from "@/components/ui/EmptyState"
 
 interface ProjectListViewProps {
   projects: Project[]
@@ -54,9 +55,7 @@ export function ProjectListView({ projects, tasks, onSelectProject, onOpenAddMod
       })}
 
       {projects.length === 0 && (
-        <p className="text-sm text-white/30 text-center py-8">
-          No projects yet. Add one from your GitHub repos.
-        </p>
+        <EmptyState message="No projects yet" />
       )}
     </div>
   )
