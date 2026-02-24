@@ -165,7 +165,7 @@ export function Plant({ state, size = "lg" }: PlantProps) {
       <ellipse cx={90} cy={124} rx={36} ry={5.5} fill="url(#rimTopGrad)" />
 
       {/* Rim inner edge ring */}
-      <ellipse cx={90} cy={126.5} rx={32} ry={4} fill="#a07848" />
+      <ellipse cx={90} cy={126.5} rx={32} ry={4} fill="#5a4030" />
 
       {/* Rim highlight arc */}
       <path
