@@ -102,6 +102,7 @@ export function Plant({ state, size = "lg" }: PlantProps) {
         </filter>
       </defs>
 
+      <g transform="translate(0, -13)">
       {/* Ambient ground glow for alive plants */}
       {isAlive && (
         <motion.ellipse
@@ -462,6 +463,7 @@ export function Plant({ state, size = "lg" }: PlantProps) {
           <line x1="88" y1="130" x2="88" y2="134" stroke="rgba(60,40,25,0.4)" strokeWidth={0.4} />
         </>
       )}
+      </g>
     </motion.svg>
   )
 }
