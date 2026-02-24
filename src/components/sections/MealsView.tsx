@@ -52,11 +52,11 @@ export function MealsView() {
       {/* Today's Logs — shows meals logged today */}
       <MealLogs refreshKey={refreshKey} />
 
-      {/* Meal Plan + Daily Essentials — side by side */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <MealPlanCard plan={mealPlan} />
-        <NutritionTips />
-      </div>
+      {/* Daily Essentials — checklist */}
+      <NutritionTips />
+
+      {/* Today's Meal Plan — what to eat */}
+      <MealPlanCard plan={mealPlan} />
 
       {/* Cook's Tasks — flat checklist for the cook */}
       <CookCard plan={mealPlan} />
