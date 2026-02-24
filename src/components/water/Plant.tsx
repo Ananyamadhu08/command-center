@@ -18,7 +18,7 @@ const SWAY_AMOUNT: Record<PlantState, number> = {
 }
 
 export function Plant({ state, size = "lg" }: PlantProps) {
-  const dim = size === "sm" ? 72 : 180
+  const dim = size === "sm" ? 72 : 250
   const sway = SWAY_AMOUNT[state]
   const isDead = state === "dead"
   const isWilted = state === "wilted"
