@@ -77,10 +77,9 @@ export function WaterPlantCard() {
         </span>
       </div>
 
-      {/* Plant + Controls */}
-      <div className="flex items-center gap-6">
-        {/* Plant */}
-        <div className="relative flex-shrink-0">
+      {/* Plant on top */}
+      <div className="flex flex-col items-center gap-4">
+        <div className="relative">
           <Plant state={state} size="lg" />
 
           {/* Water drop animation */}
@@ -96,48 +95,45 @@ export function WaterPlantCard() {
           )}
         </div>
 
-        {/* Right side — status + button */}
-        <div className="flex-1 space-y-4">
-          {/* Status */}
-          <div>
-            <p className="text-sm text-white/70 font-medium">{STATE_LABELS[state]}</p>
-            <p className="text-[10px] text-white/30 font-mono mt-1">
-              {glasses >= TARGET
-                ? `${glasses - TARGET} bonus ${glasses - TARGET === 1 ? "glass" : "glasses"}`
-                : `${TARGET - glasses} more to go`}
-            </p>
-          </div>
-
-          {/* Progress bar */}
-          <div className="space-y-1.5">
-            <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-              <motion.div
-                className="h-full rounded-full bg-gradient-to-r from-sky-500/70 to-sky-400/90"
-                initial={{ width: 0 }}
-                animate={{ width: `${progress * 100}%` }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-              />
-            </div>
-            <div className="flex justify-between">
-              {Array.from({ length: TARGET }, (_, i) => (
-                <div
-                  key={i}
-                  className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${
-                    i < glasses ? "bg-sky-400/80" : "bg-white/10"
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Add glass button */}
-          <GlowButton variant="ghost" size="sm" onClick={addGlass}>
-            <span className="flex items-center gap-1.5">
-              <Plus size={14} />
-              Add a glass
-            </span>
-          </GlowButton>
+        {/* Status */}
+        <div className="text-center">
+          <p className="text-sm text-white/70 font-medium">{STATE_LABELS[state]}</p>
+          <p className="text-[10px] text-white/30 font-mono mt-1">
+            {glasses >= TARGET
+              ? `${glasses - TARGET} bonus ${glasses - TARGET === 1 ? "glass" : "glasses"}`
+              : `${TARGET - glasses} more to go`}
+          </p>
         </div>
+
+        {/* Progress bar */}
+        <div className="w-full space-y-1.5">
+          <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+            <motion.div
+              className="h-full rounded-full bg-gradient-to-r from-sky-500/70 to-sky-400/90"
+              initial={{ width: 0 }}
+              animate={{ width: `${progress * 100}%` }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+            />
+          </div>
+          <div className="flex justify-between">
+            {Array.from({ length: TARGET }, (_, i) => (
+              <div
+                key={i}
+                className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${
+                  i < glasses ? "bg-sky-400/80" : "bg-white/10"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Add glass button */}
+        <GlowButton variant="ghost" size="sm" onClick={addGlass}>
+          <span className="flex items-center gap-1.5">
+            <Plus size={14} />
+            Add a glass
+          </span>
+        </GlowButton>
       </div>
     </GlassCard>
   )
