@@ -115,16 +115,7 @@ export function WaterPlantCard() {
               transition={{ duration: 0.6, ease: "easeOut" }}
             />
           </div>
-          <div className="flex justify-between">
-            {Array.from({ length: TARGET }, (_, i) => (
-              <div
-                key={i}
-                className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${
-                  i < glasses ? "bg-sky-400/80" : "bg-white/10"
-                }`}
-              />
-            ))}
-          </div>
+
         </div>
 
         {/* Add glass button */}
