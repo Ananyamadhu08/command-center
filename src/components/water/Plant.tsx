@@ -28,7 +28,7 @@ export function Plant({ state, size = "lg" }: PlantProps) {
   const isAlive = isHealthy || isThriving
 
   // Progressive values
-  const stemHeight = isDead ? 20 : isWilted ? 30 : isDry ? 42 : 55
+  const stemHeight = isDead ? 25 : isWilted ? 30 : isDry ? 42 : 55
   const leafSize = isDead ? 0.3 : isWilted ? 0.5 : isDry ? 0.75 : 1
   const leafOpacity = isDead ? 0.4 : isWilted ? 0.6 : isDry ? 0.8 : 1
   const saturation = isDead ? 0 : isWilted ? 0.4 : isDry ? 0.7 : 1
@@ -66,8 +66,8 @@ export function Plant({ state, size = "lg" }: PlantProps) {
 
         {/* Stem gradient */}
         <linearGradient id="stemGrad" x1="0" y1="1" x2="0" y2="0">
-          <stop offset="0%" stopColor={isDead ? "#4a3020" : `hsl(${100 + saturation * 20}, ${30 + saturation * 40}%, ${20 + saturation * 15}%)`} />
-          <stop offset="100%" stopColor={isDead ? "#5a3828" : `hsl(${110 + saturation * 15}, ${35 + saturation * 45}%, ${25 + saturation * 20}%)`} />
+          <stop offset="0%" stopColor={isDead ? "#8a7a5a" : `hsl(${100 + saturation * 20}, ${30 + saturation * 40}%, ${20 + saturation * 15}%)`} />
+          <stop offset="100%" stopColor={isDead ? "#9a8a62" : `hsl(${110 + saturation * 15}, ${35 + saturation * 45}%, ${25 + saturation * 20}%)`} />
         </linearGradient>
 
         {/* Leaf gradients */}
@@ -177,9 +177,9 @@ export function Plant({ state, size = "lg" }: PlantProps) {
       >
         {/* Stem — organic curve */}
         <motion.path
-          d={`M90 127 Q${isDead ? "90" : "87"} ${127 - stemHeight * 0.5} 90 ${127 - stemHeight}`}
+          d={`M90 127 Q${isDead ? "89" : "87"} ${127 - stemHeight * 0.5} 90 ${127 - stemHeight}`}
           stroke="url(#stemGrad)"
-          strokeWidth={isDead ? 2.5 : 3.5}
+          strokeWidth={isDead ? 3.5 : 3.5}
           strokeLinecap="round"
           fill="none"
           initial={{ pathLength: 0 }}
@@ -443,14 +443,7 @@ export function Plant({ state, size = "lg" }: PlantProps) {
         </>
       )}
 
-      {/* Dead state — dried soil cracks */}
-      {isDead && (
-        <>
-          <line x1="82" y1="131" x2="86" y2="135" stroke="rgba(60,40,25,0.5)" strokeWidth={0.5} />
-          <line x1="95" y1="132" x2="98" y2="134" stroke="rgba(60,40,25,0.5)" strokeWidth={0.5} />
-          <line x1="88" y1="130" x2="88" y2="134" stroke="rgba(60,40,25,0.4)" strokeWidth={0.4} />
-        </>
-      )}
+
       </g>
     </motion.svg>
   )
