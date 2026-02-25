@@ -102,7 +102,7 @@ export function TodayView() {
       {/* Today's Overview */}
       <motion.div variants={staggerItem}>
         <h2 className="text-lg font-semibold text-white/80 mb-4">Today&apos;s Overview</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
           <WeatherCard weather={weather} />
           <StatCard
             icon={<Dumbbell size={24} className="text-electric-light" />}
@@ -124,7 +124,6 @@ export function TodayView() {
             value={`${mealLogs.length}/7`}
             label="Meals tracked"
           />
-          <WaterPlantMini />
         </div>
       </motion.div>
 
@@ -152,7 +151,10 @@ export function TodayView() {
       {/* Nutrition */}
       <motion.div variants={staggerItem} className="space-y-5">
         <SectionHeader title="Nutrition" href="/meals" linkText="Full plan" />
-        <NutritionTips />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <NutritionTips />
+          <WaterPlantMini />
+        </div>
         <MealPlanCard plan={mealPlan} />
       </motion.div>
     </motion.div>

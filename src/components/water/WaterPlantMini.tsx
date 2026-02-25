@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { motion } from "framer-motion"
+import { Droplets } from "lucide-react"
 import { GlassCard } from "@/components/ui/GlassCard"
 import { Plant, getPlantState } from "./Plant"
 import { getToday } from "@/lib/utils"
@@ -10,6 +12,7 @@ const TARGET = 8
 export function WaterPlantMini() {
   const [glasses, setGlasses] = useState(0)
   const [loading, setLoading] = useState(true)
+  const [animateWater, setAnimateWater] = useState(false)
 
   const fetchWater = useCallback(async () => {
     try {
@@ -28,6 +31,8 @@ export function WaterPlantMini() {
   useEffect(() => { fetchWater() }, [fetchWater])
 
   async function handleTap() {
+    setAnimateWater(true)
+    setTimeout(() => setAnimateWater(false), 800)
     const prev = glasses
     setGlasses((g) => g + 1)
     try {
@@ -62,14 +67,24 @@ export function WaterPlantMini() {
   return (
     <GlassCard
       hover={false}
-      className="h-full text-center py-3 cursor-pointer active:scale-95 transition-transform"
+      className="h-full text-center py-5 cursor-pointer active:scale-95 transition-transform"
       onClick={handleTap}
     >
-      <div className="flex items-center justify-center mb-0.5">
-        <Plant state={state} size="sm" />
+      <div className="relative flex items-center justify-center mb-0.5">
+        <Plant state={state} size="lg" />
+        {animateWater && (
+          <motion.div
+            className="absolute top-0 left-1/2 -translate-x-1/2"
+            initial={{ y: -10, opacity: 1, scale: 1 }}
+            animate={{ y: 60, opacity: 0, scale: 0.5 }}
+            transition={{ duration: 0.7, ease: "easeIn" }}
+          >
+            <Droplets size={20} className="text-sky-400" />
+          </motion.div>
+        )}
       </div>
-      <p className="text-lg font-semibold text-white/90">{glasses}/{TARGET}</p>
-      <p className="text-[10px] font-mono text-white/30 mt-0.5">Tap to water</p>
+      <p className="text-xl font-semibold text-white/90 mt-2">{glasses}/{TARGET} glasses</p>
+      <p className="text-xs font-mono text-white/30 mt-1">Tap to water</p>
     </GlassCard>
   )
 }
