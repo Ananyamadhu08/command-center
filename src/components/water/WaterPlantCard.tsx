@@ -7,6 +7,7 @@ import { GlassCard } from "@/components/ui/GlassCard"
 import { GlowButton } from "@/components/ui/GlowButton"
 import { Plant, getPlantState, type PlantState } from "./Plant"
 import { getToday } from "@/lib/utils"
+import { WaterAnimation } from "./WaterAnimation"
 
 const TARGET = 8
 const STATE_LABELS: Record<PlantState, string> = {
@@ -90,17 +91,7 @@ export function WaterPlantCard() {
         <div className="relative">
           <Plant state={state} size="lg" />
 
-          {/* Water drop animation */}
-          {animateWater && (
-            <motion.div
-              className="absolute top-0 left-1/2 -translate-x-1/2"
-              initial={{ y: -10, opacity: 1, scale: 1 }}
-              animate={{ y: 60, opacity: 0, scale: 0.5 }}
-              transition={{ duration: 0.7, ease: "easeIn" }}
-            >
-              <Droplets size={20} className="text-sky-400" />
-            </motion.div>
-          )}
+          <WaterAnimation active={animateWater} />
         </div>
 
         {/* Status */}
