@@ -84,69 +84,43 @@ function CodeHero(_props: { item: MindItem }) {
   )
 }
 
-function HighlightHero({ item }: { item: MindItem }) {
+function HighlightHero(_props: { item: MindItem }) {
   return (
-    <>
-      {/* Decorative quote mark */}
-      <div
-        className="absolute top-1 left-4 text-[120px] leading-none text-amber/[0.07] select-none"
-        style={{ fontFamily: "Georgia, serif" }}
-      >
-        &ldquo;
-      </div>
-      {/* Quote text as visual */}
-      <div className="absolute inset-0 flex items-center px-8 pt-6">
-        <p
-          className="text-[14px] text-white/[0.25] leading-[1.8] italic line-clamp-4 select-none"
-          style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
-        >
-          {item.content}
-        </p>
-      </div>
-      {/* Warm glow */}
-      <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-60 h-32 bg-amber/[0.05] blur-[60px] rounded-full" />
-    </>
+    <img
+      src="/mind/highlight-default.png"
+      alt=""
+      className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700 ease-out"
+    />
   )
 }
 
-function ThoughtHero({ item }: { item: MindItem }) {
+function ThoughtHero(_props: { item: MindItem }) {
   return (
-    <>
-      {/* Nebula orbs */}
-      <div className="absolute top-6 right-8 w-32 h-32 rounded-full bg-pink-500/[0.07] blur-[45px]" />
-      <div className="absolute bottom-4 left-6 w-28 h-28 rounded-full bg-cosmic/[0.07] blur-[45px]" />
-      {/* Star particles */}
-      <div className="absolute top-10 left-14 w-1 h-1 rounded-full bg-white/[0.08]" />
-      <div className="absolute top-[72px] right-[72px] w-1.5 h-1.5 rounded-full bg-pink-300/[0.12]" />
-      <div className="absolute bottom-14 left-[33%] w-1 h-1 rounded-full bg-cosmic-light/[0.1]" />
-      <div className="absolute top-16 left-[55%] w-0.5 h-0.5 rounded-full bg-white/[0.15]" />
-      {/* Thought preview */}
-      <div className="absolute inset-0 flex items-center px-7">
-        <p className="text-[13px] text-white/[0.15] leading-[1.8] line-clamp-4 select-none">
-          {item.content}
-        </p>
-      </div>
-    </>
+    <img
+      src="/mind/thought-default.png"
+      alt=""
+      className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700 ease-out"
+    />
   )
 }
 
-function VisualHero({ item }: { item: MindItem }) {
-  if (item.image_url) {
-    return (
-      <img
-        src={item.image_url}
-        alt={item.title ?? "Saved"}
-        className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700 ease-out"
-      />
-    )
-  }
+function ImageHero({ item }: { item: MindItem }) {
   return (
-    <>
-      <div className="absolute inset-0 flex items-center justify-center">
-        <ImageIcon size={52} className="text-white/[0.04]" />
-      </div>
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-44 h-44 rounded-full bg-teal-500/[0.04] blur-[70px]" />
-    </>
+    <img
+      src={item.image_url || "/mind/image-default.png"}
+      alt={item.title ?? "Saved"}
+      className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700 ease-out"
+    />
+  )
+}
+
+function ScreenshotHero({ item }: { item: MindItem }) {
+  return (
+    <img
+      src={item.image_url || "/mind/image-default.png"}
+      alt={item.title ?? "Saved"}
+      className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700 ease-out"
+    />
   )
 }
 
@@ -155,8 +129,8 @@ const HERO_RENDERERS: Record<MindItemType, React.FC<{ item: MindItem }>> = {
   code: CodeHero,
   highlight: HighlightHero,
   thought: ThoughtHero,
-  image: VisualHero,
-  screenshot: VisualHero,
+  image: ImageHero,
+  screenshot: ScreenshotHero,
 }
 
 /* ── Noise texture (inline SVG) ── */
