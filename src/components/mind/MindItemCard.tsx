@@ -119,7 +119,7 @@ function ScreenshotHero({ item }: { item: MindItem }) {
     <img
       src={item.image_url || "/mind/screenshot-default.png"}
       alt={item.title ?? "Saved"}
-      className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700 ease-out"
+      className="absolute inset-0 w-full h-full object-cover object-[center_30%] group-hover:scale-[1.04] transition-transform duration-700 ease-out"
     />
   )
 }
