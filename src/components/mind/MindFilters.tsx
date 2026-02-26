@@ -65,16 +65,16 @@ export function MindFilters({
 
       {/* Tag cloud */}
       {tags.length > 0 && (
-        <div className="flex flex-wrap gap-1">
+        <div className="flex flex-wrap gap-2">
           {tags.slice(0, 20).map(({ tag, count }) => (
             <button
               key={tag}
               onClick={() => onTagChange(activeTag === tag ? null : tag)}
               className={cn(
-                "px-2 py-0.5 rounded text-[10px] font-mono transition-all duration-200",
+                "px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all duration-200",
                 activeTag === tag
-                  ? "bg-cosmic/20 text-cosmic-light border border-cosmic/30"
-                  : "text-white/20 bg-white/[0.03] hover:bg-white/[0.06] hover:text-white/35 border border-transparent",
+                  ? "bg-purple-500/30 text-purple-200 border border-purple-400/40"
+                  : "bg-purple-500/15 text-purple-300/80 border border-purple-400/20 hover:bg-purple-500/25 hover:text-purple-200",
               )}
             >
               {tag}
