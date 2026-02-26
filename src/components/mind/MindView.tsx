@@ -59,7 +59,7 @@ export function MindView() {
 
       {/* Search */}
       <motion.div variants={staggerItem} className="space-y-3">
-        <p className="text-[10px] font-mono text-white/25 text-center mb-4">
+        <p className="text-[12px] font-mono text-white/25 text-center mb-4">
           Save everything. Organize nothing. Find anything.
         </p>
 
