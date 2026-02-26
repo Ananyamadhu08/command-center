@@ -32,32 +32,32 @@ const TYPE_THEME: Record<
 > = {
   article: {
     hero: "from-[#0c1445] via-[#14105a] to-[#0d2847]",
-    badge: "bg-electric/20 text-electric-light/80 border-electric/20",
+    badge: "bg-blue-500/80 text-white border-blue-400/50 shadow-lg shadow-blue-500/25",
     glow: "hover:shadow-[0_8px_48px_rgba(59,130,246,0.12)]",
   },
   code: {
     hero: "from-[#060e06] via-[#0a160a] to-[#040d08]",
-    badge: "bg-emerald-500/20 text-emerald-300/80 border-emerald-500/20",
+    badge: "bg-emerald-500/80 text-white border-emerald-400/50 shadow-lg shadow-emerald-500/25",
     glow: "hover:shadow-[0_8px_48px_rgba(52,211,153,0.10)]",
   },
   highlight: {
     hero: "from-[#2d1a00] via-[#3a2400] to-[#1f1500]",
-    badge: "bg-amber/20 text-amber-light/80 border-amber/20",
+    badge: "bg-amber-500/80 text-white border-amber-400/50 shadow-lg shadow-amber-500/25",
     glow: "hover:shadow-[0_8px_48px_rgba(245,158,11,0.12)]",
   },
   thought: {
     hero: "from-[#1a0a2e] via-[#2a1042] to-[#150825]",
-    badge: "bg-pink-500/20 text-pink-300/80 border-pink-500/20",
+    badge: "bg-pink-500/80 text-white border-pink-400/50 shadow-lg shadow-pink-500/25",
     glow: "hover:shadow-[0_8px_48px_rgba(236,72,153,0.10)]",
   },
   image: {
     hero: "from-[#0a1a15] via-[#0f2520] to-[#051510]",
-    badge: "bg-teal-500/20 text-teal-300/80 border-teal-500/20",
+    badge: "bg-teal-500/80 text-white border-teal-400/50 shadow-lg shadow-teal-500/25",
     glow: "hover:shadow-[0_8px_48px_rgba(20,184,166,0.10)]",
   },
   screenshot: {
     hero: "from-[#0f0f15] via-[#141420] to-[#0a0a12]",
-    badge: "bg-white/10 text-white/50 border-white/10",
+    badge: "bg-slate-500/80 text-white border-slate-400/50 shadow-lg shadow-slate-500/25",
     glow: "hover:shadow-[0_8px_48px_rgba(255,255,255,0.04)]",
   },
 }
@@ -236,13 +236,13 @@ export function MindItemCard({ item, onClick, index = 0 }: MindItemCardProps) {
               {item.tags.slice(0, 3).map((tag) => (
                 <span
                   key={tag}
-                  className="text-[9px] font-mono text-white/[0.16] bg-white/[0.03] px-1.5 py-0.5 rounded"
+                  className="text-[9px] font-mono text-white/50 bg-white/[0.08] px-1.5 py-0.5 rounded"
                 >
                   {tag}
                 </span>
               ))}
               {item.tags.length > 3 && (
-                <span className="text-[9px] font-mono text-white/10">
+                <span className="text-[9px] font-mono text-white/40">
                   +{item.tags.length - 3}
                 </span>
               )}
@@ -250,14 +250,14 @@ export function MindItemCard({ item, onClick, index = 0 }: MindItemCardProps) {
           )}
 
           {item.source_domain && (
-            <div className="flex items-center gap-1 text-[9px] text-white/[0.13]">
+            <div className="flex items-center gap-1 text-[9px] text-white/40">
               <Globe size={8} />
               <span className="truncate">{item.source_domain}</span>
             </div>
           )}
 
           {/* Timestamp */}
-          <span className="text-[9px] font-mono text-white/15">
+          <span className="text-[9px] font-mono text-white/35">
             {formatRelativeTime(item.created_at)}
           </span>
         </div>
