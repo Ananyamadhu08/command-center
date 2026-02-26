@@ -75,7 +75,7 @@ function ArticleHero(_props: { item: MindItem }) {
     <img
       src="/mind/article-default.png"
       alt=""
-      className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:scale-[1.04] transition-transform duration-700 ease-out"
+      className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700 ease-out"
     />
   )
 }
@@ -85,7 +85,7 @@ function CodeHero(_props: { item: MindItem }) {
     <img
       src="/mind/code-default.png"
       alt=""
-      className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:scale-[1.04] transition-transform duration-700 ease-out"
+      className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700 ease-out"
     />
   )
 }
@@ -95,7 +95,7 @@ function HighlightHero(_props: { item: MindItem }) {
     <img
       src="/mind/highlight-default.png"
       alt=""
-      className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:scale-[1.04] transition-transform duration-700 ease-out"
+      className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700 ease-out"
     />
   )
 }
@@ -105,7 +105,7 @@ function ThoughtHero(_props: { item: MindItem }) {
     <img
       src="/mind/thought-default.png"
       alt=""
-      className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:scale-[1.04] transition-transform duration-700 ease-out"
+      className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700 ease-out"
     />
   )
 }
@@ -115,7 +115,7 @@ function ImageHero({ item }: { item: MindItem }) {
     <img
       src={item.image_url || "/mind/image-default.png"}
       alt={item.title ?? "Saved"}
-      className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:scale-[1.04] transition-transform duration-700 ease-out"
+      className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700 ease-out"
     />
   )
 }
@@ -125,7 +125,7 @@ function ScreenshotHero({ item }: { item: MindItem }) {
     <img
       src={item.image_url || "/mind/screenshot-default.png"}
       alt={item.title ?? "Saved"}
-      className="absolute inset-0 w-full h-full object-cover object-[center_30%] opacity-50 group-hover:scale-[1.04] transition-transform duration-700 ease-out"
+      className="absolute inset-0 w-full h-full object-cover object-[center_30%] group-hover:scale-[1.04] transition-transform duration-700 ease-out"
     />
   )
 }
