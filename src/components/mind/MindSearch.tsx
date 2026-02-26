@@ -85,65 +85,99 @@ export function MindSearch({ onItemClick }: MindSearchProps) {
 
   return (
     <div className="relative">
-      {/* Search container — glow is pure box-shadow, no extra divs */}
-      <div
-        className={cn(
-          "relative flex items-center rounded-2xl transition-all duration-500",
-          "border",
-          focused
-            ? "border-cosmic-light/30 bg-white/[0.05] shadow-[0_0_30px_rgba(139,92,246,0.15),0_0_60px_rgba(139,92,246,0.08)]"
-            : "border-white/[0.08] bg-white/[0.03] hover:border-white/[0.12] shadow-[0_0_0_rgba(139,92,246,0)]",
-        )}
-      >
-        {/* Search icon */}
-        <div className="pl-5 pr-2 py-3.5 flex items-center">
-          {searching ? (
-            <Loader2 size={18} className="text-cosmic-light animate-spin" />
-          ) : (
-            <Search
-              size={18}
-              className={cn(
-                "transition-all duration-500",
-                focused ? "text-cosmic-light" : "text-white/25",
-              )}
-            />
-          )}
-        </div>
-
-        {/* Input */}
-        <input
-          ref={inputRef}
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setTimeout(() => setFocused(false), 200)}
-          placeholder="Search your mind... (natural language works)"
-          style={{ outline: "none", boxShadow: "none" }}
+      {/* Animated gradient border wrapper */}
+      <div className="relative rounded-2xl p-[1px]">
+        {/* Flowing gradient border */}
+        <div
           className={cn(
-            "flex-1 bg-transparent py-3.5 pr-4 text-sm text-white/90 font-medium",
-            "placeholder:text-white/20 placeholder:font-normal",
+            "absolute inset-0 rounded-2xl transition-opacity duration-500",
+            focused ? "opacity-100" : "opacity-0",
           )}
+          style={{
+            background: "linear-gradient(90deg, #ec4899, #8b5cf6, #3b82f6, #8b5cf6, #ec4899, #8b5cf6, #3b82f6, #8b5cf6, #ec4899)",
+            backgroundSize: "300% 100%",
+            animation: "gradient-flow 4s linear infinite",
+          }}
         />
 
-        {/* Clear button */}
-        {query && (
-          <button
-            onClick={() => { setQuery(""); setResults([]); inputRef.current?.focus() }}
-            className="pr-4 text-white/25 hover:text-white/60 transition-colors duration-200"
-          >
-            <X size={15} />
-          </button>
+        {/* Blurred glow behind */}
+        <div
+          className={cn(
+            "absolute inset-[-6px] rounded-3xl blur-xl transition-opacity duration-500",
+            focused ? "opacity-30" : "opacity-0",
+          )}
+          style={{
+            background: "linear-gradient(90deg, #ec4899, #8b5cf6, #3b82f6, #8b5cf6, #ec4899, #8b5cf6, #3b82f6, #8b5cf6, #ec4899)",
+            backgroundSize: "300% 100%",
+            animation: "gradient-flow 4s linear infinite",
+          }}
+        />
+
+        {/* Idle border */}
+        {!focused && (
+          <div
+            className="absolute inset-0 rounded-2xl"
+            style={{ background: "rgba(255,255,255,0.08)" }}
+          />
         )}
 
-        {/* Keyboard shortcut hint */}
-        {!query && !focused && (
-          <div className="pr-4 flex items-center gap-1">
-            <kbd className="text-[10px] font-mono text-white/15 bg-white/[0.04] border border-white/[0.06] px-1.5 py-0.5 rounded">
-              /
-            </kbd>
+        {/* Inner content */}
+        <div
+          className={cn(
+            "relative flex items-center rounded-[15px] transition-colors duration-500",
+            focused ? "bg-space-900" : "bg-white/[0.03]",
+          )}
+        >
+          {/* Search icon */}
+          <div className="pl-5 pr-2 py-3.5 flex items-center">
+            {searching ? (
+              <Loader2 size={18} className="text-cosmic-light animate-spin" />
+            ) : (
+              <Search
+                size={18}
+                className={cn(
+                  "transition-all duration-500",
+                  focused ? "text-cosmic-light" : "text-white/25",
+                )}
+              />
+            )}
           </div>
-        )}
+
+          {/* Input */}
+          <input
+            ref={inputRef}
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setTimeout(() => setFocused(false), 200)}
+            placeholder="Search your mind... (natural language works)"
+            style={{ outline: "none", boxShadow: "none" }}
+            className={cn(
+              "flex-1 bg-transparent py-3.5 pr-4 text-sm text-white/90 font-medium",
+              "placeholder:text-white/20 placeholder:font-normal",
+            )}
+          />
+
+          {/* Clear button */}
+          {query && (
+            <button
+              onClick={() => { setQuery(""); setResults([]); inputRef.current?.focus() }}
+              className="pr-4 text-white/25 hover:text-white/60 transition-colors duration-200"
+            >
+              <X size={15} />
+            </button>
+          )}
+
+          {/* Keyboard shortcut hint */}
+          {!query && !focused && (
+            <div className="pr-4 flex items-center gap-1">
+              <kbd className="text-[10px] font-mono text-white/15 bg-white/[0.04] border border-white/[0.06] px-1.5 py-0.5 rounded">
+                /
+              </kbd>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Hint text */}
