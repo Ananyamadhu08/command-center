@@ -4,6 +4,7 @@ import React, { createContext, useContext, useMemo, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { motion } from "framer-motion"
+import { Rocket } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { NAV_ITEMS } from "@/lib/routes"
 
@@ -81,9 +82,21 @@ export function Sidebar() {
       <div className="flex h-full w-full flex-col border-r border-white/[0.06] py-6">
         {/* Logo */}
         <div className={cn("flex items-center mb-8", open ? "px-4 gap-3" : "px-0 justify-center")}>
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cosmic to-electric flex items-center justify-center text-white text-sm font-bold shrink-0">
-            C
-          </div>
+          <svg width="0" height="0" className="absolute">
+            <defs>
+              <linearGradient id="sidebar-icon-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#ec4899" />
+                <stop offset="50%" stopColor="#8b5cf6" />
+                <stop offset="100%" stopColor="#3b82f6" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <Rocket
+            size={24}
+            strokeWidth={1.75}
+            className="shrink-0"
+            style={{ stroke: "url(#sidebar-icon-gradient)" }}
+          />
           <Collapsible open={open} className="flex flex-col overflow-hidden">
             <span className="text-sm font-semibold text-white/80 tracking-wide">
               Command Center
@@ -117,10 +130,8 @@ export function Sidebar() {
                   <Icon
                     size={18}
                     strokeWidth={1.75}
-                    className={cn(
-                      "shrink-0 transition-colors",
-                      isActive ? "text-cosmic-light" : "text-white/30 group-hover:text-white/50",
-                    )}
+                    className="shrink-0"
+                    style={{ stroke: "url(#sidebar-icon-gradient)" }}
                   />
                   <Collapsible open={open} className="text-sm font-medium flex-1 text-left">
                     {item.label}
