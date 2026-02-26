@@ -89,10 +89,7 @@ export function MindSearch({ onItemClick }: MindSearchProps) {
       <div className="relative rounded-2xl p-[1px]">
         {/* Flowing gradient border */}
         <div
-          className={cn(
-            "absolute inset-0 rounded-2xl transition-opacity duration-500",
-            focused ? "opacity-100" : "opacity-0",
-          )}
+          className="absolute inset-0 rounded-2xl"
           style={{
             background: "linear-gradient(90deg, #ec4899, #8b5cf6, #3b82f6, #8b5cf6, #ec4899, #8b5cf6, #3b82f6, #8b5cf6, #ec4899)",
             backgroundSize: "300% 100%",
@@ -102,10 +99,7 @@ export function MindSearch({ onItemClick }: MindSearchProps) {
 
         {/* Blurred glow behind */}
         <div
-          className={cn(
-            "absolute inset-[-6px] rounded-3xl blur-xl transition-opacity duration-500",
-            focused ? "opacity-30" : "opacity-0",
-          )}
+          className="absolute inset-[-6px] rounded-3xl blur-xl opacity-30"
           style={{
             background: "linear-gradient(90deg, #ec4899, #8b5cf6, #3b82f6, #8b5cf6, #ec4899, #8b5cf6, #3b82f6, #8b5cf6, #ec4899)",
             backgroundSize: "300% 100%",
@@ -113,19 +107,11 @@ export function MindSearch({ onItemClick }: MindSearchProps) {
           }}
         />
 
-        {/* Idle border */}
-        {!focused && (
-          <div
-            className="absolute inset-0 rounded-2xl"
-            style={{ background: "rgba(255,255,255,0.08)" }}
-          />
-        )}
-
         {/* Inner content */}
         <div
           className={cn(
             "relative flex items-center rounded-[15px] transition-colors duration-500",
-            focused ? "bg-space-900" : "bg-white/[0.03]",
+            focused ? "bg-[#0a0a1a]" : "bg-[#0c0c1e]",
           )}
         >
           {/* Search icon */}
