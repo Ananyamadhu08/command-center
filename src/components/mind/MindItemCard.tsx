@@ -117,7 +117,7 @@ function ImageHero({ item }: { item: MindItem }) {
 function ScreenshotHero({ item }: { item: MindItem }) {
   return (
     <img
-      src={item.image_url || "/mind/image-default.png"}
+      src={item.image_url || "/mind/screenshot-default.png"}
       alt={item.title ?? "Saved"}
       className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700 ease-out"
     />
