@@ -26,8 +26,8 @@ export function ProjectListView({ projects, tasks, onSelectProject, onOpenAddMod
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <FolderOpen size={22} strokeWidth={1.75} style={{ stroke: "url(#icon-gradient)" }} />
-          <h2 className="text-lg font-semibold text-white/80">Projects</h2>
+          <FolderOpen size={26} strokeWidth={1.75} style={{ stroke: "url(#icon-gradient)" }} />
+          <h2 className="text-2xl font-semibold text-white/90">Projects</h2>
         </div>
         <GlowButton variant="cosmic" size="sm" onClick={onOpenAddModal}>
           + Add Project

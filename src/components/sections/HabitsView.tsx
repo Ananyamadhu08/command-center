@@ -161,8 +161,8 @@ export function HabitsView() {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
       <div className="flex items-center gap-3">
-        <CheckCircle size={22} strokeWidth={1.75} style={{ stroke: "url(#icon-gradient)" }} />
-        <h2 className="text-lg font-semibold text-white/80">Habits & Tracking</h2>
+        <CheckCircle size={26} strokeWidth={1.75} style={{ stroke: "url(#icon-gradient)" }} />
+        <h2 className="text-2xl font-semibold text-white/90">Habits & Tracking</h2>
       </div>
 
       <ReadingTracker onLog={handleReadingLog} recentLogs={readingLogs} />

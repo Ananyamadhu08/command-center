@@ -48,8 +48,8 @@ export function NotesView() {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
       <div className="flex items-center gap-3">
-        <FileText size={22} strokeWidth={1.75} style={{ stroke: "url(#icon-gradient)" }} />
-        <h2 className="text-lg font-semibold text-white/80">Quick Notes</h2>
+        <FileText size={26} strokeWidth={1.75} style={{ stroke: "url(#icon-gradient)" }} />
+        <h2 className="text-2xl font-semibold text-white/90">Quick Notes</h2>
       </div>
 
       <GlassCard glow="cosmic">

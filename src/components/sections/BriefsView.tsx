@@ -24,8 +24,8 @@ export function BriefsView() {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
       <div className="flex items-center gap-3">
-        <Zap size={22} strokeWidth={1.75} style={{ stroke: "url(#icon-gradient)" }} />
-        <h2 className="text-lg font-semibold text-white/80">Tech News</h2>
+        <Zap size={26} strokeWidth={1.75} style={{ stroke: "url(#icon-gradient)" }} />
+        <h2 className="text-2xl font-semibold text-white/90">Tech News</h2>
       </div>
 
       {loading ? (

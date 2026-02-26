@@ -49,11 +49,11 @@ export function MindView() {
       <motion.div variants={staggerItem}>
         <div className="flex items-center gap-3">
           <Brain
-            size={22}
+            size={26}
             strokeWidth={1.75}
             style={{ stroke: "url(#icon-gradient)" }}
           />
-          <h1 className="text-xl font-semibold text-white/90">The Mind</h1>
+          <h1 className="text-2xl font-semibold text-white/90">The Mind</h1>
         </div>
       </motion.div>
 

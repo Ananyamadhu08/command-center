@@ -38,9 +38,9 @@ export function MorningBriefPage({ brief }: MorningBriefPageProps) {
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
       <div className="flex items-center gap-3 mb-3">
-        <Sun size={22} strokeWidth={1.75} style={{ stroke: "url(#icon-gradient)" }} />
+        <Sun size={26} strokeWidth={1.75} style={{ stroke: "url(#icon-gradient)" }} />
         <div>
-          <h1 className="text-xl font-semibold text-white/90">{brief.title}</h1>
+          <h1 className="text-2xl font-semibold text-white/90">{brief.title}</h1>
           <p className="text-xs font-mono text-white/30">
             {new Date(brief.created_at).toLocaleDateString("en-IN", {
               weekday: "long",

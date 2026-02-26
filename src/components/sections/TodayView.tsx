@@ -1,39 +1,63 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { motion } from "framer-motion"
-import { Cloud, Dumbbell, BookOpen, CheckCircle, ArrowRight, Sun } from "lucide-react"
-import { GlassCard } from "@/components/ui/GlassCard"
-import { BriefCard, PendingBriefCard } from "@/components/briefs/BriefCard"
-import { MealPlanCard } from "@/components/meals/MealPlanCard"
-import { NutritionTips } from "@/components/meals/NutritionTips"
-import { HabitTracker } from "@/components/habits/HabitTracker"
-import { WaterPlantMini } from "@/components/water/WaterPlantMini"
-import { getTodaysMealPlan } from "@/lib/nutrition"
-import { staggerContainer, staggerItem } from "@/lib/animations"
-import { useTodayData, type WeatherData } from "@/hooks/use-today-data"
-import type { BriefType } from "@/lib/types"
+import Link from "next/link";
+import { motion } from "framer-motion";
+import {
+  Cloud,
+  Dumbbell,
+  BookOpen,
+  CheckCircle,
+  ArrowRight,
+  Sun,
+} from "lucide-react";
+import { GlassCard } from "@/components/ui/GlassCard";
+import { BriefCard, PendingBriefCard } from "@/components/briefs/BriefCard";
+import { MealPlanCard } from "@/components/meals/MealPlanCard";
+import { NutritionTips } from "@/components/meals/NutritionTips";
+import { HabitTracker } from "@/components/habits/HabitTracker";
+import { WaterPlantMini } from "@/components/water/WaterPlantMini";
+import { getTodaysMealPlan } from "@/lib/nutrition";
+import { staggerContainer, staggerItem } from "@/lib/animations";
+import { useTodayData, type WeatherData } from "@/hooks/use-today-data";
+import type { BriefType } from "@/lib/types";
 
 const WEATHER_ICONS: Record<string, string> = {
-  "01d": "\u2600\uFE0F", "01n": "\uD83C\uDF19",
-  "02d": "\u26C5", "02n": "\u2601\uFE0F",
-  "03d": "\u2601\uFE0F", "03n": "\u2601\uFE0F",
-  "04d": "\u2601\uFE0F", "04n": "\u2601\uFE0F",
-  "09d": "\uD83C\uDF27\uFE0F", "09n": "\uD83C\uDF27\uFE0F",
-  "10d": "\uD83C\uDF26\uFE0F", "10n": "\uD83C\uDF27\uFE0F",
-  "11d": "\u26C8\uFE0F", "11n": "\u26C8\uFE0F",
-  "13d": "\u2744\uFE0F", "13n": "\u2744\uFE0F",
-  "50d": "\uD83C\uDF2B\uFE0F", "50n": "\uD83C\uDF2B\uFE0F",
-}
+  "01d": "\u2600\uFE0F",
+  "01n": "\uD83C\uDF19",
+  "02d": "\u26C5",
+  "02n": "\u2601\uFE0F",
+  "03d": "\u2601\uFE0F",
+  "03n": "\u2601\uFE0F",
+  "04d": "\u2601\uFE0F",
+  "04n": "\u2601\uFE0F",
+  "09d": "\uD83C\uDF27\uFE0F",
+  "09n": "\uD83C\uDF27\uFE0F",
+  "10d": "\uD83C\uDF26\uFE0F",
+  "10n": "\uD83C\uDF27\uFE0F",
+  "11d": "\u26C8\uFE0F",
+  "11n": "\u26C8\uFE0F",
+  "13d": "\u2744\uFE0F",
+  "13n": "\u2744\uFE0F",
+  "50d": "\uD83C\uDF2B\uFE0F",
+  "50n": "\uD83C\uDF2B\uFE0F",
+};
 
-const BRIEF_TYPES: BriefType[] = ["morning_briefing", "tech_news", "evening_review"]
+const BRIEF_TYPES: BriefType[] = [
+  "morning_briefing",
+  "tech_news",
+  "evening_review",
+];
 
 function WeatherCard({ weather }: { weather: WeatherData | null }) {
   return (
     <GlassCard hover={false} className="h-full text-center py-4">
       <div className="h-6 flex items-center justify-center mb-1">
         {weather ? (
-          <span className="text-2xl leading-none">{WEATHER_ICONS[weather.icon] ?? <Cloud size={24} className="text-white/60" />}</span>
+          <span className="text-2xl leading-none">
+            {WEATHER_ICONS[weather.icon] ?? (
+              <Cloud size={24} className="text-white/60" />
+            )}
+          </span>
         ) : (
           <Cloud size={24} className="text-white/60" />
         )}
@@ -45,7 +69,7 @@ function WeatherCard({ weather }: { weather: WeatherData | null }) {
         {weather?.condition ?? "Loading..."}
       </p>
     </GlassCard>
-  )
+  );
 }
 
 function StatCard({
@@ -53,23 +77,35 @@ function StatCard({
   value,
   label,
 }: {
-  icon: React.ReactNode
-  value: string
-  label: string
+  icon: React.ReactNode;
+  value: string;
+  label: string;
 }) {
   return (
     <GlassCard hover={false} className="h-full text-center py-4">
       <div className="h-6 flex items-center justify-center mb-1">{icon}</div>
       <p className="text-lg font-semibold text-white/90">{value}</p>
-      <p className="text-[10px] font-mono text-white/30 mt-0.5 truncate">{label}</p>
+      <p className="text-[10px] font-mono text-white/30 mt-0.5 truncate">
+        {label}
+      </p>
     </GlassCard>
-  )
+  );
 }
 
-function SectionHeader({ title, href, linkText }: { title: string; href: string; linkText: string }) {
+function SectionHeader({
+  title,
+  href,
+  linkText,
+}: {
+  title: string;
+  href: string;
+  linkText: string;
+}) {
   return (
     <div className="flex items-center justify-between mb-4">
-      <h3 className="text-xs font-mono text-white/30 uppercase tracking-wider">{title}</h3>
+      <h3 className="text-xs font-mono text-white/30 uppercase tracking-wider">
+        {title}
+      </h3>
       <Link
         href={href}
         className="text-[10px] text-cosmic-light/50 hover:text-cosmic-light transition-colors"
@@ -77,7 +113,7 @@ function SectionHeader({ title, href, linkText }: { title: string; href: string;
         {linkText} <ArrowRight size={10} className="inline ml-0.5" />
       </Link>
     </div>
-  )
+  );
 }
 
 export function TodayView() {
@@ -93,17 +129,28 @@ export function TodayView() {
     weather,
     briefsByType,
     handleHabitToggle,
-  } = useTodayData()
+  } = useTodayData();
 
-  const mealPlan = getTodaysMealPlan()
+  const mealPlan = getTodaysMealPlan();
 
   return (
-    <motion.div variants={staggerContainer} initial="hidden" animate="show" className="space-y-6">
+    <motion.div
+      variants={staggerContainer}
+      initial="hidden"
+      animate="show"
+      className="space-y-6"
+    >
       {/* Today's Overview */}
       <motion.div variants={staggerItem}>
         <div className="flex items-center gap-3 mb-4">
-          <Sun size={22} strokeWidth={1.75} style={{ stroke: "url(#icon-gradient)" }} />
-          <h2 className="text-lg font-semibold text-white/80">Today&apos;s Overview</h2>
+          <Sun
+            size={26}
+            strokeWidth={1.75}
+            style={{ stroke: "url(#icon-gradient)" }}
+          />
+          <h2 className="text-2xl font-semibold text-white/90">
+            Today&apos;s Overview
+          </h2>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
           <WeatherCard weather={weather} />
@@ -135,12 +182,12 @@ export function TodayView() {
         <SectionHeader title="Briefs" href="/briefs" linkText="View all" />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {BRIEF_TYPES.map((type) => {
-            const brief = briefsByType.get(type)
+            const brief = briefsByType.get(type);
             return brief ? (
               <BriefCard key={type} brief={brief} />
             ) : (
               <PendingBriefCard key={type} type={type} />
-            )
+            );
           })}
         </div>
       </motion.div>
@@ -148,7 +195,11 @@ export function TodayView() {
       {/* Habits */}
       <motion.div variants={staggerItem}>
         <SectionHeader title="Habits" href="/habits" linkText="Details" />
-        <HabitTracker habits={habits} todayLogs={habitLogs} onToggle={handleHabitToggle} />
+        <HabitTracker
+          habits={habits}
+          todayLogs={habitLogs}
+          onToggle={handleHabitToggle}
+        />
       </motion.div>
 
       {/* Nutrition */}
@@ -161,5 +212,5 @@ export function TodayView() {
         <MealPlanCard plan={mealPlan} />
       </motion.div>
     </motion.div>
-  )
+  );
 }
