@@ -158,16 +158,6 @@ export function MindSearch({ onItemClick }: MindSearchProps) {
         </div>
       </div>
 
-      {/* Hint text */}
-      {!focused && !query && (
-        <div className="flex items-center gap-1.5 mt-2.5 ml-1">
-          <Sparkles size={10} className="text-cosmic-light/40" />
-          <span className="text-[10px] text-white/20 font-mono tracking-wide">
-            Semantic search — describe what you remember, not exact words
-          </span>
-        </div>
-      )}
-
       {/* Search results dropdown */}
       <AnimatePresence>
         {showDropdown && (
