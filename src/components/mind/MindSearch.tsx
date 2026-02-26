@@ -93,7 +93,7 @@ export function MindSearch({ onItemClick }: MindSearchProps) {
           style={{
             background: "linear-gradient(90deg, #ec4899, #8b5cf6, #3b82f6, #8b5cf6, #ec4899, #8b5cf6, #3b82f6, #8b5cf6, #ec4899)",
             backgroundSize: "300% 100%",
-            animation: "gradient-flow 8s linear infinite",
+            animation: "gradient-flow 12s linear infinite",
           }}
         />
 
@@ -103,7 +103,7 @@ export function MindSearch({ onItemClick }: MindSearchProps) {
           style={{
             background: "linear-gradient(90deg, #ec4899, #8b5cf6, #3b82f6, #8b5cf6, #ec4899, #8b5cf6, #3b82f6, #8b5cf6, #ec4899)",
             backgroundSize: "300% 100%",
-            animation: "gradient-flow 8s linear infinite",
+            animation: "gradient-flow 12s linear infinite",
           }}
         />
 
