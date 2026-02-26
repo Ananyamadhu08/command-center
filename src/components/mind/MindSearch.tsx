@@ -114,12 +114,12 @@ export function MindSearch({ onItemClick }: MindSearchProps) {
             focused ? "bg-[#0a0a1a]" : "bg-[#0c0c1e]",
           )}
         >
-          {/* Search icon */}
+          {/* Icon */}
           <div className="pl-5 pr-2 py-3.5 flex items-center">
             {searching ? (
               <Loader2 size={18} className="text-cosmic-light animate-spin" />
             ) : (
-              <Search
+              <Sparkles
                 size={18}
                 className={cn(
                   "transition-all duration-500",
