@@ -188,19 +188,15 @@ export function TechBriefPage({ brief }: TechBriefPageProps) {
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-3">
-        <Zap size={22} strokeWidth={1.75} style={{ stroke: "url(#icon-gradient)" }} />
-        <div className="flex-1">
-          <h1 className="text-xl font-semibold text-white/90">{brief.title}</h1>
-          <p className="text-xs font-mono text-white/30">
-            {newsCount + discussions.length} stories {"\u00B7"} {hotTakes.length} hot takes {"\u00B7"}{" "}
-            {new Date(brief.created_at).toLocaleDateString("en-IN", {
-              weekday: "long",
-              day: "numeric",
-              month: "long",
-            })}
-          </p>
-        </div>
+      <div className="mb-3">
+        <p className="text-xs font-mono text-white/30">
+          {newsCount + discussions.length} stories {"\u00B7"} {hotTakes.length} hot takes {"\u00B7"}{" "}
+          {new Date(brief.created_at).toLocaleDateString("en-IN", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+          })}
+        </p>
       </div>
 
       {/* Tab Bar */}
