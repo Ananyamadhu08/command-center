@@ -74,34 +74,13 @@ function ArticleHero(_props: { item: MindItem }) {
   )
 }
 
-function CodeHero({ item }: { item: MindItem }) {
-  const preview = item.content?.split("\n").slice(0, 12).join("\n") ?? ""
-
+function CodeHero(_props: { item: MindItem }) {
   return (
-    <>
-      {/* Code as texture */}
-      <div className="absolute inset-0 p-4 overflow-hidden">
-        <pre className="text-[10px] font-mono leading-[1.7] text-emerald-400/[0.14] whitespace-pre select-none">
-          {preview}
-        </pre>
-      </div>
-      {/* Scan lines */}
-      <div
-        className="absolute inset-0 opacity-[0.02]"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(52,211,153,0.3) 3px, rgba(52,211,153,0.3) 4px)",
-        }}
-      />
-      {/* Center glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-28 bg-emerald-500/[0.03] blur-[60px] rounded-full" />
-      {/* Language chip */}
-      {item.language && (
-        <div className="absolute top-3 left-3 text-[8px] font-mono tracking-[0.2em] uppercase text-emerald-400/40 bg-emerald-500/[0.08] border border-emerald-500/10 px-2 py-0.5 rounded-md">
-          {item.language}
-        </div>
-      )}
-    </>
+    <img
+      src="/mind/code-default.png"
+      alt=""
+      className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700 ease-out"
+    />
   )
 }
 
