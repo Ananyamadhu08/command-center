@@ -3,10 +3,12 @@
 import { SidebarProvider, Sidebar } from "@/components/layout/Sidebar"
 import { Header } from "@/components/layout/Header"
 import { KeyboardNav } from "@/components/layout/KeyboardNav"
+import { IconGradientDef } from "@/components/ui/IconGradientDef"
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
+      <IconGradientDef />
       <div className="flex h-screen overflow-hidden">
         <Sidebar />
         <KeyboardNav />

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
+import { FileText } from "lucide-react"
 import { GlassCard } from "@/components/ui/GlassCard"
 import { GlowButton } from "@/components/ui/GlowButton"
 import { TextArea } from "@/components/ui/Input"
@@ -46,7 +47,10 @@ export function NotesView() {
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-      <h2 className="text-lg font-semibold text-white/80">Quick Notes</h2>
+      <div className="flex items-center gap-3">
+        <FileText size={22} strokeWidth={1.75} style={{ stroke: "url(#icon-gradient)" }} />
+        <h2 className="text-lg font-semibold text-white/80">Quick Notes</h2>
+      </div>
 
       <GlassCard glow="cosmic">
         <div className="space-y-3">

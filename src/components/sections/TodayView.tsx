@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { Cloud, Dumbbell, BookOpen, CheckCircle, ArrowRight } from "lucide-react"
+import { Cloud, Dumbbell, BookOpen, CheckCircle, ArrowRight, Sun } from "lucide-react"
 import { GlassCard } from "@/components/ui/GlassCard"
 import { BriefCard, PendingBriefCard } from "@/components/briefs/BriefCard"
 import { MealPlanCard } from "@/components/meals/MealPlanCard"
@@ -101,7 +101,10 @@ export function TodayView() {
     <motion.div variants={staggerContainer} initial="hidden" animate="show" className="space-y-6">
       {/* Today's Overview */}
       <motion.div variants={staggerItem}>
-        <h2 className="text-lg font-semibold text-white/80 mb-4">Today&apos;s Overview</h2>
+        <div className="flex items-center gap-3 mb-4">
+          <Sun size={22} strokeWidth={1.75} style={{ stroke: "url(#icon-gradient)" }} />
+          <h2 className="text-lg font-semibold text-white/80">Today&apos;s Overview</h2>
+        </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
           <WeatherCard weather={weather} />
           <StatCard

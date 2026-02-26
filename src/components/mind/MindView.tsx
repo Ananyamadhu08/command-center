@@ -45,9 +45,7 @@ export function MindView() {
       {/* Header */}
       <motion.div variants={staggerItem}>
         <div className="flex items-center gap-3 mb-1">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-cosmic/30 to-electric/30 border border-cosmic/20 flex items-center justify-center">
-            <Brain size={16} className="text-cosmic-light/80" />
-          </div>
+          <Brain size={22} strokeWidth={1.75} style={{ stroke: "url(#icon-gradient)" }} />
           <div>
             <h1 className="text-xl font-semibold text-white/90">The Mind</h1>
             <p className="text-[10px] font-mono text-white/25 mt-0.5">

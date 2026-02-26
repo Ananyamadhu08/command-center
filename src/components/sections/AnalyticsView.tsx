@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
+import { BarChart3 } from "lucide-react"
 import { GlassCard } from "@/components/ui/GlassCard"
 import { StatCard } from "@/components/analytics/StatCard"
 import { VerticalBarChart } from "@/components/analytics/VerticalBarChart"
@@ -89,6 +90,10 @@ export function AnalyticsView() {
   return (
     <motion.div variants={staggerContainer} initial="hidden" animate="show" className="space-y-6">
       <motion.div variants={staggerItem}>
+        <div className="flex items-center gap-3 mb-4">
+          <BarChart3 size={22} strokeWidth={1.75} style={{ stroke: "url(#icon-gradient)" }} />
+          <h2 className="text-lg font-semibold text-white/80">Analytics</h2>
+        </div>
         <WeeklyScoreCard score={score} dateRange={getDateRange()} />
       </motion.div>
 

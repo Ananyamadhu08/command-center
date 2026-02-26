@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
+import { Utensils } from "lucide-react"
 import { MealPlanCard } from "@/components/meals/MealPlanCard"
 import { CookCard } from "@/components/meals/CookCard"
 import { TomorrowPrepCard } from "@/components/meals/TomorrowPrepCard"
@@ -39,7 +40,10 @@ export function MealsView() {
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-      <h2 className="text-lg font-semibold text-white/80">Meals & Nutrition</h2>
+      <div className="flex items-center gap-3">
+        <Utensils size={22} strokeWidth={1.75} style={{ stroke: "url(#icon-gradient)" }} />
+        <h2 className="text-lg font-semibold text-white/80">Meals & Nutrition</h2>
+      </div>
 
       {logSuccess && (
         <motion.div
