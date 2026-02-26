@@ -24,41 +24,47 @@ const TYPE_ICONS: Record<MindItemType, React.ElementType> = {
   screenshot: Monitor,
 }
 
-/* ── Per-type visual theme ── */
+/* ── Per-type accent color ── */
 
-const TYPE_THEME: Record<
+const TYPE_ACCENT: Record<
   MindItemType,
-  { hero: string; badge: string; glow: string }
+  { color: string; bg: string; border: string; glow: string }
 > = {
   article: {
-    hero: "from-[#0c1445] via-[#14105a] to-[#0d2847]",
-    badge: "bg-blue-500/35 text-white/90 border-blue-400/25 shadow-lg shadow-blue-500/20",
-    glow: "hover:shadow-[0_8px_48px_rgba(59,130,246,0.12)]",
+    color: "text-blue-400",
+    bg: "bg-blue-500/15",
+    border: "border-blue-500/30",
+    glow: "hover:shadow-[0_0_30px_rgba(59,130,246,0.15)]",
   },
   code: {
-    hero: "from-[#060e06] via-[#0a160a] to-[#040d08]",
-    badge: "bg-emerald-500/35 text-white/90 border-emerald-400/25 shadow-lg shadow-emerald-500/20",
-    glow: "hover:shadow-[0_8px_48px_rgba(52,211,153,0.10)]",
+    color: "text-emerald-400",
+    bg: "bg-emerald-500/15",
+    border: "border-emerald-500/30",
+    glow: "hover:shadow-[0_0_30px_rgba(52,211,153,0.15)]",
   },
   highlight: {
-    hero: "from-[#2d1a00] via-[#3a2400] to-[#1f1500]",
-    badge: "bg-amber-500/35 text-white/90 border-amber-400/25 shadow-lg shadow-amber-500/20",
-    glow: "hover:shadow-[0_8px_48px_rgba(245,158,11,0.12)]",
+    color: "text-amber-400",
+    bg: "bg-amber-500/15",
+    border: "border-amber-500/30",
+    glow: "hover:shadow-[0_0_30px_rgba(245,158,11,0.15)]",
   },
   thought: {
-    hero: "from-[#1a0a2e] via-[#2a1042] to-[#150825]",
-    badge: "bg-pink-500/35 text-white/90 border-pink-400/25 shadow-lg shadow-pink-500/20",
-    glow: "hover:shadow-[0_8px_48px_rgba(236,72,153,0.10)]",
+    color: "text-pink-400",
+    bg: "bg-pink-500/15",
+    border: "border-pink-500/30",
+    glow: "hover:shadow-[0_0_30px_rgba(236,72,153,0.15)]",
   },
   image: {
-    hero: "from-[#0a1a15] via-[#0f2520] to-[#051510]",
-    badge: "bg-teal-500/35 text-white/90 border-teal-400/25 shadow-lg shadow-teal-500/20",
-    glow: "hover:shadow-[0_8px_48px_rgba(20,184,166,0.10)]",
+    color: "text-teal-400",
+    bg: "bg-teal-500/15",
+    border: "border-teal-500/30",
+    glow: "hover:shadow-[0_0_30px_rgba(20,184,166,0.15)]",
   },
   screenshot: {
-    hero: "from-[#0f0f15] via-[#141420] to-[#0a0a12]",
-    badge: "bg-slate-500/35 text-white/90 border-slate-400/25 shadow-lg shadow-slate-500/20",
-    glow: "hover:shadow-[0_8px_48px_rgba(255,255,255,0.04)]",
+    color: "text-violet-400",
+    bg: "bg-violet-500/15",
+    border: "border-violet-500/30",
+    glow: "hover:shadow-[0_0_30px_rgba(139,92,246,0.15)]",
   },
 }
 
@@ -133,10 +139,22 @@ const HERO_RENDERERS: Record<MindItemType, React.FC<{ item: MindItem }>> = {
   screenshot: ScreenshotHero,
 }
 
-/* ── Noise texture (inline SVG) ── */
+/* ── HUD Corner Brackets ── */
 
-const NOISE =
-  'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.8\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\' opacity=\'0.06\'/%3E%3C/svg%3E")'
+function HudCorners({ className }: { className?: string }) {
+  return (
+    <div className={cn("absolute inset-0 pointer-events-none z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500", className)}>
+      {/* Top-left */}
+      <div className="absolute top-2 left-2 w-4 h-4 border-t border-l border-white/30" />
+      {/* Top-right */}
+      <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-white/30" />
+      {/* Bottom-left */}
+      <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-white/30" />
+      {/* Bottom-right */}
+      <div className="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-white/30" />
+    </div>
+  )
+}
 
 /* ── Card Component ── */
 
@@ -148,60 +166,60 @@ interface MindItemCardProps {
 
 export function MindItemCard({ item, onClick, index = 0 }: MindItemCardProps) {
   const Icon = TYPE_ICONS[item.type]
-  const theme = TYPE_THEME[item.type]
+  const accent = TYPE_ACCENT[item.type]
   const HeroContent = HERO_RENDERERS[item.type]
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
-        duration: 0.5,
-        delay: index * 0.05,
+        duration: 0.45,
+        delay: index * 0.04,
         ease: [0.25, 0.46, 0.45, 0.94],
       }}
       onClick={onClick}
       className={cn(
-        "group relative rounded-2xl overflow-hidden cursor-pointer",
-        "bg-space-800/80",
-        "border border-white/[0.06]",
-        "transition-all duration-500",
-        "h-[330px] flex flex-col",
-        theme.glow,
-        "hover:border-white/[0.14] hover:translate-y-[-3px]",
+        "group relative cursor-pointer",
+        "bg-space-900/90 backdrop-blur-sm",
+        "border border-white/[0.08]",
+        "rounded-xl overflow-hidden",
+        "transition-all duration-400",
+        "flex flex-col",
+        accent.glow,
+        "hover:border-white/[0.18] hover:translate-y-[-2px]",
       )}
     >
-      {/* Hover light sweep */}
-      <div className="absolute inset-0 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] via-transparent to-transparent" />
-      </div>
+      {/* HUD targeting corners on hover */}
+      <HudCorners />
 
-      {/* ── Visual Hero ── */}
-      <div
-        className={cn(
-          "relative h-[160px] overflow-hidden shrink-0",
-          "bg-gradient-to-br",
-          theme.hero,
-        )}
-      >
+      {/* ── Hero Image ── */}
+      <div className="relative h-[155px] overflow-hidden shrink-0">
         <HeroContent item={item} />
 
-        {/* Noise texture */}
+        {/* Scanline overlay */}
         <div
-          className="absolute inset-0 mix-blend-overlay pointer-events-none"
-          style={{ backgroundImage: NOISE, backgroundSize: "100px 100px" }}
+          className="absolute inset-0 pointer-events-none opacity-[0.03]"
+          style={{
+            backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.1) 2px, rgba(255,255,255,0.1) 3px)",
+          }}
         />
 
-        {/* Bottom fade into card body */}
-        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-space-800/90 to-transparent" />
+        {/* Bottom fade */}
+        <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-space-900/95 to-transparent" />
 
         {/* Type badge — top right */}
         <div
           className={cn(
-            "absolute top-2.5 right-3 flex items-center gap-1.5",
-            "px-2 py-[3px] rounded-lg text-[9px] font-semibold uppercase tracking-[0.15em]",
+            "absolute top-2.5 right-3 z-20",
+            "flex items-center gap-1.5",
+            "px-2 py-[3px] rounded-lg",
+            "text-[9px] font-semibold uppercase tracking-[0.15em]",
             "border backdrop-blur-sm",
-            theme.badge,
+            accent.bg,
+            accent.border,
+            "text-white/90",
+            "shadow-lg",
           )}
         >
           <Icon size={9} />
@@ -209,56 +227,68 @@ export function MindItemCard({ item, onClick, index = 0 }: MindItemCardProps) {
         </div>
       </div>
 
-      {/* ── Info Section ── */}
-      <div className="flex-1 flex flex-col px-4 pt-2.5 pb-2.5 min-h-0 overflow-hidden">
-        {/* Title or content excerpt */}
+      {/* ── Content Body ── */}
+      <div className="flex-1 flex flex-col px-3.5 pt-2 pb-3 min-h-0">
+        {/* Title or content */}
         {item.title ? (
-          <h3 className="text-[13px] font-semibold text-white/80 leading-snug line-clamp-2 group-hover:text-white/95 transition-colors duration-300">
+          <h3 className="text-[13px] font-semibold text-white/85 leading-tight line-clamp-2 group-hover:text-white transition-colors duration-300">
             {item.title}
           </h3>
         ) : item.content ? (
-          <p className="text-[12px] text-white/45 leading-snug line-clamp-2">
+          <p className="text-[12px] text-white/50 leading-snug line-clamp-2 italic">
             {item.content}
           </p>
         ) : null}
 
-        {/* Article summary */}
+        {/* Summary for articles */}
         {item.type === "article" && item.summary && (
-          <p className="text-[10px] text-white/30 leading-relaxed line-clamp-2 mt-1">
+          <p className="text-[10.5px] text-white/30 leading-relaxed line-clamp-2 mt-1.5">
             {item.summary}
           </p>
         )}
 
-        {/* Tags — right after content */}
+        {/* Tags */}
         {item.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-2">
+          <div className="flex flex-wrap gap-1 mt-2.5">
             {item.tags.slice(0, 3).map((tag) => (
               <span
                 key={tag}
-                className="text-[9px] font-mono text-white/50 bg-white/[0.08] px-1.5 py-0.5 rounded"
+                className={cn(
+                  "text-[9px] font-mono px-1.5 py-0.5 rounded",
+                  "bg-white/[0.05] border border-white/[0.08]",
+                  "text-white/45",
+                )}
               >
                 {tag}
               </span>
             ))}
             {item.tags.length > 3 && (
-              <span className="text-[9px] font-mono text-white/40">
+              <span className="text-[9px] font-mono text-white/30 self-center">
                 +{item.tags.length - 3}
               </span>
             )}
           </div>
         )}
 
-        {/* Footer: source + timestamp — pinned to bottom */}
-        <div className="flex items-center justify-between mt-auto pt-2 border-t border-white/[0.06] shrink-0">
+        {/* ── Footer Bar ── */}
+        <div className="mt-auto flex items-center gap-2 pt-2.5">
+          {/* Accent dot */}
+          <div className={cn("w-1 h-1 rounded-full shrink-0", accent.color.replace("text-", "bg-"))} />
+
           {item.source_domain ? (
-            <div className="flex items-center gap-1 text-[9px] text-white/40 min-w-0">
-              <Globe size={8} className="shrink-0" />
-              <span className="truncate">{item.source_domain}</span>
-            </div>
+            <span className="text-[9px] font-mono text-white/35 truncate min-w-0">
+              {item.source_domain}
+            </span>
           ) : (
-            <span />
+            <span className="text-[9px] font-mono text-white/20 truncate">
+              local
+            </span>
           )}
-          <span className="text-[9px] font-mono text-white/35 shrink-0 ml-2">
+
+          {/* Spacer dot */}
+          <span className="text-white/15 text-[8px]">/</span>
+
+          <span className="text-[9px] font-mono text-white/30 shrink-0">
             {formatRelativeTime(item.created_at)}
           </span>
         </div>
