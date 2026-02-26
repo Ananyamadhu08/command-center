@@ -195,10 +195,10 @@ export function MindItemCard({ item, onClick, index = 0 }: MindItemCardProps) {
         {/* Bottom fade into card body */}
         <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-space-800/90 to-transparent" />
 
-        {/* Type badge */}
+        {/* Type badge — top right */}
         <div
           className={cn(
-            "absolute bottom-2.5 left-3 flex items-center gap-1.5",
+            "absolute top-2.5 right-3 flex items-center gap-1.5",
             "px-2 py-[3px] rounded-lg text-[9px] font-semibold uppercase tracking-[0.15em]",
             "border backdrop-blur-sm",
             theme.badge,
@@ -207,11 +207,6 @@ export function MindItemCard({ item, onClick, index = 0 }: MindItemCardProps) {
           <Icon size={9} />
           {item.type}
         </div>
-
-        {/* Timestamp */}
-        <span className="absolute top-2.5 right-3 text-[9px] font-mono text-white/15 bg-black/25 backdrop-blur-sm px-1.5 py-0.5 rounded">
-          {formatRelativeTime(item.created_at)}
-        </span>
       </div>
 
       {/* ── Info Section ── */}
@@ -260,6 +255,11 @@ export function MindItemCard({ item, onClick, index = 0 }: MindItemCardProps) {
               <span className="truncate">{item.source_domain}</span>
             </div>
           )}
+
+          {/* Timestamp */}
+          <span className="text-[9px] font-mono text-white/15">
+            {formatRelativeTime(item.created_at)}
+          </span>
         </div>
       </div>
     </motion.div>
