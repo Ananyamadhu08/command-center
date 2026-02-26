@@ -2,10 +2,20 @@
 
 import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Search, X, Loader2, Sparkles } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { MindItemCard } from "./MindItemCard"
-import type { MindItem } from "@/lib/types"
+import {
+  Search,
+  X,
+  Loader2,
+  Sparkles,
+  FileText,
+  Highlighter,
+  Image,
+  Code2,
+  Monitor,
+  Globe,
+} from "lucide-react"
+import { cn, formatRelativeTime } from "@/lib/utils"
+import type { MindItem, MindItemType } from "@/lib/types"
 
 interface SearchResult {
   item: MindItem
@@ -14,6 +24,24 @@ interface SearchResult {
 
 interface MindSearchProps {
   onItemClick?: (item: MindItem) => void
+}
+
+const RESULT_ICONS: Record<MindItemType, React.ElementType> = {
+  article: FileText,
+  highlight: Highlighter,
+  image: Image,
+  code: Code2,
+  thought: Sparkles,
+  screenshot: Monitor,
+}
+
+const RESULT_ACCENTS: Record<MindItemType, string> = {
+  article: "text-electric-light/60",
+  code: "text-emerald-300/60",
+  highlight: "text-amber-light/60",
+  thought: "text-pink-300/60",
+  image: "text-teal-300/60",
+  screenshot: "text-white/40",
 }
 
 export function MindSearch({ onItemClick }: MindSearchProps) {
@@ -107,7 +135,7 @@ export function MindSearch({ onItemClick }: MindSearchProps) {
         </div>
       )}
 
-      {/* Search results dropdown */}
+      {/* Search results dropdown — compact rows */}
       <AnimatePresence>
         {showDropdown && (
           <motion.div
@@ -118,7 +146,7 @@ export function MindSearch({ onItemClick }: MindSearchProps) {
             className={cn(
               "absolute top-full left-0 right-0 mt-2 z-50",
               "rounded-2xl border border-white/10 bg-space-800/95 backdrop-blur-xl",
-              "shadow-[0_16px_64px_rgba(0,0,0,0.5)] p-3",
+              "shadow-[0_16px_64px_rgba(0,0,0,0.5)] p-2",
               "max-h-[60vh] overflow-y-auto",
             )}
           >
@@ -137,18 +165,48 @@ export function MindSearch({ onItemClick }: MindSearchProps) {
             )}
 
             {hasResults && (
-              <div className="space-y-2">
-                <p className="text-[10px] text-white/20 font-mono px-1 mb-2">
+              <div className="space-y-0.5">
+                <p className="text-[10px] text-white/20 font-mono px-3 py-1.5">
                   {results.length} result{results.length !== 1 ? "s" : ""}
                 </p>
-                {results.map((r, i) => (
-                  <MindItemCard
-                    key={r.item.id}
-                    item={r.item}
-                    index={i}
-                    onClick={() => onItemClick?.(r.item)}
-                  />
-                ))}
+                {results.map((r) => {
+                  const Icon = RESULT_ICONS[r.item.type]
+                  const accent = RESULT_ACCENTS[r.item.type]
+                  const label = r.item.title || r.item.content?.slice(0, 80) || "Untitled"
+
+                  return (
+                    <button
+                      key={r.item.id}
+                      onClick={() => onItemClick?.(r.item)}
+                      className={cn(
+                        "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl",
+                        "text-left transition-colors duration-150",
+                        "hover:bg-white/[0.04]",
+                      )}
+                    >
+                      <Icon size={14} className={accent} />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[12px] text-white/70 truncate leading-snug">
+                          {label}
+                        </p>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <span className="text-[9px] font-mono text-white/20 uppercase tracking-wider">
+                            {r.item.type}
+                          </span>
+                          {r.item.source_domain && (
+                            <span className="flex items-center gap-0.5 text-[9px] text-white/15">
+                              <Globe size={7} />
+                              {r.item.source_domain}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <span className="text-[9px] font-mono text-white/12 shrink-0">
+                        {formatRelativeTime(r.item.created_at)}
+                      </span>
+                    </button>
+                  )
+                })}
               </div>
             )}
           </motion.div>

@@ -14,15 +14,24 @@ interface MindGridProps {
 export function MindGrid({ items, loading, onItemClick }: MindGridProps) {
   if (loading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {Array.from({ length: 6 }).map((_, i) => (
           <div
             key={i}
-            className="h-[280px] rounded-2xl border border-white/5 bg-white/[0.02] p-4 animate-pulse"
+            className="h-[320px] rounded-2xl border border-white/[0.04] bg-white/[0.015] animate-pulse overflow-hidden"
           >
-            <div className="h-3 w-16 bg-white/5 rounded mb-3" />
-            <div className="h-3 w-3/4 bg-white/5 rounded mb-2" />
-            <div className="h-3 w-1/2 bg-white/5 rounded" />
+            {/* Hero skeleton */}
+            <div className="h-[190px] bg-white/[0.02]" />
+            {/* Info skeleton */}
+            <div className="p-4 space-y-3">
+              <div className="h-3.5 w-3/4 bg-white/[0.04] rounded" />
+              <div className="h-2.5 w-1/2 bg-white/[0.03] rounded" />
+              <div className="flex gap-1.5 mt-6">
+                <div className="h-4 w-12 bg-white/[0.03] rounded" />
+                <div className="h-4 w-10 bg-white/[0.03] rounded" />
+                <div className="h-4 w-14 bg-white/[0.03] rounded" />
+              </div>
+            </div>
           </div>
         ))}
       </div>
@@ -46,7 +55,7 @@ export function MindGrid({ items, loading, onItemClick }: MindGridProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {items.map((item, i) => (
         <MindItemCard
           key={item.id}
