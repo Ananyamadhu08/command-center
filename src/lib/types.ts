@@ -257,3 +257,35 @@ export interface GitHubOverview {
   repos_contributed_today: number
   total_repos: number
 }
+
+// ── The Mind ──────────────────────────────────────────────
+
+export type MindItemType = "article" | "highlight" | "image" | "code" | "thought" | "screenshot"
+
+export interface MindItem {
+  id: string
+  type: MindItemType
+  title: string | null
+  content: string | null
+  summary: string | null
+  url: string | null
+  source_domain: string | null
+  image_url: string | null
+  language: string | null
+  tags: string[]
+  access_count: number
+  last_accessed_at: string | null
+  created_at: string
+}
+
+export const MIND_TYPE_CONFIG: Record<
+  MindItemType,
+  { label: string; icon: string; color: string; className: string }
+> = {
+  article: { label: "Article", icon: "FileText", color: "#60a5fa", className: "bg-electric/20 text-electric-light border-electric/30" },
+  highlight: { label: "Highlight", icon: "Highlighter", color: "#fbbf24", className: "bg-amber/20 text-amber-light border-amber/30" },
+  image: { label: "Image", icon: "Image", color: "#34d399", className: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30" },
+  code: { label: "Code", icon: "Code2", color: "#a78bfa", className: "bg-cosmic/20 text-cosmic-light border-cosmic/30" },
+  thought: { label: "Thought", icon: "Sparkles", color: "#f472b6", className: "bg-pink-500/20 text-pink-300 border-pink-500/30" },
+  screenshot: { label: "Screenshot", icon: "Monitor", color: "#94a3b8", className: "bg-white/10 text-white/60 border-white/10" },
+}

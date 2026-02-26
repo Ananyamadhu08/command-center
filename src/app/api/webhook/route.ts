@@ -183,6 +183,21 @@ export async function POST(request: Request) {
       return ok(data)
     }
 
+    // ── Mind Save ─────────────────────────────────────────
+    case "mind_save": {
+      const { url, content, title, type: itemType, image_url } = body as Record<string, string>
+      if (!url && !content && !image_url) {
+        return fail("Missing at least one of: url, content, image_url")
+      }
+      const { processSave } = await import("@/lib/mind/pipeline")
+      try {
+        const result = await processSave({ url, content, title, type: itemType, image_url })
+        return ok(result.item)
+      } catch (e) {
+        return fail(e instanceof Error ? e.message : "Mind save failed", 500)
+      }
+    }
+
     default:
       return fail(`Unknown webhook type: ${webhookType}`)
   }
