@@ -137,7 +137,7 @@ export function MindSearch({ onItemClick }: MindSearchProps) {
             onChange={(e) => setQuery(e.target.value)}
             onFocus={() => setFocused(true)}
             onBlur={() => setTimeout(() => setFocused(false), 200)}
-            placeholder="Search your mind... (natural language works)"
+            placeholder="Search your mind..."
             style={{ outline: "none", boxShadow: "none" }}
             className={cn(
               "flex-1 bg-transparent py-3.5 pr-4 text-sm text-white/90 font-medium",
@@ -155,14 +155,6 @@ export function MindSearch({ onItemClick }: MindSearchProps) {
             </button>
           )}
 
-          {/* Keyboard shortcut hint */}
-          {!query && !focused && (
-            <div className="pr-4 flex items-center gap-1">
-              <kbd className="text-[10px] font-mono text-white/15 bg-white/[0.04] border border-white/[0.06] px-1.5 py-0.5 rounded">
-                /
-              </kbd>
-            </div>
-          )}
         </div>
       </div>
 
