@@ -32,32 +32,32 @@ const TYPE_THEME: Record<
 > = {
   article: {
     hero: "from-[#0c1445] via-[#14105a] to-[#0d2847]",
-    badge: "bg-blue-500/50 text-white/90 border-blue-400/30 shadow-lg shadow-blue-500/20",
+    badge: "bg-blue-500/35 text-white/90 border-blue-400/25 shadow-lg shadow-blue-500/20",
     glow: "hover:shadow-[0_8px_48px_rgba(59,130,246,0.12)]",
   },
   code: {
     hero: "from-[#060e06] via-[#0a160a] to-[#040d08]",
-    badge: "bg-emerald-500/50 text-white/90 border-emerald-400/30 shadow-lg shadow-emerald-500/20",
+    badge: "bg-emerald-500/35 text-white/90 border-emerald-400/25 shadow-lg shadow-emerald-500/20",
     glow: "hover:shadow-[0_8px_48px_rgba(52,211,153,0.10)]",
   },
   highlight: {
     hero: "from-[#2d1a00] via-[#3a2400] to-[#1f1500]",
-    badge: "bg-amber-500/50 text-white/90 border-amber-400/30 shadow-lg shadow-amber-500/20",
+    badge: "bg-amber-500/35 text-white/90 border-amber-400/25 shadow-lg shadow-amber-500/20",
     glow: "hover:shadow-[0_8px_48px_rgba(245,158,11,0.12)]",
   },
   thought: {
     hero: "from-[#1a0a2e] via-[#2a1042] to-[#150825]",
-    badge: "bg-pink-500/50 text-white/90 border-pink-400/30 shadow-lg shadow-pink-500/20",
+    badge: "bg-pink-500/35 text-white/90 border-pink-400/25 shadow-lg shadow-pink-500/20",
     glow: "hover:shadow-[0_8px_48px_rgba(236,72,153,0.10)]",
   },
   image: {
     hero: "from-[#0a1a15] via-[#0f2520] to-[#051510]",
-    badge: "bg-teal-500/50 text-white/90 border-teal-400/30 shadow-lg shadow-teal-500/20",
+    badge: "bg-teal-500/35 text-white/90 border-teal-400/25 shadow-lg shadow-teal-500/20",
     glow: "hover:shadow-[0_8px_48px_rgba(20,184,166,0.10)]",
   },
   screenshot: {
     hero: "from-[#0f0f15] via-[#141420] to-[#0a0a12]",
-    badge: "bg-slate-500/50 text-white/90 border-slate-400/30 shadow-lg shadow-slate-500/20",
+    badge: "bg-slate-500/35 text-white/90 border-slate-400/25 shadow-lg shadow-slate-500/20",
     glow: "hover:shadow-[0_8px_48px_rgba(255,255,255,0.04)]",
   },
 }
