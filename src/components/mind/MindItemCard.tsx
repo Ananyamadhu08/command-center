@@ -181,7 +181,7 @@ export function MindItemCard({ item, onClick, index = 0 }: MindItemCardProps) {
       onClick={onClick}
       className={cn(
         "group relative cursor-pointer",
-        "bg-space-900/90 backdrop-blur-sm",
+        "bg-white/[0.03] backdrop-blur-sm",
         "border border-white/[0.08]",
         "rounded-xl overflow-hidden",
         "transition-all duration-400",
@@ -206,7 +206,7 @@ export function MindItemCard({ item, onClick, index = 0 }: MindItemCardProps) {
         />
 
         {/* Bottom fade */}
-        <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-space-900/95 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-black/60 to-transparent" />
 
         {/* Type badge — top right */}
         <div
