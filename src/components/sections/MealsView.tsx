@@ -42,7 +42,7 @@ export function MealsView() {
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
       <div className="flex items-center gap-3">
         <Utensils size={26} strokeWidth={1.75} style={{ stroke: "url(#icon-gradient)" }} />
-        <h2 className="text-2xl font-semibold text-white/90">Meals & Nutrition</h2>
+        <h2 className="text-2xl font-light text-white/90">Meals & Nutrition</h2>
       </div>
 
       {logSuccess && (

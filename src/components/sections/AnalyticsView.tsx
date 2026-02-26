@@ -92,7 +92,7 @@ export function AnalyticsView() {
       <motion.div variants={staggerItem}>
         <div className="flex items-center gap-3 mb-4">
           <BarChart3 size={26} strokeWidth={1.75} style={{ stroke: "url(#icon-gradient)" }} />
-          <h2 className="text-2xl font-semibold text-white/90">Analytics</h2>
+          <h2 className="text-2xl font-light text-white/90">Analytics</h2>
         </div>
         <WeeklyScoreCard score={score} dateRange={getDateRange()} />
       </motion.div>

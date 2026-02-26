@@ -76,7 +76,7 @@ export function EveningBriefPage({ brief }: EveningBriefPageProps) {
       <div className="flex items-center gap-3 mb-3">
         <Moon size={26} strokeWidth={1.75} style={{ stroke: "url(#icon-gradient)" }} />
         <div>
-          <h1 className="text-2xl font-semibold text-white/90">{brief.title}</h1>
+          <h1 className="text-2xl font-light text-white/90">{brief.title}</h1>
           <p className="text-xs font-mono text-white/30">
             {new Date(brief.created_at).toLocaleDateString("en-IN", {
               weekday: "long",

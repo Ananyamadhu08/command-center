@@ -148,7 +148,7 @@ export function TodayView() {
             strokeWidth={1.75}
             style={{ stroke: "url(#icon-gradient)" }}
           />
-          <h2 className="text-2xl font-semibold text-white/90">
+          <h2 className="text-2xl font-light text-white/90">
             Today&apos;s Overview
           </h2>
         </div>
