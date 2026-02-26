@@ -166,7 +166,7 @@ export function MindItemCard({ item, onClick, index = 0 }: MindItemCardProps) {
         "bg-space-800/80",
         "border border-white/[0.06]",
         "transition-all duration-500",
-        "h-[320px] flex flex-col",
+        "h-[330px] flex flex-col",
         theme.glow,
         "hover:border-white/[0.14] hover:translate-y-[-3px]",
       )}
@@ -179,7 +179,7 @@ export function MindItemCard({ item, onClick, index = 0 }: MindItemCardProps) {
       {/* ── Visual Hero ── */}
       <div
         className={cn(
-          "relative h-[190px] overflow-hidden shrink-0",
+          "relative h-[160px] overflow-hidden shrink-0",
           "bg-gradient-to-br",
           theme.hero,
         )}
@@ -210,54 +210,55 @@ export function MindItemCard({ item, onClick, index = 0 }: MindItemCardProps) {
       </div>
 
       {/* ── Info Section ── */}
-      <div className="flex-1 flex flex-col px-4 pt-3 pb-3 min-h-0">
+      <div className="flex-1 flex flex-col px-4 pt-2.5 pb-2.5 min-h-0 overflow-hidden">
         {/* Title or content excerpt */}
         {item.title ? (
-          <h3 className="text-[13px] font-semibold text-white/80 leading-snug mb-1.5 line-clamp-2 group-hover:text-white/95 transition-colors duration-300">
+          <h3 className="text-[13px] font-semibold text-white/80 leading-snug line-clamp-2 group-hover:text-white/95 transition-colors duration-300">
             {item.title}
           </h3>
         ) : item.content ? (
-          <p className="text-[12px] text-white/45 leading-snug mb-1.5 line-clamp-2">
+          <p className="text-[12px] text-white/45 leading-snug line-clamp-2">
             {item.content}
           </p>
         ) : null}
 
         {/* Article summary */}
         {item.type === "article" && item.summary && (
-          <p className="text-[10px] text-white/20 leading-relaxed line-clamp-2">
+          <p className="text-[10px] text-white/30 leading-relaxed line-clamp-2 mt-1">
             {item.summary}
           </p>
         )}
 
-        {/* Tags + source pinned to bottom */}
-        <div className="mt-auto shrink-0 space-y-1.5">
-          {item.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1">
-              {item.tags.slice(0, 3).map((tag) => (
-                <span
-                  key={tag}
-                  className="text-[9px] font-mono text-white/50 bg-white/[0.08] px-1.5 py-0.5 rounded"
-                >
-                  {tag}
-                </span>
-              ))}
-              {item.tags.length > 3 && (
-                <span className="text-[9px] font-mono text-white/40">
-                  +{item.tags.length - 3}
-                </span>
-              )}
-            </div>
-          )}
+        {/* Tags — right after content */}
+        {item.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1 mt-2">
+            {item.tags.slice(0, 3).map((tag) => (
+              <span
+                key={tag}
+                className="text-[9px] font-mono text-white/50 bg-white/[0.08] px-1.5 py-0.5 rounded"
+              >
+                {tag}
+              </span>
+            ))}
+            {item.tags.length > 3 && (
+              <span className="text-[9px] font-mono text-white/40">
+                +{item.tags.length - 3}
+              </span>
+            )}
+          </div>
+        )}
 
-          {item.source_domain && (
-            <div className="flex items-center gap-1 text-[9px] text-white/40">
-              <Globe size={8} />
+        {/* Footer: source + timestamp — pinned to bottom */}
+        <div className="flex items-center justify-between mt-auto pt-2 border-t border-white/[0.06] shrink-0">
+          {item.source_domain ? (
+            <div className="flex items-center gap-1 text-[9px] text-white/40 min-w-0">
+              <Globe size={8} className="shrink-0" />
               <span className="truncate">{item.source_domain}</span>
             </div>
+          ) : (
+            <span />
           )}
-
-          {/* Timestamp */}
-          <span className="text-[9px] font-mono text-white/35">
+          <span className="text-[9px] font-mono text-white/35 shrink-0 ml-2">
             {formatRelativeTime(item.created_at)}
           </span>
         </div>
