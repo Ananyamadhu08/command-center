@@ -2,9 +2,7 @@ import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
 import { StarBackground } from "@/components/layout/StarBackground"
-import { Sidebar } from "@/components/layout/Sidebar"
-import { Header } from "@/components/layout/Header"
-import { KeyboardNav } from "@/components/layout/KeyboardNav"
+import { AppShell } from "@/components/layout/AppShell"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,14 +30,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <div className="min-h-screen relative">
+        <div className="h-screen relative overflow-hidden">
           <StarBackground />
-          <Sidebar />
-          <KeyboardNav />
-          <main className="ml-16 lg:ml-56 min-h-screen relative z-10 p-6 lg:p-10 max-w-5xl">
-            <Header />
-            {children}
-          </main>
+          <div className="relative z-10 h-full">
+            <AppShell>{children}</AppShell>
+          </div>
         </div>
       </body>
     </html>

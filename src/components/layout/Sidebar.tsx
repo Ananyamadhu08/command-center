@@ -1,66 +1,147 @@
 "use client"
 
+import React, { createContext, useContext, useMemo, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 import { NAV_ITEMS } from "@/lib/routes"
 
+const DESKTOP_OPEN_WIDTH = 224
+const DESKTOP_COLLAPSED_WIDTH = 64
+const SPRING_CONFIG = { type: "spring", stiffness: 260, damping: 30 } as const
+
+// --- Collapsible text wrapper ---
+
+function Collapsible({
+  open,
+  className,
+  children,
+}: {
+  open: boolean
+  className?: string
+  children: React.ReactNode
+}) {
+  return (
+    <motion.div
+      initial={false}
+      animate={{ opacity: open ? 1 : 0, maxWidth: open ? 200 : 0 }}
+      transition={SPRING_CONFIG}
+      style={{ overflow: "hidden", display: "flex" }}
+      className={cn("whitespace-nowrap", className)}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+// --- Sidebar context ---
+
+type SidebarContextValue = {
+  open: boolean
+  setOpen: (open: boolean) => void
+}
+
+const SidebarContext = createContext<SidebarContextValue | null>(null)
+
+export function useSidebar() {
+  const ctx = useContext(SidebarContext)
+  if (!ctx) throw new Error("useSidebar must be used within <SidebarProvider />")
+  return ctx
+}
+
+export function SidebarProvider({ children }: { children: React.ReactNode }) {
+  const [open, setOpen] = useState(false)
+  const value = useMemo(() => ({ open, setOpen }), [open])
+
+  return (
+    <SidebarContext.Provider value={value}>
+      {children}
+    </SidebarContext.Provider>
+  )
+}
+
+// --- Main sidebar ---
+
 export function Sidebar() {
+  const { open, setOpen } = useSidebar()
   const pathname = usePathname()
 
   return (
-    <nav
-      className="fixed left-0 top-0 h-full w-16 lg:w-56 flex flex-col items-center lg:items-stretch py-8 z-20"
+    <motion.aside
+      initial={false}
+      animate={{ width: open ? DESKTOP_OPEN_WIDTH : DESKTOP_COLLAPSED_WIDTH }}
+      transition={SPRING_CONFIG}
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+      className="relative z-30 h-full shrink-0 flex overflow-hidden"
       role="navigation"
       aria-label="Main navigation"
     >
-      <div className="mb-10 flex items-center justify-center lg:justify-start lg:px-5">
-        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cosmic to-electric flex items-center justify-center text-white text-sm font-bold">
-          C
+      <div className="flex h-full w-full flex-col border-r border-white/[0.06] py-6">
+        {/* Logo */}
+        <div className={cn("flex items-center mb-8", open ? "px-4 gap-3" : "px-0 justify-center")}>
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cosmic to-electric flex items-center justify-center text-white text-sm font-bold shrink-0">
+            C
+          </div>
+          <Collapsible open={open} className="flex flex-col overflow-hidden">
+            <span className="text-sm font-semibold text-white/80 tracking-wide">
+              Command Center
+            </span>
+          </Collapsible>
         </div>
-        <span className="hidden lg:block ml-3 text-sm font-semibold text-white/80 tracking-wide">
-          Command Center
-        </span>
-      </div>
 
-      <div className="flex flex-col gap-1 flex-1 w-full px-2 lg:px-3">
-        {NAV_ITEMS.map((item) => {
-          const Icon = item.icon
-          const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all duration-200 group w-full",
-                isActive
-                  ? "bg-white/10 text-white shadow-[inset_0_0_12px_rgba(139,92,246,0.1)]"
-                  : "text-white/40 hover:text-white/70 hover:bg-white/5",
-              )}
-              aria-current={isActive ? "page" : undefined}
-              aria-keyshortcuts={item.shortcut}
-              title={`${item.label} (${item.shortcut})`}
-            >
-              <Icon
-                size={18}
-                strokeWidth={1.75}
-                className={cn(
-                  "shrink-0 transition-colors",
-                  isActive ? "text-cosmic-light" : "text-white/30 group-hover:text-white/50",
-                )}
-              />
-              <span className="hidden lg:block text-sm font-medium">{item.label}</span>
-            </Link>
-          )
-        })}
-      </div>
+        {/* Nav items */}
+        <div className={cn("flex flex-col gap-1 flex-1 w-full", open ? "px-3" : "px-2")}>
+          {NAV_ITEMS.map((item) => {
+            const Icon = item.icon
+            const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="group"
+                aria-current={isActive ? "page" : undefined}
+                aria-keyshortcuts={item.shortcut}
+                title={item.label}
+              >
+                <div
+                  className={cn(
+                    "rounded-xl relative flex items-center w-full cursor-pointer transition-all duration-200",
+                    open ? "justify-start gap-3 px-3 py-2.5" : "justify-center gap-0 p-2.5",
+                    isActive
+                      ? "bg-white/10 text-white shadow-[inset_0_0_12px_rgba(139,92,246,0.1)]"
+                      : "text-white/40 hover:text-white/70 hover:bg-white/5",
+                  )}
+                >
+                  <Icon
+                    size={18}
+                    strokeWidth={1.75}
+                    className={cn(
+                      "shrink-0 transition-colors",
+                      isActive ? "text-cosmic-light" : "text-white/30 group-hover:text-white/50",
+                    )}
+                  />
+                  <Collapsible open={open} className="text-sm font-medium flex-1 text-left">
+                    {item.label}
+                  </Collapsible>
+                  {isActive && open && (
+                    <span className="absolute left-0 top-1.5 bottom-1.5 w-[3px] bg-cosmic-light rounded-r" />
+                  )}
+                </div>
+              </Link>
+            )
+          })}
+        </div>
 
-      <div className="px-2 lg:px-3 mt-auto">
-        <div className="h-px bg-white/5 mb-4" />
-        <div className="text-[10px] text-white/20 text-center lg:text-left lg:px-3 font-mono">
-          v1.0
+        {/* Footer */}
+        <div className={cn("mt-auto", open ? "px-4" : "px-2")}>
+          <div className="h-px bg-white/5 mb-4" />
+          <Collapsible open={open}>
+            <span className="text-[10px] text-white/20 font-mono px-1">v1.0</span>
+          </Collapsible>
         </div>
       </div>
-    </nav>
+    </motion.aside>
   )
 }
