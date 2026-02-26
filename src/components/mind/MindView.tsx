@@ -44,19 +44,17 @@ export function MindView() {
     >
       {/* Header */}
       <motion.div variants={staggerItem}>
-        <div className="flex items-center gap-3 mb-1">
+        <div className="flex items-center gap-3">
           <Brain size={22} strokeWidth={1.75} style={{ stroke: "url(#icon-gradient)" }} />
-          <div>
-            <h1 className="text-xl font-semibold text-white/90">The Mind</h1>
-            <p className="text-[10px] font-mono text-white/25 mt-0.5">
-              Save everything. Organize nothing. Find anything.
-            </p>
-          </div>
+          <h1 className="text-xl font-semibold text-white/90">The Mind</h1>
         </div>
       </motion.div>
 
       {/* Search */}
-      <motion.div variants={staggerItem}>
+      <motion.div variants={staggerItem} className="space-y-3">
+        <p className="text-[10px] font-mono text-white/25 text-center">
+          Save everything. Organize nothing. Find anything.
+        </p>
         <MindSearch onItemClick={setSelectedItem} />
       </motion.div>
 
