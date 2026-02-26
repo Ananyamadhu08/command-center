@@ -105,12 +105,12 @@ export function Sidebar() {
       <div className="flex h-full w-full flex-col border-r border-white/[0.06] py-6">
         {/* Logo */}
         <div className={cn("flex items-center mb-8", open ? "px-4 gap-3" : "px-0 justify-center")}>
-          <Rocket
-            size={24}
-            strokeWidth={1.75}
-            className="shrink-0"
-            style={{ stroke: "url(#sidebar-icon-gradient)" }}
-          />
+          <div
+            className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+            style={{ background: "linear-gradient(135deg, #ec4899, #a855f7, #3b82f6)" }}
+          >
+            <Rocket size={18} strokeWidth={1.75} className="text-white" />
+          </div>
           <Collapsible open={open} className="flex flex-col overflow-hidden">
             <span className="text-sm font-semibold text-white/80 tracking-wide">
               Command Center
