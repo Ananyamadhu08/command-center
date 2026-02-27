@@ -15,6 +15,7 @@ import { staggerContainer, staggerItem } from "@/lib/animations"
 import type { AnalyticsData, WeekComparison, WeeklyGoals } from "@/lib/types"
 import { resolveColor } from "@/lib/colors"
 import { Loader } from "@/components/ui/Loader"
+import { EmptyState } from "@/components/ui/EmptyState"
 
 const DEFAULT_COMPARISON: WeekComparison = {
   exercise_minutes: { this_week: 0, last_week: 0 },
@@ -59,15 +60,39 @@ function getTrend(thisWeek: number, lastWeek: number): "up" | "down" | "neutral"
 
 export function AnalyticsView() {
   const [data, setData] = useState<AnalyticsData | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchApi<AnalyticsData>("/api/analytics").then((result) => {
-      if (result) setData(result)
-    })
+    fetchApi<AnalyticsData>("/api/analytics")
+      .then((result) => {
+        if (result) setData(result)
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false))
   }, [])
 
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center gap-3">
+          <BarChart3 size={26} strokeWidth={1.75} style={{ stroke: "url(#icon-gradient)" }} />
+          <h2 className="text-2xl font-light text-white/90">Analytics</h2>
+        </div>
+        <Loader label="Computing analytics..." />
+      </div>
+    )
+  }
+
   if (!data) {
-    return <Loader label="Computing analytics..." />
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center gap-3">
+          <BarChart3 size={26} strokeWidth={1.75} style={{ stroke: "url(#icon-gradient)" }} />
+          <h2 className="text-2xl font-light text-white/90">Analytics</h2>
+        </div>
+        <EmptyState message="Unable to load analytics" />
+      </div>
+    )
   }
 
   const exerciseChartData = data.exercise.daily_breakdown.map((d) => ({
