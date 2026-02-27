@@ -84,7 +84,7 @@ export function InspirationCard({ item, index = 0, onClick }: InspirationCardPro
       <HudCorners />
 
       {/* Hero Image */}
-      <div className="relative h-[160px] overflow-hidden shrink-0">
+      <div className="relative h-[190px] overflow-hidden shrink-0">
         <img
           src={imageSrc}
           alt=""
