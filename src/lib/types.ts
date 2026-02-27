@@ -258,6 +258,25 @@ export interface GitHubOverview {
   total_repos: number
 }
 
+// ── Inspiration ──────────────────────────────────────────
+
+export type InspirationCategory = "product" | "ui_design" | "creative_tech"
+
+export interface InspirationItem {
+  id: string
+  title: string
+  creator: string
+  description: string
+  why_notable: string
+  category: InspirationCategory
+  image_url: string | null
+  source_url: string | null
+  source: string
+  tags: string[]
+  build_this: boolean
+  created_at: string
+}
+
 // ── The Mind ──────────────────────────────────────────────
 
 export type MindItemType = "article" | "highlight" | "image" | "code" | "thought" | "screenshot"
