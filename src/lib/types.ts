@@ -275,6 +275,10 @@ export interface InspirationItem {
   tags: string[]
   build_this: boolean
   created_at: string
+  tech_stack: string[]
+  links: { label: string; url: string }[]
+  key_features: string[]
+  revenue_or_traction: string | null
 }
 
 // ── The Mind ──────────────────────────────────────────────
