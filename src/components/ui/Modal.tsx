@@ -80,7 +80,7 @@ export function Modal({ isOpen, onClose, title, children, wide = false }: ModalP
               </div>
 
               {/* Content */}
-              <div className="px-6 pt-1 pb-6 max-h-[calc(85vh-60px)] overflow-y-auto">
+              <div className="px-6 pt-1 pb-6 max-h-[calc(85vh-60px)] overflow-y-auto scrollbar-hide" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
                 {children}
               </div>
             </div>

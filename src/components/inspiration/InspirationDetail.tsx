@@ -13,25 +13,25 @@ const CATEGORY_STYLE: Record<
   product: {
     label: "Product",
     icon: Package,
-    bg: "bg-blue-500/20",
-    border: "border-blue-400/40",
-    text: "text-blue-300",
+    bg: "bg-blue-600/50",
+    border: "border-blue-400/60",
+    text: "text-white",
     defaultImage: "/inspiration/product-default.png",
   },
   ui_design: {
     label: "UI & Design",
     icon: Palette,
-    bg: "bg-pink-500/20",
-    border: "border-pink-400/40",
-    text: "text-pink-300",
+    bg: "bg-pink-600/50",
+    border: "border-pink-400/60",
+    text: "text-white",
     defaultImage: "/inspiration/ui-default.png",
   },
   creative_tech: {
     label: "Creative Tech",
     icon: Sparkles,
-    bg: "bg-violet-500/20",
-    border: "border-violet-400/40",
-    text: "text-violet-300",
+    bg: "bg-violet-600/50",
+    border: "border-violet-400/60",
+    text: "text-white",
     defaultImage: "/inspiration/creative-default.png",
   },
 }
@@ -51,7 +51,7 @@ export function InspirationDetail({ item, onClose }: InspirationDetailProps) {
   return (
     <Modal isOpen={!!item} onClose={onClose} title={item.title} wide>
       <div className="space-y-5">
-        {/* Hero Image */}
+        {/* Hero Image with badges overlaid */}
         <div className="relative h-[200px] rounded-lg overflow-hidden">
           <img
             src={imageSrc}
@@ -59,39 +59,39 @@ export function InspirationDetail({ item, onClose }: InspirationDetailProps) {
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0e0e1a] via-transparent to-transparent" />
-          <div className="absolute bottom-3 left-3">
-            <span className="text-[10px] font-mono text-white/70 bg-black/50 backdrop-blur-sm px-2 py-1 rounded-md">
-              by {item.creator}
+
+          {/* Category badge — top right on image */}
+          <div className="absolute top-3 right-3 z-20">
+            <span
+              className={cn(
+                "inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider",
+                "px-2.5 py-1 rounded-lg border backdrop-blur-md shadow-lg",
+                config.bg, config.border, config.text,
+              )}
+            >
+              <Icon size={11} />
+              {config.label}
             </span>
           </div>
         </div>
 
-        {/* Badges */}
-        <div className="flex items-center gap-2 flex-wrap">
-          <span
-            className={cn(
-              "inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.14em] px-3 py-1.5 rounded-lg border",
-              config.bg, config.border, config.text,
-            )}
-          >
-            <Icon size={11} />
-            {config.label}
-          </span>
-          {item.build_this && (
-            <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.14em] px-3 py-1.5 rounded-lg border bg-orange-500/20 border-orange-400/40 text-orange-300">
-              <Flame size={11} strokeWidth={2} />
-              For You
-            </span>
-          )}
-          <span className="text-[10px] font-mono text-white/35 ml-auto">
-            {item.source}
-          </span>
-        </div>
+        {/* Why It Stands Out — the hook, most important */}
+        <p className="text-[13px] text-white/75 leading-relaxed">
+          {item.why_notable}
+        </p>
 
-        {/* Description */}
-        <p className="text-[13px] text-white/70 leading-relaxed">
+        {/* Full description */}
+        <p className="text-[12px] text-white/50 leading-relaxed">
           {item.description}
         </p>
+
+        {/* Traction — social proof early */}
+        {item.revenue_or_traction && (
+          <div className="flex items-start gap-2.5 px-3 py-2.5 rounded-lg bg-emerald-500/[0.06] border border-emerald-500/15">
+            <TrendingUp size={13} className="text-emerald-400/70 mt-0.5 shrink-0" />
+            <span className="text-[12px] text-emerald-300/70 leading-relaxed">{item.revenue_or_traction}</span>
+          </div>
+        )}
 
         {/* Key Features */}
         {item.key_features.length > 0 && (
@@ -104,7 +104,7 @@ export function InspirationDetail({ item, onClose }: InspirationDetailProps) {
               {item.key_features.map((feature) => (
                 <li key={feature} className="flex items-start gap-2.5">
                   <div className="w-1 h-1 rounded-full bg-white/20 mt-[7px] shrink-0" />
-                  <span className="text-[12px] text-white/55 leading-relaxed">{feature}</span>
+                  <span className="text-[12px] text-white/50 leading-relaxed">{feature}</span>
                 </li>
               ))}
             </ul>
@@ -116,7 +116,7 @@ export function InspirationDetail({ item, onClose }: InspirationDetailProps) {
           <div className="space-y-2.5">
             <div className="flex items-center gap-2">
               <Wrench size={12} className="text-violet-400/60" />
-              <span className="text-[10px] font-mono text-white/40 uppercase tracking-[0.15em]">Tech Stack</span>
+              <span className="text-[10px] font-mono text-white/40 uppercase tracking-[0.15em]">Built With</span>
             </div>
             <div className="flex flex-wrap gap-1.5">
               {item.tech_stack.map((tech) => (
@@ -130,24 +130,6 @@ export function InspirationDetail({ item, onClose }: InspirationDetailProps) {
             </div>
           </div>
         )}
-
-        {/* Traction */}
-        {item.revenue_or_traction && (
-          <div className="flex items-start gap-2.5 px-3 py-2.5 rounded-lg bg-emerald-500/[0.06] border border-emerald-500/15">
-            <TrendingUp size={13} className="text-emerald-400/70 mt-0.5 shrink-0" />
-            <span className="text-[12px] text-emerald-300/70 leading-relaxed">{item.revenue_or_traction}</span>
-          </div>
-        )}
-
-        {/* Why Notable */}
-        <div className="space-y-2">
-          <span className="text-[10px] font-mono text-white/30 uppercase tracking-[0.15em]">
-            Why It Stands Out
-          </span>
-          <p className="text-[12px] text-white/50 leading-relaxed italic">
-            {item.why_notable}
-          </p>
-        </div>
 
         {/* Tags */}
         {item.tags.length > 0 && (
@@ -188,6 +170,26 @@ export function InspirationDetail({ item, onClose }: InspirationDetailProps) {
             </div>
           </div>
         )}
+
+        {/* Footer — creator, source, for you */}
+        <div className="flex items-center gap-2 pt-2">
+          <span className="text-[10px] font-mono text-white/35">
+            by {item.creator}
+          </span>
+          <span className="text-white/15 text-[8px]">/</span>
+          <span className="text-[10px] font-mono text-white/35">
+            {item.source}
+          </span>
+          {item.build_this && (
+            <>
+              <span className="text-white/15 text-[8px]">/</span>
+              <span className="inline-flex items-center gap-1 text-[10px] font-mono text-orange-300/60">
+                <Flame size={10} strokeWidth={2} />
+                For You
+              </span>
+            </>
+          )}
+        </div>
       </div>
     </Modal>
   )
