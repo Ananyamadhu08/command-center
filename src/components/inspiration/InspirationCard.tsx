@@ -13,8 +13,8 @@ const CATEGORY_CONFIG: Record<
     label: "Product",
     icon: Package,
     color: "text-blue-400",
-    bg: "bg-blue-500/15",
-    border: "border-blue-500/30",
+    bg: "bg-blue-600/40",
+    border: "border-blue-400/50",
     glow: "hover:shadow-[0_0_30px_rgba(59,130,246,0.15)]",
     defaultImage: "/inspiration/product-default.png",
   },
@@ -22,8 +22,8 @@ const CATEGORY_CONFIG: Record<
     label: "UI & Design",
     icon: Palette,
     color: "text-pink-400",
-    bg: "bg-pink-500/15",
-    border: "border-pink-500/30",
+    bg: "bg-pink-600/40",
+    border: "border-pink-400/50",
     glow: "hover:shadow-[0_0_30px_rgba(236,72,153,0.15)]",
     defaultImage: "/inspiration/ui-default.png",
   },
@@ -31,8 +31,8 @@ const CATEGORY_CONFIG: Record<
     label: "Creative Tech",
     icon: Sparkles,
     color: "text-violet-400",
-    bg: "bg-violet-500/15",
-    border: "border-violet-500/30",
+    bg: "bg-violet-600/40",
+    border: "border-violet-400/50",
     glow: "hover:shadow-[0_0_30px_rgba(139,92,246,0.15)]",
     defaultImage: "/inspiration/creative-default.png",
   },
@@ -104,25 +104,25 @@ export function InspirationCard({ item, index = 0, onClick }: InspirationCardPro
         <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/50 to-transparent" />
 
         {/* Badges — top right */}
-        <div className="absolute top-2.5 right-3 z-20 flex items-center gap-1.5">
+        <div className="absolute top-2.5 right-3 z-20 flex items-center gap-2">
           {item.build_this && (
-            <div className="flex items-center justify-center w-[22px] h-[22px] rounded-lg border backdrop-blur-sm bg-orange-500/20 border-orange-500/40 shadow-lg">
-              <Flame size={10} className="text-orange-300" />
+            <div className="flex items-center justify-center w-[28px] h-[28px] rounded-lg border backdrop-blur-md bg-orange-500/50 border-orange-400/60 shadow-lg">
+              <Flame size={16} strokeWidth={2} className="text-orange-100" />
             </div>
           )}
           <div
             className={cn(
               "flex items-center gap-1.5",
-              "px-2 py-[3px] rounded-lg",
-              "text-[9px] font-semibold uppercase tracking-[0.15em]",
-              "border backdrop-blur-sm",
+              "px-2.5 py-1 rounded-lg",
+              "text-[10px] font-bold uppercase tracking-wider",
+              "border backdrop-blur-md",
               config.bg,
               config.border,
-              "text-white/90",
+              "text-white",
               "shadow-lg",
             )}
           >
-            <Icon size={9} />
+            <Icon size={11} />
             {config.label}
           </div>
         </div>
