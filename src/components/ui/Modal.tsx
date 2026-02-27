@@ -61,7 +61,7 @@ export function Modal({ isOpen, onClose, title, children, wide = false }: ModalP
             <div
               className="relative rounded-2xl overflow-hidden backdrop-blur-3xl"
               style={{
-                background: "rgba(14, 14, 26, 0.45)",
+                background: "rgba(14, 14, 26, 0.25)",
               }}
             >
               {/* Subtle top highlight */}
