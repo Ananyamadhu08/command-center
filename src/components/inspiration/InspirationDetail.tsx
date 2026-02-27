@@ -1,6 +1,6 @@
 "use client"
 
-import { Package, Palette, Sparkles, Rocket, ExternalLink } from "lucide-react"
+import { Package, Palette, Sparkles, Flame, ExternalLink } from "lucide-react"
 import { Modal } from "@/components/ui/Modal"
 import { cn } from "@/lib/utils"
 import { isSafeUrl } from "@/lib/api"
@@ -71,9 +71,9 @@ export function InspirationDetail({ item, onClose }: InspirationDetailProps) {
             {config.label}
           </span>
           {item.build_this && (
-            <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] px-2.5 py-1 rounded-lg border backdrop-blur-sm bg-emerald-500/20 border-emerald-500/40 text-emerald-300">
-              <Rocket size={10} />
-              Build This
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] px-2 py-1 rounded-lg border backdrop-blur-sm bg-orange-500/20 border-orange-500/40 text-orange-300">
+              <Flame size={10} />
+              For You
             </span>
           )}
           <span className="text-[10px] font-mono text-white/30 ml-auto">

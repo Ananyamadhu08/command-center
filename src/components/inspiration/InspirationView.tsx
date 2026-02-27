@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Flame, Package, Palette, Sparkles, Rocket } from "lucide-react"
+import { Flame, Package, Palette, Sparkles } from "lucide-react"
 import { InspirationCard } from "./InspirationCard"
 import { InspirationDetail } from "./InspirationDetail"
 import { SAMPLE_INSPIRATION } from "@/lib/inspiration-data"
@@ -16,7 +16,7 @@ const FILTERS: { key: FilterTab; label: string; icon: React.ElementType }[] = [
   { key: "product", label: "Products", icon: Package },
   { key: "ui_design", label: "UI & Design", icon: Palette },
   { key: "creative_tech", label: "Creative Tech", icon: Sparkles },
-  { key: "build_this", label: "Build This", icon: Rocket },
+  { key: "build_this", label: "For You", icon: Flame },
 ]
 
 export function InspirationView() {

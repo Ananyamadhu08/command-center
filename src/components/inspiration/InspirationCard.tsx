@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { ExternalLink, Rocket, Palette, Sparkles, Package } from "lucide-react"
+import { ExternalLink, Flame, Palette, Sparkles, Package } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { InspirationCategory, InspirationItem } from "@/lib/types"
 
@@ -103,31 +103,29 @@ export function InspirationCard({ item, index = 0, onClick }: InspirationCardPro
         {/* Bottom fade */}
         <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/50 to-transparent" />
 
-        {/* Category badge */}
-        <div
-          className={cn(
-            "absolute top-2.5 right-3 z-20",
-            "flex items-center gap-1.5",
-            "px-2 py-[3px] rounded-lg",
-            "text-[9px] font-semibold uppercase tracking-[0.15em]",
-            "border backdrop-blur-sm",
-            config.bg,
-            config.border,
-            "text-white/90",
-            "shadow-lg",
+        {/* Badges — top right */}
+        <div className="absolute top-2.5 right-3 z-20 flex items-center gap-1.5">
+          {item.build_this && (
+            <div className="flex items-center justify-center w-[22px] h-[22px] rounded-lg border backdrop-blur-sm bg-orange-500/20 border-orange-500/40 shadow-lg">
+              <Flame size={10} className="text-orange-300" />
+            </div>
           )}
-        >
-          <Icon size={9} />
-          {config.label}
-        </div>
-
-        {/* Build This badge */}
-        {item.build_this && (
-          <div className="absolute top-2.5 left-3 z-20 flex items-center gap-1 px-2 py-[3px] rounded-lg text-[9px] font-semibold uppercase tracking-[0.15em] border backdrop-blur-sm bg-emerald-500/20 border-emerald-500/40 text-emerald-300 shadow-lg">
-            <Rocket size={9} />
-            Build This
+          <div
+            className={cn(
+              "flex items-center gap-1.5",
+              "px-2 py-[3px] rounded-lg",
+              "text-[9px] font-semibold uppercase tracking-[0.15em]",
+              "border backdrop-blur-sm",
+              config.bg,
+              config.border,
+              "text-white/90",
+              "shadow-lg",
+            )}
+          >
+            <Icon size={9} />
+            {config.label}
           </div>
-        )}
+        </div>
 
         {/* Creator on image */}
         <div className="absolute bottom-2.5 left-3 z-20">
