@@ -127,12 +127,6 @@ export function InspirationCard({ item, index = 0, onClick }: InspirationCardPro
           </div>
         </div>
 
-        {/* Creator on image */}
-        <div className="absolute bottom-2.5 left-3 z-20">
-          <span className="text-[10px] font-mono text-white/70 backdrop-blur-sm bg-black/30 px-2 py-0.5 rounded-md">
-            {item.creator}
-          </span>
-        </div>
       </div>
 
       {/* Content Body */}
@@ -169,6 +163,10 @@ export function InspirationCard({ item, index = 0, onClick }: InspirationCardPro
         {/* Footer */}
         <div className="mt-auto flex items-center gap-2 pt-2.5">
           <div className={cn("w-1 h-1 rounded-full shrink-0", config.color.replace("text-", "bg-"))} />
+          <span className="text-[9px] font-mono text-white/35 truncate">
+            {item.creator}
+          </span>
+          <span className="text-white/15 text-[8px]">/</span>
           <span className="text-[9px] font-mono text-white/35 truncate">
             {item.source}
           </span>
