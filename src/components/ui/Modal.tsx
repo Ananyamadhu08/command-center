@@ -41,13 +41,13 @@ export function Modal({ isOpen, onClose, title, children, wide = false }: ModalP
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
           onClick={onClose}
         >
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+          <div className="absolute inset-0 bg-black/80 backdrop-blur-md" />
           <motion.div
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className={`glass glow-cosmic relative z-10 w-full max-h-[85vh] overflow-y-auto p-6 ${wide ? "max-w-2xl" : "max-w-lg"}`}
+            className={`relative z-10 w-full max-h-[85vh] overflow-y-auto p-6 rounded-2xl border border-white/[0.12] bg-[#1a1a2e] shadow-[0_0_60px_rgba(0,0,0,0.5)] ${wide ? "max-w-2xl" : "max-w-lg"}`}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
