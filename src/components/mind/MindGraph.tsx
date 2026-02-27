@@ -30,8 +30,17 @@ interface MindGraphProps {
   onItemClick: (item: MindItem) => void
 }
 
+interface Transform {
+  x: number
+  y: number
+  scale: number
+}
+
 const NODE_RADIUS = 6
 const NODE_RADIUS_HOVER = 8
+const MIN_ZOOM = 0.15
+const MAX_ZOOM = 4
+const ZOOM_SENSITIVITY = 0.002
 
 export function MindGraph({ items, loading, onItemClick }: MindGraphProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -43,6 +52,19 @@ export function MindGraph({ items, loading, onItemClick }: MindGraphProps) {
   const dimsRef = useRef({ width: 0, height: 0 })
   const simRunningRef = useRef(true)
   const drawRef = useRef<() => void>(() => {})
+
+  // Camera transform: pan + zoom
+  const transformRef = useRef<Transform>({ x: 0, y: 0, scale: 1 })
+
+  // Drag state
+  const dragRef = useRef<{
+    active: boolean
+    type: "pan" | "node" | null
+    node: SimNode | null
+    startX: number
+    startY: number
+    moved: boolean
+  }>({ active: false, type: null, node: null, startX: 0, startY: 0, moved: false })
 
   const [tooltipItem, setTooltipItem] = useState<MindItem | null>(null)
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 })
@@ -64,12 +86,37 @@ export function MindGraph({ items, loading, onItemClick }: MindGraphProps) {
     connectedRef.current = next
   }, [])
 
-  // Request a single redraw for hover interactions after simulation settles
-  const requestDraw = useCallback(() => {
-    if (!simRunningRef.current) {
-      cancelAnimationFrame(animRef.current)
-      animRef.current = requestAnimationFrame(() => drawRef.current())
+  // Convert screen coordinates to world (simulation) coordinates
+  const screenToWorld = useCallback((screenX: number, screenY: number) => {
+    const t = transformRef.current
+    return {
+      x: (screenX - t.x) / t.scale,
+      y: (screenY - t.y) / t.scale,
     }
+  }, [])
+
+  // Find nearest node within snap distance (in world coords)
+  const findNode = useCallback((worldX: number, worldY: number, snapDist: number) => {
+    let closest: SimNode | null = null
+    let closestDist = snapDist
+
+    for (const node of nodesRef.current) {
+      if (node.x == null || node.y == null) continue
+      const dx = node.x - worldX
+      const dy = node.y - worldY
+      const dist = Math.sqrt(dx * dx + dy * dy)
+      if (dist < closestDist) {
+        closest = node
+        closestDist = dist
+      }
+    }
+    return closest
+  }, [])
+
+  // Request a single redraw for interactions after simulation settles
+  const requestDraw = useCallback(() => {
+    cancelAnimationFrame(animRef.current)
+    animRef.current = requestAnimationFrame(() => drawRef.current())
   }, [])
 
   // Initialize simulation when items change
@@ -83,20 +130,37 @@ export function MindGraph({ items, loading, onItemClick }: MindGraphProps) {
     const dpr = window.devicePixelRatio || 1
     simRunningRef.current = true
 
+    // Reset transform for new data
+    transformRef.current = { x: 0, y: 0, scale: 1 }
+
     function resize() {
       if (!canvas) return
       const rect = canvas.getBoundingClientRect()
       dimsRef.current = { width: rect.width, height: rect.height }
       canvas.width = rect.width * dpr
       canvas.height = rect.height * dpr
-      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0)
       drawFrame()
     }
 
     function drawFrame() {
       if (!ctx) return
       const { width: cw, height: ch } = dimsRef.current
+      const dprLocal = window.devicePixelRatio || 1
+      const t = transformRef.current
+
+      // Reset transform and clear
+      ctx.setTransform(dprLocal, 0, 0, dprLocal, 0, 0)
       ctx.clearRect(0, 0, cw, ch)
+
+      // Apply camera transform
+      ctx.setTransform(
+        dprLocal * t.scale,
+        0,
+        0,
+        dprLocal * t.scale,
+        dprLocal * t.x,
+        dprLocal * t.y,
+      )
 
       const hovered = hoveredRef.current
       const connected = connectedRef.current
@@ -106,19 +170,19 @@ export function MindGraph({ items, loading, onItemClick }: MindGraphProps) {
       // Draw edges
       for (const link of currentLinks) {
         const s = link.source as SimNode
-        const t = link.target as SimNode
-        if (s.x == null || s.y == null || t.x == null || t.y == null) continue
+        const tgt = link.target as SimNode
+        if (s.x == null || s.y == null || tgt.x == null || tgt.y == null) continue
 
-        const edgeKey = `${s.id}:${t.id}`
+        const edgeKey = `${s.id}:${tgt.id}`
         const isConnected = hovered != null && connected.has(edgeKey)
 
         ctx.beginPath()
         ctx.moveTo(s.x, s.y)
-        ctx.lineTo(t.x, t.y)
+        ctx.lineTo(tgt.x, tgt.y)
         ctx.strokeStyle = isConnected
           ? "rgba(255, 255, 255, 0.25)"
           : "rgba(255, 255, 255, 0.06)"
-        ctx.lineWidth = isConnected ? 1.5 : 1
+        ctx.lineWidth = (isConnected ? 1.5 : 1) / t.scale
         ctx.stroke()
       }
 
@@ -127,17 +191,18 @@ export function MindGraph({ items, loading, onItemClick }: MindGraphProps) {
         if (node.x == null || node.y == null) continue
 
         const isHovered = hovered?.id === node.id
-        const r = isHovered ? NODE_RADIUS_HOVER : NODE_RADIUS
+        const isDragged = dragRef.current.node?.id === node.id
+        const r = (isHovered || isDragged ? NODE_RADIUS_HOVER : NODE_RADIUS) / t.scale
         const color = MIND_TYPE_CONFIG[node.item.type].color
 
         ctx.beginPath()
         ctx.arc(node.x, node.y, r, 0, Math.PI * 2)
-        ctx.fillStyle = isHovered ? color : hexToRgba(color, 0.8)
+        ctx.fillStyle = (isHovered || isDragged) ? color : hexToRgba(color, 0.8)
         ctx.fill()
 
-        if (isHovered) {
+        if (isHovered || isDragged) {
           ctx.beginPath()
-          ctx.arc(node.x, node.y, r + 4, 0, Math.PI * 2)
+          ctx.arc(node.x, node.y, r + 4 / t.scale, 0, Math.PI * 2)
           ctx.fillStyle = hexToRgba(color, 0.15)
           ctx.fill()
         }
@@ -181,47 +246,107 @@ export function MindGraph({ items, loading, onItemClick }: MindGraphProps) {
 
     simRef.current = sim
 
-    // Draw on each simulation tick — stops automatically when simulation cools
     sim.on("tick", drawFrame)
-
     sim.on("end", () => {
       simRunningRef.current = false
     })
 
-    // Use ResizeObserver for container resize
-    const observer = new ResizeObserver(() => resize())
-    observer.observe(canvas)
-
-    return () => {
-      cancelAnimationFrame(animRef.current)
-      sim.stop()
-      observer.disconnect()
-    }
-  }, [items])
-
-  // Mouse interactions — trigger redraw on hover changes
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent<HTMLCanvasElement>) => {
-      const canvas = canvasRef.current
+    // --- Wheel zoom (toward cursor) ---
+    function handleWheel(e: WheelEvent) {
+      e.preventDefault()
       if (!canvas) return
 
       const rect = canvas.getBoundingClientRect()
-      const mx = e.clientX - rect.left
-      const my = e.clientY - rect.top
+      const mouseX = e.clientX - rect.left
+      const mouseY = e.clientY - rect.top
 
-      let closest: SimNode | null = null
-      let closestDist = 20
+      const t = transformRef.current
+      const delta = -e.deltaY * ZOOM_SENSITIVITY
+      const newScale = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, t.scale * (1 + delta)))
+      const ratio = newScale / t.scale
 
-      for (const node of nodesRef.current) {
-        if (node.x == null || node.y == null) continue
-        const dx = node.x - mx
-        const dy = node.y - my
-        const dist = Math.sqrt(dx * dx + dy * dy)
-        if (dist < closestDist) {
-          closest = node
-          closestDist = dist
-        }
+      // Zoom toward cursor: keep the world point under the cursor fixed
+      transformRef.current = {
+        x: mouseX - (mouseX - t.x) * ratio,
+        y: mouseY - (mouseY - t.y) * ratio,
+        scale: newScale,
       }
+
+      requestDraw()
+    }
+
+    // --- Mouse down: start pan or node drag ---
+    function handleMouseDown(e: MouseEvent) {
+      if (!canvas || e.button !== 0) return
+
+      const rect = canvas.getBoundingClientRect()
+      const sx = e.clientX - rect.left
+      const sy = e.clientY - rect.top
+      const world = screenToWorld(sx, sy)
+
+      const snapDist = 20 / transformRef.current.scale
+      const node = findNode(world.x, world.y, snapDist)
+
+      if (node) {
+        // Start node drag
+        dragRef.current = { active: true, type: "node", node, startX: sx, startY: sy, moved: false }
+        // Pin the node
+        node.fx = node.x
+        node.fy = node.y
+        // Reheat simulation gently
+        sim.alphaTarget(0.3).restart()
+        simRunningRef.current = true
+      } else {
+        // Start pan
+        dragRef.current = { active: true, type: "pan", node: null, startX: sx, startY: sy, moved: false }
+      }
+
+      canvas.style.cursor = node ? "grabbing" : "grabbing"
+    }
+
+    // --- Mouse move: pan or drag node ---
+    function handleMouseMove(e: MouseEvent) {
+      if (!canvas) return
+
+      const rect = canvas.getBoundingClientRect()
+      const sx = e.clientX - rect.left
+      const sy = e.clientY - rect.top
+      const drag = dragRef.current
+
+      if (drag.active) {
+        const dx = sx - drag.startX
+        const dy = sy - drag.startY
+
+        if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+          drag.moved = true
+        }
+
+        if (drag.type === "pan") {
+          const t = transformRef.current
+          transformRef.current = {
+            ...t,
+            x: t.x + (sx - drag.startX),
+            y: t.y + (sy - drag.startY),
+          }
+          drag.startX = sx
+          drag.startY = sy
+          requestDraw()
+        } else if (drag.type === "node" && drag.node) {
+          const world = screenToWorld(sx, sy)
+          drag.node.fx = world.x
+          drag.node.fy = world.y
+          // Simulation tick will redraw
+        }
+
+        // Hide tooltip while dragging
+        setTooltipItem(null)
+        return
+      }
+
+      // Not dragging — do hover detection
+      const world = screenToWorld(sx, sy)
+      const snapDist = 20 / transformRef.current.scale
+      const closest = findNode(world.x, world.y, snapDist)
 
       const prevHovered = hoveredRef.current
       hoveredRef.current = closest
@@ -233,33 +358,75 @@ export function MindGraph({ items, loading, onItemClick }: MindGraphProps) {
         canvas.style.cursor = "pointer"
       } else {
         setTooltipItem(null)
-        canvas.style.cursor = "default"
+        canvas.style.cursor = "grab"
       }
 
-      // Redraw if hover state changed and simulation is settled
       if (prevHovered?.id !== closest?.id) {
         requestDraw()
       }
-    },
-    [updateConnected, requestDraw],
-  )
-
-  const handleMouseLeave = useCallback(() => {
-    hoveredRef.current = null
-    updateConnected(null)
-    setTooltipItem(null)
-    if (canvasRef.current) {
-      canvasRef.current.style.cursor = "default"
     }
-    requestDraw()
-  }, [updateConnected, requestDraw])
 
-  const handleClick = useCallback(() => {
-    const hovered = hoveredRef.current
-    if (hovered) {
-      onItemClick(hovered.item)
+    // --- Mouse up: end drag ---
+    function handleMouseUp(e: MouseEvent) {
+      if (!canvas) return
+
+      const drag = dragRef.current
+
+      if (drag.active && drag.type === "node" && drag.node) {
+        // Unpin the node so simulation can move it naturally
+        drag.node.fx = null
+        drag.node.fy = null
+        sim.alphaTarget(0)
+      }
+
+      // If it was a click (no significant movement) on a node, open detail
+      if (drag.active && !drag.moved && drag.type === "node" && drag.node) {
+        onItemClick(drag.node.item)
+      }
+
+      dragRef.current = { active: false, type: null, node: null, startX: 0, startY: 0, moved: false }
+      canvas.style.cursor = "grab"
     }
-  }, [onItemClick])
+
+    function handleMouseLeave() {
+      if (!canvas) return
+
+      const drag = dragRef.current
+      if (drag.active && drag.type === "node" && drag.node) {
+        drag.node.fx = null
+        drag.node.fy = null
+        sim.alphaTarget(0)
+      }
+
+      dragRef.current = { active: false, type: null, node: null, startX: 0, startY: 0, moved: false }
+      hoveredRef.current = null
+      updateConnected(null)
+      setTooltipItem(null)
+      requestDraw()
+    }
+
+    // Attach event listeners
+    canvas.addEventListener("wheel", handleWheel, { passive: false })
+    canvas.addEventListener("mousedown", handleMouseDown)
+    canvas.addEventListener("mousemove", handleMouseMove)
+    canvas.addEventListener("mouseup", handleMouseUp)
+    canvas.addEventListener("mouseleave", handleMouseLeave)
+    canvas.style.cursor = "grab"
+
+    const observer = new ResizeObserver(() => resize())
+    observer.observe(canvas)
+
+    return () => {
+      cancelAnimationFrame(animRef.current)
+      sim.stop()
+      observer.disconnect()
+      canvas.removeEventListener("wheel", handleWheel)
+      canvas.removeEventListener("mousedown", handleMouseDown)
+      canvas.removeEventListener("mousemove", handleMouseMove)
+      canvas.removeEventListener("mouseup", handleMouseUp)
+      canvas.removeEventListener("mouseleave", handleMouseLeave)
+    }
+  }, [items, screenToWorld, findNode, updateConnected, requestDraw, onItemClick])
 
   if (loading) {
     return (
@@ -284,9 +451,6 @@ export function MindGraph({ items, loading, onItemClick }: MindGraphProps) {
       <canvas
         ref={canvasRef}
         className="w-full h-full"
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        onClick={handleClick}
       />
       <MindGraphTooltip item={tooltipItem} x={tooltipPos.x} y={tooltipPos.y} />
     </div>
