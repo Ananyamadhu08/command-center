@@ -180,7 +180,7 @@ export function MindGraph({ items, loading, onItemClick }: MindGraphProps) {
         ctx.moveTo(s.x, s.y)
         ctx.lineTo(tgt.x, tgt.y)
         ctx.strokeStyle = isConnected
-          ? "rgba(255, 255, 255, 0.35)"
+          ? "rgba(167, 139, 250, 0.6)"
           : "rgba(255, 255, 255, 0.15)"
         ctx.lineWidth = (isConnected ? 1.5 : 1) / t.scale
         ctx.stroke()
