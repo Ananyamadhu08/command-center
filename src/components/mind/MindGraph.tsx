@@ -226,11 +226,8 @@ export function MindGraph({ items, loading, onItemClick }: MindGraphProps) {
 
           const isHovered = hovered?.id === node.id
           const isDragged = dragRef.current.node?.id === node.id
-          const fullLabel = node.item.title ?? node.item.content?.slice(0, 40) ?? ""
-          if (!fullLabel) continue
-
-          // Truncate with ellipsis instead of squishing
-          const label = truncateLabel(ctx, fullLabel, 140)
+          const label = node.item.title ?? node.item.content?.slice(0, 60) ?? ""
+          if (!label) continue
 
           // Convert world position to screen position
           const screenX = node.x * t.scale + t.x
@@ -492,17 +489,6 @@ export function MindGraph({ items, loading, onItemClick }: MindGraphProps) {
       <MindGraphTooltip item={tooltipItem} x={tooltipPos.x} y={tooltipPos.y} />
     </div>
   )
-}
-
-function truncateLabel(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string {
-  if (ctx.measureText(text).width <= maxWidth) return text
-
-  const ellipsis = "..."
-  let truncated = text
-  while (truncated.length > 0 && ctx.measureText(truncated + ellipsis).width > maxWidth) {
-    truncated = truncated.slice(0, -1)
-  }
-  return truncated + ellipsis
 }
 
 function hexToRgba(hex: string, alpha: number): string {

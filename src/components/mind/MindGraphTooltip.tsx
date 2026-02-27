@@ -39,8 +39,14 @@ export function MindGraphTooltip({ item, x, y }: MindGraphTooltipProps) {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.15 }}
-          className="glass pointer-events-none fixed z-50 max-w-[220px] px-3 py-2.5 rounded-xl"
-          style={{ left: safeX, top: safeY }}
+          className="pointer-events-none fixed z-50 max-w-[220px] px-3 py-2.5 rounded-xl border border-white/10"
+          style={{
+            left: safeX,
+            top: safeY,
+            background: "rgba(10, 10, 20, 0.85)",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+          }}
         >
           <div className="flex items-center gap-1.5 mb-1.5">
             {(() => {
