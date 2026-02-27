@@ -43,7 +43,7 @@ export function Modal({ isOpen, onClose, title, children, wide = false }: ModalP
           onClick={onClose}
         >
           {/* Backdrop */}
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-xl" />
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
 
           {/* Modal panel */}
           <motion.div
@@ -59,9 +59,9 @@ export function Modal({ isOpen, onClose, title, children, wide = false }: ModalP
 
             {/* Glass container */}
             <div
-              className="relative rounded-2xl overflow-hidden backdrop-blur-2xl"
+              className="relative rounded-2xl overflow-hidden backdrop-blur-3xl"
               style={{
-                background: "rgba(14, 14, 26, 0.92)",
+                background: "rgba(14, 14, 26, 0.45)",
               }}
             >
               {/* Subtle top highlight */}
