@@ -1,38 +1,39 @@
-"use client";
+"use client"
 
-import { useState, useCallback } from "react";
-import { motion } from "framer-motion";
-import { Brain } from "lucide-react";
-import { MindSearch } from "./MindSearch";
-import { MindSaveForm } from "./MindSaveForm";
-import { MindFilters } from "./MindFilters";
-import { MindGrid } from "./MindGrid";
-import { MindItemDetail } from "./MindItemDetail";
-import { useMindItems, useMindTags, useMindSave } from "@/hooks/use-mind";
-import { staggerContainer, staggerItem } from "@/lib/animations";
-import type { MindItem, MindItemType } from "@/lib/types";
+import { useState, useCallback } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Brain } from "lucide-react"
+import { MindSearch } from "./MindSearch"
+import { MindSaveForm } from "./MindSaveForm"
+import { MindFilters } from "./MindFilters"
+import { MindGrid } from "./MindGrid"
+import { MindGraph } from "./MindGraph"
+import { MindItemDetail } from "./MindItemDetail"
+import { useMindItems, useMindTags, useMindSave, useMindAllItems } from "@/hooks/use-mind"
+import { staggerContainer, staggerItem } from "@/lib/animations"
+import type { MindItem, MindItemType } from "@/lib/types"
+import type { ViewMode } from "./MindFilters"
 
 export function MindView() {
-  const [typeFilter, setTypeFilter] = useState<MindItemType | null>(null);
-  const [tagFilter, setTagFilter] = useState<string | null>(null);
-  const [selectedItem, setSelectedItem] = useState<MindItem | null>(null);
+  const [typeFilter, setTypeFilter] = useState<MindItemType | null>(null)
+  const [tagFilter, setTagFilter] = useState<string | null>(null)
+  const [selectedItem, setSelectedItem] = useState<MindItem | null>(null)
+  const [viewMode, setViewMode] = useState<ViewMode>("list")
 
-  const { items, loading, total, refetch } = useMindItems(
-    typeFilter,
-    tagFilter,
-  );
-  const tags = useMindTags();
+  const { items, loading, total, refetch } = useMindItems(typeFilter, tagFilter)
+  const { items: allItems, loading: allLoading } = useMindAllItems(viewMode === "graph")
+  const tags = useMindTags()
 
   const handleSaved = useCallback(() => {
-    refetch();
-  }, [refetch]);
+    refetch()
+  }, [refetch])
 
-  const { save, saving, error: saveError } = useMindSave(handleSaved);
+  const { save, saving, error: saveError } = useMindSave(handleSaved)
 
   async function handleDelete(id: string) {
     try {
-      const res = await fetch(`/api/mind/items?id=${id}`, { method: "DELETE" });
-      if (res.ok) refetch();
+      const res = await fetch(`/api/mind/items?id=${id}`, { method: "DELETE" })
+      if (res.ok) refetch()
     } catch {
       // Silent fail
     }
@@ -66,10 +67,12 @@ export function MindView() {
         <MindSearch onItemClick={setSelectedItem} />
       </motion.div>
 
-      {/* Save form */}
-      <motion.div variants={staggerItem}>
-        <MindSaveForm onSave={save} saving={saving} error={saveError} />
-      </motion.div>
+      {/* Save form — hidden in graph mode */}
+      {viewMode === "list" && (
+        <motion.div variants={staggerItem}>
+          <MindSaveForm onSave={save} saving={saving} error={saveError} />
+        </motion.div>
+      )}
 
       {/* Filters */}
       <motion.div variants={staggerItem}>
@@ -80,16 +83,44 @@ export function MindView() {
           onTagChange={setTagFilter}
           tags={tags}
           totalItems={total}
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
         />
       </motion.div>
 
-      {/* Grid */}
+      {/* Content: Grid or Graph */}
       <motion.div variants={staggerItem}>
-        <MindGrid
-          items={items}
-          loading={loading}
-          onItemClick={setSelectedItem}
-        />
+        <AnimatePresence mode="wait">
+          {viewMode === "list" ? (
+            <motion.div
+              key="grid"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2 }}
+            >
+              <MindGrid
+                items={items}
+                loading={loading}
+                onItemClick={setSelectedItem}
+              />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="graph"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2 }}
+            >
+              <MindGraph
+                items={allItems}
+                loading={allLoading}
+                onItemClick={setSelectedItem}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
 
       {/* Detail modal */}
@@ -99,5 +130,5 @@ export function MindView() {
         onDelete={handleDelete}
       />
     </motion.div>
-  );
+  )
 }

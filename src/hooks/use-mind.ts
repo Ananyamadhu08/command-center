@@ -96,6 +96,37 @@ export function useMindSearch() {
   return { query, setQuery, results, searching, search }
 }
 
+const GRAPH_ITEM_LIMIT = 500
+
+export function useMindAllItems(enabled: boolean) {
+  const [items, setItems] = useState<MindItem[]>([])
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (!enabled) return
+
+    async function fetchAll() {
+      setLoading(true)
+      try {
+        const params = new URLSearchParams()
+        params.set("limit", String(GRAPH_ITEM_LIMIT))
+        const res = await fetch(`/api/mind/items?${params}`)
+        if (res.ok) {
+          const json = await res.json()
+          if (json.success) setItems(json.data)
+        }
+      } catch {
+        // Silent fail
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchAll()
+  }, [enabled])
+
+  return { items, loading }
+}
+
 export function useMindSave(onSaved: () => void) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
